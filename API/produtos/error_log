@@ -1,0 +1,12 @@
+[30-Mar-2020 00:03:38 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'p.id_produto' in 'field list'' in /home/livresbs/public_html/models/Produto.php:35
+Stack trace:
+#0 /home/livresbs/public_html/models/Produto.php(35): PDOStatement->execute()
+#1 /home/livresbs/public_html/API/produtos/index.php(13): Produto->read()
+#2 {main}
+  thrown in /home/livresbs/public_html/models/Produto.php on line 35
+[08-May-2020 15:48:18 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE p.id = 1' at line 18' in /home/livresbs/public_html/models/Produto.php:66
+Stack trace:
+#0 /home/livresbs/public_html/models/Produto.php(66): PDOStatement->execute()
+#1 /home/livresbs/public_html/API/produtos/index.php(14): Produto->find('1')
+#2 {main}
+  thrown in /home/livresbs/public_html/models/Produto.php on line 66

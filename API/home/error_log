@@ -1,0 +1,58 @@
+[09-Apr-2020 19:12:34 UTC] PHP Warning:  include(../config.php): failed to open stream: No such file or directory in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:12:34 UTC] PHP Warning:  include(../config.php): failed to open stream: No such file or directory in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:12:34 UTC] PHP Warning:  include(): Failed opening '../config.php' for inclusion (include_path='.:/opt/cpanel/ea-php54/root/usr/share/pear') in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:12:34 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO)' in /home/livresbs/public_html/API/home/index.php:6
+Stack trace:
+#0 /home/livresbs/public_html/API/home/index.php(6): PDO->__construct('mysql:host=;dbn...', NULL, NULL, Array)
+#1 {main}
+  thrown in /home/livresbs/public_html/API/home/index.php on line 6
+[09-Apr-2020 19:13:17 UTC] PHP Warning:  include(../config.php): failed to open stream: No such file or directory in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:13:17 UTC] PHP Warning:  include(../config.php): failed to open stream: No such file or directory in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:13:17 UTC] PHP Warning:  include(): Failed opening '../config.php' for inclusion (include_path='.:/opt/cpanel/ea-php54/root/usr/share/pear') in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:13:17 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO)' in /home/livresbs/public_html/API/home/index.php:6
+Stack trace:
+#0 /home/livresbs/public_html/API/home/index.php(6): PDO->__construct('mysql:host=;dbn...', NULL, NULL, Array)
+#1 {main}
+  thrown in /home/livresbs/public_html/API/home/index.php on line 6
+[09-Apr-2020 19:15:04 UTC] PHP Warning:  include(../config.php): failed to open stream: No such file or directory in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:15:04 UTC] PHP Warning:  include(../config.php): failed to open stream: No such file or directory in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:15:04 UTC] PHP Warning:  include(): Failed opening '../config.php' for inclusion (include_path='.:/opt/cpanel/ea-php54/root/usr/share/pear') in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:15:04 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO)' in /home/livresbs/public_html/API/home/index.php:6
+Stack trace:
+#0 /home/livresbs/public_html/API/home/index.php(6): PDO->__construct('mysql:host=;dbn...', NULL, NULL, Array)
+#1 {main}
+  thrown in /home/livresbs/public_html/API/home/index.php on line 6
+[09-Apr-2020 19:15:05 UTC] PHP Warning:  include(../config.php): failed to open stream: No such file or directory in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:15:05 UTC] PHP Warning:  include(../config.php): failed to open stream: No such file or directory in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:15:05 UTC] PHP Warning:  include(): Failed opening '../config.php' for inclusion (include_path='.:/opt/cpanel/ea-php54/root/usr/share/pear') in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:15:05 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO)' in /home/livresbs/public_html/API/home/index.php:6
+Stack trace:
+#0 /home/livresbs/public_html/API/home/index.php(6): PDO->__construct('mysql:host=;dbn...', NULL, NULL, Array)
+#1 {main}
+  thrown in /home/livresbs/public_html/API/home/index.php on line 6
+[09-Apr-2020 19:15:49 UTC] PHP Warning:  include(../config.php): failed to open stream: No such file or directory in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:15:49 UTC] PHP Warning:  include(../config.php): failed to open stream: No such file or directory in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:15:49 UTC] PHP Warning:  include(): Failed opening '../config.php' for inclusion (include_path='.:/opt/cpanel/ea-php54/root/usr/share/pear') in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:15:49 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO)' in /home/livresbs/public_html/API/home/index.php:6
+Stack trace:
+#0 /home/livresbs/public_html/API/home/index.php(6): PDO->__construct('mysql:host=;dbn...', NULL, NULL, Array)
+#1 {main}
+  thrown in /home/livresbs/public_html/API/home/index.php on line 6
+[09-Apr-2020 19:16:55 UTC] PHP Warning:  include(../config.php): failed to open stream: No such file or directory in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:16:55 UTC] PHP Warning:  include(../config.php): failed to open stream: No such file or directory in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:16:55 UTC] PHP Warning:  include(): Failed opening '../config.php' for inclusion (include_path='.:/opt/cpanel/ea-php54/root/usr/share/pear') in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:16:55 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO)' in /home/livresbs/public_html/API/home/index.php:6
+Stack trace:
+#0 /home/livresbs/public_html/API/home/index.php(6): PDO->__construct('mysql:host=;dbn...', NULL, NULL, Array)
+#1 {main}
+  thrown in /home/livresbs/public_html/API/home/index.php on line 6
+[09-Apr-2020 19:17:42 UTC] PHP Warning:  include(../config.php): failed to open stream: No such file or directory in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:17:42 UTC] PHP Warning:  include(../config.php): failed to open stream: No such file or directory in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:17:42 UTC] PHP Warning:  include(): Failed opening '../config.php' for inclusion (include_path='.:/opt/cpanel/ea-php54/root/usr/share/pear') in /home/livresbs/public_html/API/home/index.php on line 3
+[09-Apr-2020 19:17:42 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO)' in /home/livresbs/public_html/API/home/index.php:6
+Stack trace:
+#0 /home/livresbs/public_html/API/home/index.php(6): PDO->__construct('mysql:host=;dbn...', NULL, NULL, Array)
+#1 {main}
+  thrown in /home/livresbs/public_html/API/home/index.php on line 6
+[09-Apr-2020 19:17:56 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/livresbs/public_html/API/home/index.php:1) in /home/livresbs/public_html/API/home/index.php on line 28
+[04-May-2020 17:30:18 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/livresbs/public_html/API/home/index.php:1) in /home/livresbs/public_html/API/home/index.php on line 16

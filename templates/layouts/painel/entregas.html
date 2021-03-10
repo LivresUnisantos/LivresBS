@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+
+{% block content %}
+    {% if (data_entrega != "") %}
+        <span class="cabecalho_entregas">Entrega de {{data_entrega }}</span>
+    {% endif %}
+    {% for p in conteudo %}
+        <div class="pedido">
+            <ul class="consumidor">
+                <li>{{ loop.index }}) {{p.consumidor.consumidor}} (código {{ p.consumidor.id }} - {{ p.consumidor.comunidade }}ª comunidade)</li>
+                <li>Forma de entrega: {{p.pedido.descricao_entrega}}</li>
+                <li>Email: {{p.consumidor.email}}</li>
+                <li>CPF: {{p.consumidor.cpf}}</li>
+                <li>Cota: R${{p.pedido.pedido_cota|number_format(2,",",".") }}</li>
+                <li>
+                    Fixo: R${{ p.pedido.pedido_fixa |number_format(2,",",".")}} |
+                    Mensal: R${{ p.pedido.pedido_mensal |number_format(2,",",".")}} |
+                    Variável: R${{ p.pedido.pedido_variavel |number_format(2,",",".")}} |
+                    Entrega: R${{ p.pedido.pedido_entrega_valor |number_format(2,",",".")}}
+                </li>
+                <li>Total: R${{p.pedido.pedido_valor_total|number_format(2,',','.')}}</li>
+            </ul>
+            <ul class="pedido">
+                <li>Pedido:</li>
+                {% for i in p.itens %}
+                <li class={{item.tipo_cesta}}>{{i.item.item_qtde*1}} {{i.produto.unidade}} x {{i.produto.nome}} ({{i.item.item_freq_cesta[0:1]|upper}} - código {{i.produto.id}})</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+{% endblock content %}

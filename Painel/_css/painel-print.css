@@ -1,0 +1,32 @@
+* {
+    background:transparent !important;
+    color:#000 !important;
+    text-shadow:none !important;
+    filter:none !important;
+    -ms-filter:none !important;
+}
+
+body {
+    padding: 0;
+    margin:0cm;
+    font-size: 11pt;
+    line-height: 1.4em;
+    width: 20cm;
+    height: 28.7cm;
+}
+
+.single_order{
+    /*page-break-before: always;*/ 
+}
+.single_order div.item{
+    page-break-before: always;
+    page-break-after: always;
+}
+.single_order p{
+    page-break-before: always;
+    page-break-after: always;
+}
+
+.single_order .coll{
+    padding: 4px !important;
+}

@@ -1,0 +1,46 @@
+{% extends "index.html" %}
+
+{% block content %}
+    {% if conteudo %}
+        {% if (data_entrega != "") %}
+            <span class="cabecalho_entregas">Entrega de {{data_entrega }}</span>
+        {% endif %}
+        <table id="capture" style="vertical-align:top;" class="caixa-table">
+            <tr class="firstLine">
+            <td width="260">Consumidor</td>
+            <td width="30">G</td>
+            <td width="70">Cota</td>
+            <td width="70">Mensal</td>
+            <td width="70">Extra</td>
+            <td width="70">Diferença</td>
+            <td width="70">Total</td>
+            <td width="100">Forma Entrega</td>
+            <td width="100">Forma Pagamento</td>
+            <td width="200">Compra Extra</td>
+            </tr>
+            {% for p in conteudo %}
+                <tr class="{{ cycle(['lineColor','lineBlank'], loop.index0) }}">
+                    <td>{{p.consumidor.consumidor}}</td>
+                    <td>G{{p.consumidor.comunidade}}</td>
+                    <td>R${{p.pedido.pedido_cota|number_format(2,",",".") }}</td>
+                    <td>R${{p.pedido.pedido_mensal|number_format(2,",",".")}}</td>
+                    <td>R${{(p.pedido.pedido_avulso)|number_format(2,",",".") }}</td>
+                    {# não mostrar diferença caso seja menor que R$0,50 já que este valor não entra na contabilização  #}
+                    {% if ((p.pedido.pedido_variavel-(p.pedido.pedido_cota-p.pedido.pedido_fixa)) >= 0.51 or (p.pedido.pedido_variavel-(p.pedido.pedido_cota-p.pedido.pedido_fixa)) <= -0.51) %}
+                        <td>R${{(p.pedido.pedido_variavel-(p.pedido.pedido_cota-p.pedido.pedido_fixa))|number_format(2,",",".") }}</td>
+                    {% else %}
+                        <td>R${{0.0|number_format(2,",",".") }}</td>
+                    {% endif %}
+                    <td>R${{p.pedido.pedido_valor_total|number_format(2,',','.')}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>                
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        {% if (data_entrega != "") %}
+            <span class="cabecalho_entregas">Não há pedidos consolidados para a data selecionada</span>
+        {% endif %}        
+    {% endif %}
+{% endblock content %}

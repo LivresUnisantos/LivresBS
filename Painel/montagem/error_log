@@ -1,0 +1,83 @@
+[10-May-2020 01:08:27 UTC] PHP Fatal error:  Uncaught exception 'Exception' with message 'DateTime::__construct(): Failed to parse time string (2020-05-10 08: 00) at position 11 (0): Unexpected character' in /home/livresbs/public_html/Painel/montagem/home.php:18
+Stack trace:
+#0 /home/livresbs/public_html/Painel/montagem/home.php(18): DateTime->__construct('2020-05-10 08: ...')
+#1 /home/livresbs/public_html/Painel/montagem/index.php(66): require_once('/home/livresbs/...')
+#2 {main}
+  thrown in /home/livresbs/public_html/Painel/montagem/home.php on line 18
+[10-May-2020 01:08:35 UTC] PHP Fatal error:  Uncaught exception 'Exception' with message 'DateTime::__construct(): Failed to parse time string (2020-05-10 08: 00) at position 11 (0): Unexpected character' in /home/livresbs/public_html/Painel/montagem/home.php:18
+Stack trace:
+#0 /home/livresbs/public_html/Painel/montagem/home.php(18): DateTime->__construct('2020-05-10 08: ...')
+#1 /home/livresbs/public_html/Painel/montagem/index.php(66): require_once('/home/livresbs/...')
+#2 {main}
+  thrown in /home/livresbs/public_html/Painel/montagem/home.php on line 18
+[17-May-2020 17:56:26 UTC] PHP Warning:  require_once(/home/livresbs/public_html/Painel/_pdf/dompdf/lib/php-font-lib/src/FontLib/Autoloader.php): failed to open stream: No such file or directory in /home/livresbs/public_html/Painel/_pdf/dompdf/autoload.inc.php on line 29
+[17-May-2020 17:56:26 UTC] PHP Fatal error:  require_once(): Failed opening required '/home/livresbs/public_html/Painel/_pdf/dompdf/lib/php-font-lib/src/FontLib/Autoloader.php' (include_path='.:/opt/cpanel/ea-php54/root/usr/share/pear') in /home/livresbs/public_html/Painel/_pdf/dompdf/autoload.inc.php on line 29
+[17-May-2020 17:57:34 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 17:57:37 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 17:57:38 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 17:57:39 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 17:57:59 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 17:58:00 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 17:58:01 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 17:58:28 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 17:58:33 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:00:02 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:00:13 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:00:15 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:00:15 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:00:15 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:00:16 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:00:34 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:01:06 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:01:07 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:01:08 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:05:55 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:05:57 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:05:58 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:05:58 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Dompdf.php on line 356
+[17-May-2020 18:11:26 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:12:46 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:16:35 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 848
+[17-May-2020 18:17:26 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:20:43 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:21:05 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 28672 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/lib/Cpdf.php on line 3058
+[17-May-2020 18:21:13 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 4096 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/FrameDecorator/Block.php on line 282
+[17-May-2020 18:22:02 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 4096 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/FrameDecorator/Block.php on line 282
+[17-May-2020 18:22:40 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 4096 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/FrameDecorator/Block.php on line 282
+[17-May-2020 18:23:27 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 4096 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/FrameDecorator/Block.php on line 282
+[17-May-2020 18:23:53 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:24:14 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:25:37 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:25:46 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/FrameDecorator/Block.php on line 45
+[17-May-2020 18:26:07 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 848
+[17-May-2020 18:26:12 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 848
+[17-May-2020 18:26:14 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 848
+[17-May-2020 18:26:47 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:27:00 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:27:12 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:27:28 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:27:59 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:29:10 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:29:24 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 848
+[17-May-2020 18:30:11 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:30:15 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:30:28 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/FrameDecorator/Block.php on line 45
+[17-May-2020 18:30:47 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/FrameDecorator/Block.php on line 45
+[17-May-2020 18:30:56 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/FrameDecorator/Block.php on line 45
+[17-May-2020 18:31:05 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 847
+[17-May-2020 18:31:22 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/FrameDecorator/Block.php on line 45
+[17-May-2020 18:31:35 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Frame.php on line 893
+[17-May-2020 18:31:38 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Frame.php on line 893
+[17-May-2020 18:32:03 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/FrameDecorator/Block.php on line 45
+[17-May-2020 18:32:47 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 849
+[17-May-2020 18:32:49 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 849
+[17-May-2020 18:33:08 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Frame.php on line 893
+[17-May-2020 18:33:27 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/lib/fonts/Times-Bold.afm.php on line 2
+[17-May-2020 18:34:21 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 848
+[17-May-2020 18:34:24 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 848
+[17-May-2020 18:35:01 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 848
+[17-May-2020 18:35:06 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 849
+[17-May-2020 18:35:09 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 849
+[17-May-2020 18:42:34 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 147456 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 654
+[17-May-2020 18:43:14 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 147456 bytes) in /home/livresbs/public_html/Painel/_pdf/dompdf/src/Css/Style.php on line 654
+[24-May-2020 14:05:37 America/Sao_Paulo] PHP Fatal error:  Cannot redeclare MyAutoLoad() (previously declared in /home/livresbs/public_html/_app/Config.inc.php:51) in /home/livresbs/public_html/_app/Config.inc.php on line 60

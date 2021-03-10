@@ -1,0 +1,10 @@
+[24-Mar-2020 17:38:12 UTC] PHP Notice:  Undefined index: consumidor in /home/livresbs/public_html/entrega-feiras/salva.php on line 18
+[24-Mar-2020 17:38:12 UTC] PHP Notice:  Undefined index: email in /home/livresbs/public_html/entrega-feiras/salva.php on line 19
+[24-Mar-2020 17:38:12 UTC] PHP Notice:  Undefined index: cpf in /home/livresbs/public_html/entrega-feiras/salva.php on line 20
+[24-Mar-2020 17:38:12 UTC] PHP Notice:  Undefined index: endereco in /home/livresbs/public_html/entrega-feiras/salva.php on line 25
+[24-Mar-2020 17:38:12 UTC] PHP Notice:  Undefined index: telefone in /home/livresbs/public_html/entrega-feiras/salva.php on line 26
+[24-Mar-2020 17:38:31 UTC] PHP Notice:  Undefined index: consumidor in /home/livresbs/public_html/entrega-feiras/salva.php on line 18
+[24-Mar-2020 17:38:31 UTC] PHP Notice:  Undefined index: email in /home/livresbs/public_html/entrega-feiras/salva.php on line 19
+[24-Mar-2020 17:38:31 UTC] PHP Notice:  Undefined index: cpf in /home/livresbs/public_html/entrega-feiras/salva.php on line 20
+[24-Mar-2020 17:38:31 UTC] PHP Notice:  Undefined index: endereco in /home/livresbs/public_html/entrega-feiras/salva.php on line 25
+[24-Mar-2020 17:38:31 UTC] PHP Notice:  Undefined index: telefone in /home/livresbs/public_html/entrega-feiras/salva.php on line 26

@@ -1,0 +1,78 @@
+{% extends "index.html" %}
+
+{% block content %}
+    <div class="cesta">
+        <span>Consulte sua cesta pela respectiva data de entrega</span>
+        <div class="row">
+            <div class="col-auto">
+                {% for d in datas %}
+                    <a 
+                        class="list-group-item list-group-item-action {% if (d.data_id == data_selecionada) %} active {% endif %} "
+                        href="?cpf={{cpf}}&data={{d.data_id}}">
+                        {{ d.pedido_data|date('d/m/Y') }}
+                    </a>
+                {% endfor %}
+                <a 
+                    class="list-group-item list-group-item-action {% if (data_selecionada == -1) %} active {% endif %} "
+                    href="?cpf={{cpf}}&data=-1">
+                    Compromisso
+                </a>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        {% if data_selecionada == -1 %}
+                            Abaixo você pode ver a cesta completa solicitada por você ao Livres. Os itens que aparecem em azul estão, por enquanto, previstos para sua próxima entrega, já aqueles em vermelho serão entregues assim que os produtores os colherem!
+                            Lembre-se que nossos produtores e seus produtos são totalmente dependentes do clima. Imprevistos na disponibilidade dos produtos podem acontecer!
+                        {% else %}
+                            Abaixo você pode ver a composição da sua cesta entregue para a data selecionada.
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col cesta-container">
+                        {% if data_selecionada != -1 %}
+                            {% for c in cesta %}
+                                <div class="cesta-card">
+                                    <div class="cesta-card-container">
+                                        <div class="cesta-linha">{{c.item_produto}}</div>
+                                        <div class="cesta-linha">{{c.item_qtde/c.multiplicador_unidade2}} {{c.unidade2}}</div>
+                                        <div class="cesta-linha">{{c.item_freq_cesta}}</div>
+                                        <div class="cesta-linha">R${{(c.item_valor*c.multiplicador_unidade2)|number_format(2,",",".")}}</div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        {% if data_selecionada == -1 %}
+                            {% for c in cesta['atual'] %}
+                                <div class="cesta-card">
+                                    <div class="cesta-card-container">
+                                        <div class="cesta-linha">{{c.produto.nome}}</div>
+                                        <div class="cesta-linha">{{c.quantidade/c.produto.multiplicador_unidade2}} {{c.produto.unidade2}}</div>
+                                        <div class="cesta-linha">{{c.frequencia}}</div>
+                                        <div class="cesta-linha">R${{(c.produto.preco*c.produto.multiplicador_unidade2)|number_format(2,",",".")}}</div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% for c in cesta['compromisso'] %}
+                                <div class="cesta-card">
+                                    <div class="cesta-card-container cesta-compromisso">
+                                        <div class="cesta-linha">{{c.produto.nome}}</div>
+                                        <div class="cesta-linha">{{c.quantidade/c.produto.multiplicador_unidade2}} {{c.produto.unidade2}}</div>
+                                        <div class="cesta-linha">{{c.frequencia}}</div>
+                                        <div class="cesta-linha">R${{(c.produto.preco*c.produto.multiplicador_unidade2)|number_format(2,",",".")}}</div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col" class="cesta-totais">
+                        Valor da sua cesta:
+                    </div>
+                </div>  
+            </div>                     
+        </div>
+    </div>
+{% endblock content %}

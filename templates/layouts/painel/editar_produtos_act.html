@@ -1,0 +1,288 @@
+<div class="container">
+    {% if produto.id %}
+        <form method="POST" id="formEditarProduto" action="editar_produtos_act.php?id={{ produto.id }}">
+    {% else %}
+        <form method="POST" id="formEditarProduto" action="editar_produtos_act.php">
+    {% endif %}
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Nome</label>
+            <div class="col-sm-8">
+                {% if produto.id %}
+                    <input type="hidden" id="id" name="id" value="{{ produto.id }}" />
+                {% endif %}
+                {% if level_user >= 100000 or not produto.id %}
+                    <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" value="{{ produto.nome }}">
+                {% else %}
+                    <input type="text" class="form-control" id="aux1" name="aux1" placeholder="Nome" value="{{ produto.nome }}" disabled>
+                    <input type="hidden" class="form-control" id="nome" name="nome" value="{{ produto.nome }}">
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Categoria</label>
+            <div class="col-sm-8">
+                <select id="categoria" name="categoria" placeholder="Categoria" class="form-control">
+                    {% for c in categorias %}
+                        {% if (c.Categoria == produto.categoria) %}
+                            <option value="{{ c.Categoria }}" selected="selected">{{ c.Categoria }}</option>
+                        {% else %}
+                            <option value="{{ c.Categoria }}">{{ c.Categoria }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Unidade</label>
+            <div class="col-sm-8">
+                <select id="unidade" name="unidade" placeholder="Categoria" class="form-control">
+                    {% for u in unidades %}
+                        {% if (u == produto.unidade) %}
+                            <option value="{{ u }}" selected="selected">{{ u }}</option>
+                        {% else %}
+                            <option value="{{ u }}">{{ u }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Previsao</label>
+            <div class="col-sm-8">
+                <select id="previsao" name="previsao" placeholder="Produtor" class="form-control">
+                    {% for d in datas %}
+                        {% if d.data|date("d/m/Y") == produto.previsao|date("d/m/Y") %}
+                            <option value="{{ d.data|date("Y-m-d") }}" selected="selected">{{ d.data|date("d/m/Y") }}</option>
+                        {% else %}
+                            <option value="{{ d.data|date("Y-m-d") }}">{{ d.data|date("d/m/Y") }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="indisponivel" name="indisponivel" value="indisponivel">
+                    <label class="form-check-label" for="indisponivel">
+                        Indisponível
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Produtor</label>
+            <div class="col-sm-8">
+                <select id="produtor" name="produtor" placeholder="Produtor" class="form-control">
+                    {% for p in produtores %}
+                        {% if p == produto.produtor %}
+                            <option value="{{ p }}" selected="selected">{{ p }}</option>
+                        {% else %}
+                            <option value="{{ p }}">{{ p }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Preço Produtor</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="preco_produtor" name="preco_produtor" placeholder="Preço Produtor" value="{{ produto.preco_produtor }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Preço Comboio</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="preco" name="preco" placeholder="Preço Comboio" value="{{ produto.preco }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Preço Comunidade</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="preco_lojinha" name="preco_lojinha" placeholder="Preco Comunidade" value="{{ produto.preco_lojinha }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Preco Pré-comunidade</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="preco_pre" name="preco_pre" placeholder="Preço pré-comunidade" value="{{ produto.preco_pre }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Preco Livre Mercado</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="preco_mercado" name="preco_mercado" placeholder="Preco Livre Mercado" value="{{ produto.preco_mercado }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-8">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="mensal" name="mensal" value="mensal"
+                        {% if produto.mensal %}
+                            checked="checked"
+                        {% endif %}
+                    >
+                    <label class="form-check-label" for="mensal">
+                        Disponível para cesta Mensal?
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-4"></div>
+                <div class="col-sm-8">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="carrinho" name="carrinho" value="carrinho"
+                        {% if produto.carrinho %}
+                            checked="checked"
+                        {% endif %}
+                    >
+                    <label class="form-check-label" for="carrinho">
+                        Disponibilizar para escolha no carrinho?
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Unidade Agrupada</label>
+            <div class="col-sm-8">
+                {% if level_user >= 100000 or not produto.id %}
+                    <select id="unidade2" name="unidade2" placeholder="Categoria" class="form-control">
+                        {% for u in unidades %}
+                            {% if (u == produto.unidade2) %}
+                                <option value="{{ u }}" selected="selected">{{ u }}</option>
+                            {% else %}
+                                <option value="{{ u }}">{{ u }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                {% else %} 
+                    <select id="aux2" name="aux2" placeholder="Categoria" class="form-control" disabled>
+                        {% for u in unidades %}
+                            {% if (u == produto.unidade2) %}
+                                <option value="{{ u }}" selected="selected">{{ u }}</option>
+                            {% else %}
+                                <option value="{{ u }}">{{ u }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <input type="hidden" id="unidade2" name="unidade2" value="{{ produto.unidade2 }}" />                   
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Multiplicador Unidade Agrupada</label>
+            <div class="col-sm-8">
+                {% if level_user >= 100000 or not produto.id %}
+                    <input type="text" class="form-control" id="multiplicador_unidade2" name="multiplicador_unidade2" value={{ (produto.multiplicador_unidade2) ? produto.multiplicador_unidade2 : 1 }}>
+                {% else %}
+                    <input type="text" class="form-control" id="aux3" name="aux3" value="{{ produto.multiplicador_unidade2 }}" disabled>
+                    <input type="hidden" class="form-control" id="multiplicador_unidade2" name="multiplicador_unidade2" value={{ produto.multiplicador_unidade2 }}>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="" class="col-sm-4 col-form-label">Estoque Atual</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="estoque" name="estoque" placeholder="Estoque" value={{ produto.estoque }}>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-8">
+                <input type="submit" class="btn btn-primary" value="Salvar" />
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    function formatMoeda(v) {
+        v = v.replace("R","");
+        v = v.replace("$","");
+        v = v.replace(",", ".");
+        if (v.search("\\.") == -1) {
+            return "R$" + v + ",00";
+        }
+        inteiro = v.substring(0,v.search("\\."))
+        dec = v.substring(v.search(".")+2);
+        dec = dec.substring(0,2);
+        if (dec.length == 1) {
+            dec = dec + "0";
+        }
+        return "R$" + inteiro + "," + dec;
+    }
+
+    function formatData(d) {
+        arr = d.split("-");
+        return arr[2] + "/" + arr[1] + "/" + arr[0];
+    }
+
+    $(document).ready(function() {
+        var previsao = $("#previsao").val();
+        console.log(previsao);
+        if (previsao == '2037-12-31') {
+            $("#previsao").hide();
+            $("#indisponivel").prop("checked", true);
+        } else {
+            $("#previsao").show();
+            $("#indisponivel").prop("checked", false);
+        }
+    });
+
+    $("#indisponivel").click(function() {
+        if ($(this).prop("checked")) {
+            $("#previsao").val("2037-12-31");
+            $("#previsao").hide();
+        } else {
+            $("#previsao").show();
+        }
+    });
+
+    $("#previsao").change(function() {
+        if ($(this).val() == '2037-12-31') {
+            $("#previsao").hide();
+            $("#indisponivel").prop("checked", true);
+        }
+    });
+
+    $("#formEditarProduto").submit(function(e) {
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+
+        var form = $(this);
+        var url = form.attr('action');
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(), // serializes the form's elements.
+            success: function(data) {
+                alert(data); // show response from the php script.
+                if (data == "Produto atualizado") {
+                    var dados = form.serializeArray().reduce(function(obj, item) {
+                        obj[item.name] = item.value;
+                        return obj;
+                    }, {});
+                    id = dados["id"];
+                    
+                    $("#nome_"+id).text(dados["nome"]);
+                    $("#categoria_"+id).text(dados["categoria"]);
+                    $("#unidade_"+id).text(dados["unidade"]);
+                    $("#produtor_"+id).text(dados["produtor"]);
+                    if (formatData(dados["previsao"]) == "31/12/2037") {
+                        $("#previsao_"+id).text("Indisponível");
+                    } else {
+                        $("#previsao_"+id).text(formatData(dados["previsao"]));
+                    }
+                    $("#preco_"+id).text(formatMoeda(dados["preco"]));
+                    $("#preco_produtor_"+id).text(formatMoeda(dados["preco_produtor"]));
+                    $("#preco_lojinha_"+id).text(formatMoeda(dados["preco_lojinha"]));
+                    $("#preco_pre_"+id).text(formatMoeda(dados["preco_pre"]));
+                    $("#preco_mercado_"+id).text(formatMoeda(dados["preco_mercado"]));
+
+                    dialog.dialog("close");
+                } else {
+                    if (data == "Produto cadastrado") {
+                        location.reload();                        
+                    }
+                }
+            }
+        });
+    });
+</script>

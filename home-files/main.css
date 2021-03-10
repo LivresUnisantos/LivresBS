@@ -1,0 +1,352 @@
+
+/*------------------------------------------------------------------
+[ Input ]*/
+html {
+    scroll-behavior: smooth;
+}
+body{
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.wrap-input100 {
+  width: 280px;
+  max-width: calc(100% - 20px);
+  height: 50px;
+  background: #fff;
+  border-radius: 25px;
+}
+
+/* .input100 {
+  display: block;
+  width: 100%;
+  height: 100% ;
+  padding: 0 20px 0 30px;
+  border-radius: 25px;
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+.input100:focus {
+  box-shadow: 0 0px 10px 1px rgba(255,255,255,0.5);
+  -moz-box-shadow: 0 0px 10px 1px rgba(255,255,255,0.5);
+  -webkit-box-shadow: 0 0px 10px 1px rgba(255,255,255,0.5);
+  -o-box-shadow: 0 0px 10px 1px rgba(255,255,255,0.5);
+  -ms-box-shadow: 0 0px 10px 1px rgba(255,255,255,0.5);
+} */
+
+
+/*------------------------------------------------------------------
+[ Alert validate ]*/
+
+.validate-input {
+  position: relative;
+}
+
+.alert-validate::before {
+  content: attr(data-validate);
+  position: absolute;
+  width: 85%;
+  background-color: #fff;
+  border: 1px none #c80000;
+  border-radius: 15px;
+  /* padding: 4px 25px 4px 10px; */
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+  right: 12px;
+  pointer-events: none;
+
+  font-family: helvetica, sans-serif;
+  /* font-weight: bold; */
+  color: #c80000;
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: center;
+
+  /* visibility: hidden; */
+  opacity: 0;
+
+  -webkit-transition: opacity 0.4s;
+  -o-transition: opacity 0.4s;
+  -moz-transition: opacity 0.4s;
+  transition: opacity 0.4s;
+}
+
+/*
+.alert-validate::after {
+  content: "\f071";
+  font-family: FontAwesome;
+  display: block;
+  position: absolute;
+  color: #c80000;
+  font-size: 14px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+  right: 18px;
+}
+*/
+
+.alert-validate:hover:before {
+  visibility: visible;
+  opacity: 1;
+} 
+
+ @media (max-width: 992px) {
+  .alert-validate::before {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+
+
+/*==================================================================
+    TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT
+==================================================================*/
+
+/*==================================================================
+[ Color ]*/
+.white {color: #fff;}
+
+/*span*/
+.italic{
+  font-style: italic;
+}
+
+/*//////////////////////////////////////////////////////////////////
+*/
+p{
+  font-size: 19px;
+  padding: 20px;
+  text-align: justify;
+}
+
+img{
+  border-radius: 20px;
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ Background ]*/
+.bg0 {background-color: #fff;}
+
+
+.navbar{
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+}
+
+.iframePrincipal{
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+
+
+
+/* SECTIONS SECTIONS SECTIONS SECTIONS*/
+
+.navbar-brand{
+  font-family: helvetica, sans-serif;
+  font-size: 15px;
+}
+
+#delivery-section .container,
+#cestas-semanais-section .container,
+#seguranca-alimentar-section .container,
+#uma-solucao-section .container,
+#contato-section .container{
+  padding-top: 40px;
+}
+
+#quem-somos-section {
+  background: url(../home-img/plantacaoLivres4.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 800px;
+}
+
+#quem-somos-section .dark-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 800px;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+#quem-somos-section .home-inner {
+  padding-top: 90px;
+}
+
+#quem-somos-section .gap{
+  width: 100%;
+  height: 120px;
+}
+
+#quem-somos-section img{
+  width: 50%;
+}
+
+#quem-somos-section h1{
+  text-align: center;
+}
+
+#quem-somos-section .card-form {
+  opacity: 0.8;
+}
+
+#quem-somos-section img{
+  margin: 0;
+  padding: 0;
+  width: 80%;
+}
+
+
+#delivery-section{
+  background: #41b1e0;
+}
+
+/* #cestas-semanais-section{
+  background: url(home-img/produtosLivres.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 700px;  
+} */
+
+#cestas-semanais-section{
+  background-color: #41b1e0;
+}
+
+#seguranca-alimentar-section{
+  background: #588a2b;
+  text-align: center;
+}
+
+#seguranca-alimentar-section a{
+  color: #ffff66;
+  font-weight: bold;
+}
+
+.navbar .in .nav li {
+  display: block;
+  float: none;
+  width:100%;
+}
+
+.notopmargin{
+  margin-top: 0;
+}
+
+#contato-section{
+  /* background: #452314; */
+  background: #41b1e0;
+}
+
+#contato-section img{
+  width: 55%;
+  padding: 0;
+  border-radius: 0;
+}
+
+#contato-section .card{
+  background: #c27351;;
+  border-radius: 20px;
+}
+
+#contato-section a{
+  color: #fff;
+}
+
+/*smartphones*/
+@media(max-width: 500px){
+  h1{
+    font-size: 35px;
+    text-align: center;
+    padding-top: 15px;
+  }
+
+  p{
+    font-size: 17px;
+    text-align: justify;
+  }
+
+  #contato-section img{
+    width: 100%;
+    margin-left: 20px;
+  }
+}
+ /*tablet*/
+@media(min-width: 501px) and (max-width: 850px){
+  .p-small{
+    text-align: justify;
+  }
+  
+  #quem-somos-section img{
+    margin: 0;
+    padding: 0;
+    width: 50%;
+  }
+
+  #quem-somos-section h1{
+    padding-top: 25px;
+  }
+
+  .card{
+    width: 60%;
+    margin: auto;
+    margin-top: 40px;
+  }
+
+  #contato-section .contactsListInnerContainer{
+    width: 80%;
+    margin: auto;
+  }
+
+  #contato-section img{
+    width: 70%;
+    margin-left: 30px;
+  }
+
+}
+
+/*Widescreen*/
+@media(min-width: 850px) and (max-width: 1200px){
+  #quem-somos-section img{
+    margin: 0;
+    padding: 0;
+    width: 80%;
+  }
+
+  #quem-somos-section h1{
+    text-align: left;
+  }
+}
+
+/*Landscape*/
+@media(min-width: 1201px){
+  #quem-somos-section img{
+    margin: 0;
+    padding: 0;
+    width: 80%;
+  }
+}
+
+.card-sem-form {
+    display: none;
+}
+}

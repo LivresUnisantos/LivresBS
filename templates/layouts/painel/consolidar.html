@@ -1,0 +1,51 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="consolidar-pedidos">
+    {% for d in conteudo %}
+    <div class="row item align-items-center">
+        <div class="col-auto">{{d.data|date("d/m/Y")}}</div>
+        <div class="col">
+            {% if (d.data < ('now'|date('U'))) %}
+                <a href="consolidar.php?id={{d.data_id}}&op=total" target="_blank" class="btn btn-secondary">
+                    {% if (d.fixa > 0 or d.variavel > 0 or d.avulsa > 0) %}
+                        Re-consolidar tudo
+                    {% else %}
+                        Consolidar tudo
+                    {% endif %}
+                </a>
+                {% if (d.fixa > 0) %}
+                    <a href="consolidar.php?id={{d.data_id}}&op=variavel" target="_blank" class="btn btn-secondary">
+                        {% if (d.variavel > 0) %}
+                            Re-consolidar variável
+                        {% else %}
+                            Consolidar variável
+                        {% endif %}
+                    </a>
+                {% endif %}
+                <span>Este pedido é de uma data passada. Consolidá-lo causará impactos em pedidos já entregues.</span>
+            {% else %}
+                {% if (d.fixa > 0 or d.variavel > 0 or d.avulsa > 0) %}
+                    <a href="consolidar.php?id={{d.data_id}}&op=total" target="_blank" class="btn btn-warning">Re-consolidar tudo</a>
+                    {% if (d.fixa > 0) %}
+                        <a href="consolidar.php?id={{d.data_id}}&op=variavel" target="_blank" class="btn btn-warning">
+                            {% if (d.variavel > 0) %}
+                                Re-consolidar variável
+                            {% else %}
+                                Consolidar variável 
+                            {% endif %}                 
+                        </a>
+                    {% endif %}
+                    <span>
+                        Este pedido já foi consolidado uma vez. Caso tenha havido alteração de cesta ou disponibilidade de produtos,
+                        consolidá-lo novamente causará impactos nos pedidos.
+                    </span>
+                {% else %}
+                    <a href="consolidar.php?id={{d.data_id}}&op=total" target="_blank" class="btn btn-success">Consolidar tudo</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

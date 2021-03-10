@@ -1,0 +1,110 @@
+.consumidor li:first-of-type {
+    font-weight: bold;
+}
+
+.pedido ul {
+    list-style: none;
+    padding-left: 5px;
+}
+
+.data-selecao {
+    margin-right: 20px;
+}
+
+.pedido .variavel {
+    font-weight: bold;
+}
+
+.menu-frequencia {
+    padding-right: 10px;
+}
+
+/* Planilha de caixa */
+.caixa-table {
+    margin-left: 10px;
+}
+.caixa-table, .caixa-table td {
+    border: 1px solid #000;
+    border-collapse: collapse;
+    text-align: center;
+    font-family: Calibri;
+}
+.caixa-table .firstLine {
+    background: #000;
+    color:#fff;
+    font-weight:bold;
+}
+.caixa-table .lineColor {
+    background: #d9d9d9;
+}
+.caixa-table .lineBlank {
+    background: #fff;
+}
+.cabecalho_entregas {
+    padding-left: 10px;
+    font-size: 1.3em;
+}
+
+.consolidar-pedidos {
+    padding: 2em;
+}
+
+.item {
+    background: #f2f2f2;
+    border-top: 1px solid #bbb;
+    height: 3em;
+    color: #555;
+}
+.item .data {
+    min-width: 10px;
+}
+.item:nth-of-type(2n+0) {
+    background: #87ceeb;
+    border-top: 1px solid #bbb;
+}
+
+/* início menu */
+.wc_ead_chart_range_picker span{
+    display: inline-block;
+    background: #eee;
+    padding: 6px 10px;
+    vertical-align: middle;
+    font-size: 0.8em;
+    font-weight: 400;
+    border-radius: 2px 0 0 2px;
+    -moz-border-radius: 2px 0 0 2px;
+    -webkit-border-radius: 2px 0 0 2px;
+}
+
+.wc_ead_chart_range_picker input {
+    display: inline-block;
+    vertical-align: middle;
+    width: 100px;
+    border-color: #eee;
+    font-size: 0.8em;
+    padding: 5px;
+    text-align: center;
+    border-radius: 0 2px 2px 0;
+    -moz-border-radius: 0 2px 2px 0;
+    -webkit-border-radius: 0 2px 2px 0;
+    font-weight: 300;
+    border: 1px solid #ccc;
+}
+
+.btnData{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 0.8em;
+    cursor: pointer;
+    padding: 6px 12px;
+    background: #00B494;
+    color: #fff ;
+    text-decoration: none;
+    text-align: center;
+    border: none;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    text-shadow: 1px 1px #555;
+}
+/* fim menu */

@@ -1,0 +1,20 @@
+[17-May-2020 19:00:48 UTC] PHP Fatal error:  Uncaught TypeError: Argument 2 passed to Update::ExeUpdate() must be of the type array, null given, called in /home/livresbs/public_html/Painel/_ajax/Pedidos.ajax.php on line 90 and defined in /home/livresbs/public_html/_app/Conn/Update.class.php:38
+Stack trace:
+#0 /home/livresbs/public_html/Painel/_ajax/Pedidos.ajax.php(90): Update->ExeUpdate('pedidos_consoli...', NULL, 'WHERE item_id =...', 'ii=389')
+#1 {main}
+  thrown in /home/livresbs/public_html/_app/Conn/Update.class.php on line 38
+[17-May-2020 19:00:56 UTC] PHP Fatal error:  Uncaught TypeError: Argument 2 passed to Update::ExeUpdate() must be of the type array, null given, called in /home/livresbs/public_html/Painel/_ajax/Pedidos.ajax.php on line 90 and defined in /home/livresbs/public_html/_app/Conn/Update.class.php:38
+Stack trace:
+#0 /home/livresbs/public_html/Painel/_ajax/Pedidos.ajax.php(90): Update->ExeUpdate('pedidos_consoli...', NULL, 'WHERE item_id =...', 'ii=389')
+#1 {main}
+  thrown in /home/livresbs/public_html/_app/Conn/Update.class.php on line 38
+[17-May-2020 19:01:05 UTC] PHP Fatal error:  Uncaught TypeError: Argument 2 passed to Update::ExeUpdate() must be of the type array, null given, called in /home/livresbs/public_html/Painel/_ajax/Pedidos.ajax.php on line 90 and defined in /home/livresbs/public_html/_app/Conn/Update.class.php:38
+Stack trace:
+#0 /home/livresbs/public_html/Painel/_ajax/Pedidos.ajax.php(90): Update->ExeUpdate('pedidos_consoli...', NULL, 'WHERE item_id =...', 'ii=389')
+#1 {main}
+  thrown in /home/livresbs/public_html/_app/Conn/Update.class.php on line 38
+[25-May-2020 16:02:22 America/Sao_Paulo] PHP Fatal error:  Uncaught TypeError: Argument 2 passed to Update::ExeUpdate() must be of the type array, null given, called in /home/livresbs/public_html/Painel/_ajax/Pedidos.ajax.php on line 90 and defined in /home/livresbs/public_html/_app/Conn/Update.class.php:38
+Stack trace:
+#0 /home/livresbs/public_html/Painel/_ajax/Pedidos.ajax.php(90): Update->ExeUpdate('pedidos_consoli...', NULL, 'WHERE item_id =...', 'ii=125')
+#1 {main}
+  thrown in /home/livresbs/public_html/_app/Conn/Update.class.php on line 38

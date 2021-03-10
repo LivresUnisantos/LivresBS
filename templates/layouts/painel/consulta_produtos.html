@@ -1,0 +1,41 @@
+{% extends "index.html" %}
+
+{% block content %}
+    {% if conteudo %}
+        <input type="text" id="filtro" placeholder="Procure pelo produto" />
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>Produto</th>
+                    <th>Comboio</th>
+                    <th>Consumidor Consciente</th>
+                    <th>Livre Mercado</th>
+                </tr>
+            </thead>
+            <tbody id="tabela_produtos">
+                {% for p in conteudo %}
+                    <tr>
+                        <td>{{p.nome}}</td>
+                        <td>R${{p.preco|number_format(2,",",".")}}</td>
+                        <td>R${{p.preco_lojinha|number_format(2,",",".")}}</td>
+                        <td>R${{p.preco_mercado|number_format(2,",",".")}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        {% if (data_entrega != "") %}
+            <span class="cabecalho_entregas">Não há produtos cadastrados</span>
+        {% endif %}
+    {% endif %}
+    <script>
+        $(document).ready(function(){
+          $("#filtro").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#tabela_produtos tr").filter(function() {
+              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+          });
+        });
+    </script>
+{% endblock content %}

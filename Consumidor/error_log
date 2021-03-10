@@ -1,0 +1,24 @@
+[27-Mar-2020 15:50:52 UTC] PHP Fatal error:  Call to undefined function nltobr() in /home/livresbs/public_html/Consumidor/index.php on line 58
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[27-Mar-2020 21:01:56 UTC] PHP Warning:  Illegal string offset 'pedido' in /home/livresbs/public_html/Consumidor/index.php on line 53
+[31-Mar-2020 15:46:40 UTC] PHP Fatal error:  Class 'PHPMailer' not found in /home/livresbs/public_html/Consumidor/test.php on line 2
+[31-Mar-2020 15:49:11 UTC] PHP Warning:  require(../PHPMailer/src/PHPMailer.php): failed to open stream: No such file or directory in /home/livresbs/public_html/Consumidor/test.php on line 2
+[31-Mar-2020 15:49:11 UTC] PHP Warning:  require(../PHPMailer/src/PHPMailer.php): failed to open stream: No such file or directory in /home/livresbs/public_html/Consumidor/test.php on line 2
+[31-Mar-2020 15:49:11 UTC] PHP Fatal error:  require(): Failed opening required '../PHPMailer/src/PHPMailer.php' (include_path='.:/opt/cpanel/ea-php54/root/usr/share/pear') in /home/livresbs/public_html/Consumidor/test.php on line 2
+[31-Mar-2020 15:49:33 UTC] PHP Fatal error:  Class 'PHPMailer' not found in /home/livresbs/public_html/Consumidor/test.php on line 4
+[31-Mar-2020 15:50:20 UTC] PHP Fatal error:  Cannot redeclare class PHPMailer\PHPMailer\PHPMailer in /home/livresbs/public_html/PHPMailer/src/PHPMailer.php on line 32
+[31-Mar-2020 15:51:41 UTC] PHP Fatal error:  Class 'SMTP' not found in /home/livresbs/public_html/Consumidor/test.php on line 11

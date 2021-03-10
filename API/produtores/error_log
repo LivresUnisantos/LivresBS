@@ -1,0 +1,24 @@
+[29-Mar-2020 23:59:53 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM
+                Produtores p
+            ORDER BY p.Produtor ASC' at line 4' in /home/livresbs/public_html/models/Produtor.php:21
+Stack trace:
+#0 /home/livresbs/public_html/models/Produtor.php(21): PDOStatement->execute()
+#1 /home/livresbs/public_html/API/produtores/index.php(13): Produtor->read()
+#2 {main}
+  thrown in /home/livresbs/public_html/models/Produtor.php on line 21
+[30-Mar-2020 00:00:18 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM
+                Produtores p
+            ORDER BY p.produtor ASC' at line 4' in /home/livresbs/public_html/models/Produtor.php:21
+Stack trace:
+#0 /home/livresbs/public_html/models/Produtor.php(21): PDOStatement->execute()
+#1 /home/livresbs/public_html/API/produtores/index.php(13): Produtor->read()
+#2 {main}
+  thrown in /home/livresbs/public_html/models/Produtor.php on line 21
+[30-Mar-2020 00:00:45 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM
+                Produtores p
+            ORDER BY p.produtor ASC' at line 4' in /home/livresbs/public_html/models/Produtor.php:22
+Stack trace:
+#0 /home/livresbs/public_html/models/Produtor.php(22): PDOStatement->execute()
+#1 /home/livresbs/public_html/API/produtores/index.php(13): Produtor->read()
+#2 {main}
+  thrown in /home/livresbs/public_html/models/Produtor.php on line 22

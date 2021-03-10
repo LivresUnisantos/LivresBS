@@ -1,0 +1,100 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="../../Painel/index.php{% if (data_selecionada != '') %}?data={{data_selecionada}}{% endif %}">
+        Início
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Operação
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="../../Painel/menu_consolidar.php">Consolidar Pedidos</a>                    
+                    <a class="dropdown-item" href="../../Painel/cad_variaveis.php{% if (data_selecionada != '') %}?data={{data_selecionada}}{% endif %}">Cadastro Variáveis</a>
+                    <a class="dropdown-item" href="../../Painel/delivery.php?imprimir=1{% if (data_selecionada != '') %}&data={{data_selecionada}}{% endif %}">Delivery</a>
+                    <a class="dropdown-item" condicionalData="sim" href="../../Painel/montagem/index.php?lbs=home{% if (data_selecionada != '') %}&data={{data_selecionada}}{% endif %}">Lista Montagem</a>
+                    <a class="dropdown-item" condicionalData="sim" href="../../Painel/montagem/index.php?lbs=pre{% if (data_selecionada != '') %}&data={{data_selecionada}}{% endif %}">Pedido Pré-Comunidade</a>
+                    <a class="dropdown-item" condicionalData="sim" href="../../Painel/montagem/index.php?lbs=pedido_produtores{% if (data_selecionada != '') %}&data={{data_selecionada}}{% endif %}">Pedido Produtores</a>
+                    <a class="dropdown-item" href="../../Painel/variaveis.php{% if (data_selecionada != '') %}?data={{data_selecionada}}{% endif %}">Pedido Variáveis</a>
+                    <a class="dropdown-item" href="../../Painel/planilha_caixa.php{% if (data_selecionada != '') %}?data={{data_selecionada}}{% endif %}">Planilha Controle Caixa</a>
+                    {# <a class="dropdown-item" href="../../Painel/cota_consumidores.php?imprimir=1{% if (data_selecionada != '') %}&data={{data_selecionada}}{% endif %}">Cota Fixo/Variavel</a> #}
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Gestão Cadastros
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="../../Painel/consulta_preco.php">Consulta Preços</a>
+                    <a class="dropdown-item" href="../../Painel/consumidores.php">Consumidores</a>
+                    <a class="dropdown-item" href="../../Painel/produtos.php?imprimir=1">Produtos</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Planejamento
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="../../Painel/demanda_produto.php">Demanda</a>
+                    <a class="dropdown-item" href="../../Painel/contabilidade.php{% if (data_selecionada != '') %}?data={{data_selecionada}}{% endif %}">Resumo Contabilidade</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Consumidores Avulsos
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="../../Painel/contatos_feiras.php">Contatos das Feiras</a>                            
+                    <a class="dropdown-item" href="../../Painel/pedidos_avulsos.php">Pedidos Avulsos</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Administração
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="../../Painel/criar_usuario.php">Cadastrar Administrador</a>
+                    <a class="dropdown-item" href="../../Painel/calendario.php">Calendário</a>
+                    <a class="dropdown-item" href="../../Painel/interessados.php">Interessados Cadastrados</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Perfil
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="../../Painel/trocasenha.php" target="_blank">Trocar Senha</a>
+                    <a class="dropdown-item" href="../../Painel/deslogar.php">Deslogar</a>
+                </div>
+            </li>
+        </ul>
+        <!--        <form class="form-inline my-2 my-lg-0" id="menuData">
+                    {% if frequencia_semana %}
+                    <span class="menu-frequencia">{{ frequencia_semana }}</span>
+                    {% endif %}
+                    <select id="data_selecao_menu_sup" name="data" class="data-selecao form-control">
+                        <option value="">Escolha</option>
+                        {% for id, data in menu_datas %}
+                        <option value="{{id}}" {% if id == data_selecionada %} selected="selected" {% endif %} >{{data|date("d/m/Y")}}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="hidden" name="hidden_data_selecionada" id="hidden_data_selecionada" value="{{ data_selecionada }}">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Escolher</button>                    
+                </form>-->
+        {% if frequencia_semana %}
+            <span class="menu-frequencia">{{ frequencia_semana }}</span>
+        {% endif %}
+        <form id="menuData" method="GET" action="" class="ajax_off">
+            <input type="hidden" name="hidden_data_selecionada" id="hidden_data_selecionada" value="{{ data_selecionadas }}">
+            <label class="wc_ead_chart_range_picker">
+                {# <span>Data:</span><input readonly="readonly" value="{{ data_selecionada }}" name="data_selecionada" type="text" data-language="pt-BR" data-timepicker="true" class="jwc_datepicker_start" style="width: 150px;"/> #}
+                <span>Data:</span><input readonly="readonly" value="{{ data_selecionada }}" id="data_selecao_menu_sup" name="data" type="text" data-language="pt-BR" data-timepicker="true" class="jwc_datepicker_start" style="width: 150px;"/>
+            </label>            
+            <button class="btnData" type="submit">Escolher</button>
+        </form>
+    </div>
+</nav>
