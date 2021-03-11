@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Livres - Comboio Orgânico</title>
+    <title>Livres - Comboio Agroecológico</title>
     <link rel="stylesheet" href="../css/foundation.css">
     <link rel="stylesheet" href="../css/app.css">
   </head>
@@ -24,7 +24,7 @@ $rs=$st->fetchAll();
     <div class="grid-container">
       <div class="grid-x grid-padding-x">
         <div class="large-12 cell">
-          <h1>Livres - Comboio Orgânico</h1>
+          <h1>Livres - Comboio Agroecológico</h1>
         </div>
       </div>
 
@@ -34,7 +34,7 @@ $rs=$st->fetchAll();
             <?php
             if ($_SERVER["HTTP_HOST"] == "livresbs.com.br") {
             ?>
-                <h3>Parabéns pela escolha de fazer parte do Comboio Orgânico do Livres!</h3>
+                <h3>Parabéns pela escolha de fazer parte do Comboio Agroecológico do Livres!</h3>
                 <p>Antes de continuar, pedimos que você leia atentamente as instruções abaixo, para garantirmos que você receba sua cesta do jeitinho que você quer.</p>
                 <p>Escolha produtos tendo em vista um padrão de consumo de 6 meses. Esse compromisso permite que os produtores realizem uma política de benefícios de economia comunitária melhor que a do "livre mercado" para atendê-los. Você pode escolher sua cesta com produtos semanais e outros quinzenais, ou apenas semanais, ou apenas quizenais, eles farão um média de preço fixo!</p>
     
@@ -42,7 +42,7 @@ $rs=$st->fetchAll();
     
                 <p>Por isso tudo, preste atenção no preenchimento de seu carrinho comunitário.</p>
             <?php } else { ?>
-                <h3>Parabéns pela escolha de fazer parte do Comboio Orgânico do Livres!</h3>
+                <h3>Parabéns pela escolha de fazer parte do Comboio Agroecológico do Livres!</h3>
                 <p>Antes de continuar, pedimos que você leia atentamente as instruções abaixo, para garantirmos que você receba sua cesta do jeitinho que você quer.</p>
                 <p>Escolha produtos tendo em vista um padrão de consumo de 3 meses. Esse compromisso permite que os produtores realizem uma política de benefícios de economia comunitária melhor que a do "livre mercado" para atendê-los. Você pode escolher sua cesta com produtos semanais!</p>
     
