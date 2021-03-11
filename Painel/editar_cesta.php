@@ -131,9 +131,9 @@ if ($st->rowCount() > 0) {
         $freqSel[$row["frequencia"]] = ' selected="selected"';
         echo '<option value="Semanal"'.$freqSel["Semanal"].'>Semanal</option>';
         echo '<option value="Quinzenal"'.$freqSel["Quinzenal"].'>Quinzenal</option>';
-        if ($row["mensal"] == 1) {
+        //if ($row["mensal"] == 1) {
             echo '<option value="Mensal"'.$freqSel["Mensal"].'>Mensal</option>';
-        }
+        //}
         echo '</select>';
         echo '</td>';
         echo '<td><input type="submit" name="submit" id="submit_'.$row["idPedido"].'" value="Salvar" />';
