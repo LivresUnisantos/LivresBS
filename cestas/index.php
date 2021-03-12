@@ -262,10 +262,10 @@ if (!isset($_GET["cpf"])) {
 								 */								
 								?>
 								Sua cota esta semana é de R$<?php echo number_format($row["pedido_cota"],2,",","."); ?> com valor total da cesta de R$<?php echo number_format($row["pedido_valor_total"],2,",","."); ?>.
-								<?php echo '<br>Cesta fixa: R$'.number_format($row["pedido_fixa"],2,",","."); ?>
+								<?php echo '<br>Cesta fixa Semanal/Quinzenal: R$'.number_format($row["pedido_fixa"],2,",","."); ?>
 								<?php if ($row["pedido_variavel"] > 0) { echo '<br>+ Variável R$'.number_format($row["pedido_variavel"],2,",","."); } ?>
 								<?php if ($row["pedido_avulso"] > 0) { echo '<br>+ Compra Extra: R$'.number_format($row["pedido_avulso"],2,",","."); } ?>
-								<?php if ($row["pedido_mensal"] > 0) { echo '<br>+ Mensal: '.number_format($row["pedido_mensal"],2,",","."); } ?>
+								<?php if ($row["pedido_mensal"] > 0) { echo '<br>+ Cesta Mensal: '.number_format($row["pedido_mensal"],2,",","."); } ?>
                             </div>
 					    </div>
 					</div>
@@ -318,40 +318,47 @@ if (!isset($_GET["cpf"])) {
                     }
                     ?>
     				<div class="medium-1">&nbsp;</div>
-    			<! -- CESTA COMPROMISSO QUINZENAL -->
-    				<div class="large-12 medium-12 text-center callout" id="quinzenal">
-    					<h5>CESTA QUINZENAL</h5>
-    					<div class="grid-x grid-padding-x">
-    						<?php
-    						//Loop de pedidos quinzenais+semanais
-    						$sql = "SELECT * FROM Pedidos LEFT JOIN produtos ON Pedidos.IDProduto = produtos.id WHERE Pedidos.IDConsumidor = ".$idConsumidor." AND Pedidos.Quantidade > 0 AND (Pedidos.Frequencia = 'Semanal' OR Pedidos.Frequencia = 'Quinzenal') ORDER BY produtos.nome";
-    						$st = $conn->prepare($sql);
-    						$st->execute();
-    						$rsQuinzenal=$st->fetchAll();
-    						$totalImediato=0;
-    						$totalCompromisso=0;
-    						foreach ($rsQuinzenal as $row) {
-    						    if (strtotime($row["previsao"]) > strtotime($proximaEntrega)) {
-    						        echo '<div class="medium-6 text-left"><b>&nbsp'.ccase($row["nome"]).'</b></div>';
-    						    } else {
-    						        echo '<div class="medium-6 text-left">&nbsp'.ccase($row["nome"]).'</div>';
-    						        $totalImediato+=$row["preco"]*$row["Quantidade"];
-    						    }
-    						    $totalCompromisso+=$row["preco"]*$row["Quantidade"];
-    							echo '<div class="medium-2 text-left">'.$row["Quantidade"].' '.$row["unidade"].'</div>';
-    							echo '<div class="medium-2 text-left">'.$row["Frequencia"].'</div>';
-                                echo '<div class="medium-2">R$'.number_format($row["preco"]*$row["Quantidade"],2,",",".").'</div>';
-    						}
-                            ?>
-                            <p>&nbsp;</p>
-                        </div>
-                        <div class="text-left callout">
-                            <p>Valor total da cesta imediata: R$<?php echo number_format($livres->cotaIdeal($totalImediato),2,",","."); ?> (sendo
-                            R$<?php echo number_format($livres->cotaIdeal($totalImediato)-$totalImediato,2,",","."); ?> de variável)</p>
-                            <p><b></b>Valor total da cesta de compromisso: R$<?php echo number_format($livres->cotaIdeal($totalCompromisso),2,",","."); ?> (sendo
-                            R$<?php echo number_format($livres->cotaIdeal($totalCompromisso)-$totalCompromisso,2,",","."); ?> de variável)</b></p>
-                        </div>
-    				</div>
+					<?php
+					//Loop de pedidos quinzenais+semanais
+					$sql = "SELECT * FROM Pedidos LEFT JOIN produtos ON Pedidos.IDProduto = produtos.id WHERE Pedidos.IDConsumidor = ".$idConsumidor." AND Pedidos.Quantidade > 0 AND (Pedidos.Frequencia = 'Semanal' OR Pedidos.Frequencia = 'Quinzenal') ORDER BY produtos.nome";
+					$st = $conn->prepare($sql);
+					$st->execute();
+
+					if ($st->rowCount() > 0) {
+					?>
+						<! -- CESTA COMPROMISSO QUINZENAL -->
+						<div class="large-12 medium-12 text-center callout" id="quinzenal">
+							<h5>CESTA QUINZENAL</h5>
+							<div class="grid-x grid-padding-x">
+								<?
+								$rsQuinzenal=$st->fetchAll();
+								$totalImediato=0;
+								$totalCompromisso=0;
+								foreach ($rsQuinzenal as $row) {
+									if (strtotime($row["previsao"]) > strtotime($proximaEntrega)) {
+										echo '<div class="medium-6 text-left"><b>&nbsp'.ccase($row["nome"]).'</b></div>';
+									} else {
+										echo '<div class="medium-6 text-left">&nbsp'.ccase($row["nome"]).'</div>';
+										$totalImediato+=$row["preco"]*$row["Quantidade"];
+									}
+									$totalCompromisso+=$row["preco"]*$row["Quantidade"];
+									echo '<div class="medium-2 text-left">'.$row["Quantidade"].' '.$row["unidade"].'</div>';
+									echo '<div class="medium-2 text-left">'.$row["Frequencia"].'</div>';
+									echo '<div class="medium-2">R$'.number_format($row["preco"]*$row["Quantidade"],2,",",".").'</div>';
+								}
+								?>
+								<p>&nbsp;</p>
+							</div>
+							<div class="text-left callout">
+								<p>Valor total da cesta imediata: R$<?php echo number_format($livres->cotaIdeal($totalImediato),2,",","."); ?> (sendo
+								R$<?php echo number_format($livres->cotaIdeal($totalImediato)-$totalImediato,2,",","."); ?> de variável)</p>
+								<p><b></b>Valor total da cesta de compromisso: R$<?php echo number_format($livres->cotaIdeal($totalCompromisso),2,",","."); ?> (sendo
+								R$<?php echo number_format($livres->cotaIdeal($totalCompromisso)-$totalCompromisso,2,",","."); ?> de variável)</b></p>
+							</div>
+						</div>
+					<?php
+					}
+					?>
                 </div>
                 <?php
                 $sql = "SELECT * FROM Pedidos LEFT JOIN produtos ON Pedidos.IDProduto = produtos.id WHERE Pedidos.IDConsumidor = ".$idConsumidor." AND Pedidos.Quantidade > 0 AND (Pedidos.Frequencia = 'Mensal') ORDER BY produtos.nome";
