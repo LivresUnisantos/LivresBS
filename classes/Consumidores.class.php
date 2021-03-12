@@ -38,7 +38,7 @@ class Consumidores extends Livres {
         return $this->listaConsumidores('inativos', $ordenar);
     }
     
-    public function consumidoresTodos() {
+    public function consumidoresTodos($ordenar = "") {
         return $this->listaConsumidores('', $ordenar);
     }
 
