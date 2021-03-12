@@ -436,12 +436,16 @@ class ConsolidarPedidos extends Livres {
         if (is_array($totais)) {
             foreach ($totais as $idPedido => $valor) {
                 $fixoSemana = $valor["fixa"]["semanal"]+$valor["fixa"]["quinzenal"];
-                $variavelSemana = $valor["variavel"]["variavel"];
-                $cotaSemana = $this->cotaIdeal($fixoSemana);
-                $cotaVariavel = $cotaSemana-$fixoSemana;
-
-                $pedido_variavel = $variavelSemana;
                 $pedido_mensal = $valor["fixa"]["mensal"];
+                $variavelSemana = $valor["variavel"]["variavel"];
+                if ($fixoSemana == 0) {
+                    $cotaSemana = $this->cotaIdeal($pedido_mensal);
+                } else {
+                    $cotaSemana = $this->cotaIdeal($fixoSemana);
+                }
+                
+                $cotaVariavel = $cotaSemana-$fixoSemana;
+                $pedido_variavel = $variavelSemana;                
 
                 $dados = [
                     ":pedido_id"            => $idPedido,
@@ -465,7 +469,7 @@ class ConsolidarPedidos extends Livres {
             $datas[$id] = [
                 "data_id"   => $id,
                 "data"      => $data,
-            ];
+            ];                
         }
         
                 
@@ -476,7 +480,7 @@ class ConsolidarPedidos extends Livres {
         LEFT JOIN pedidos_consolidados_itens it
         ON ped.pedido_id = it.pedido_id
         GROUP BY cal.id,it.item_tipo_cesta";
-
+        
         $st = $this->conn()->prepare($sql);
         $st->execute();
 

@@ -26,10 +26,19 @@
                     <td>R${{p.pedido.pedido_mensal|number_format(2,",",".")}}</td>
                     <td>R${{(p.pedido.pedido_avulso)|number_format(2,",",".") }}</td>
                     {# não mostrar diferença caso seja menor que R$0,50 já que este valor não entra na contabilização  #}
-                    {% if ((p.pedido.pedido_variavel-(p.pedido.pedido_cota-p.pedido.pedido_fixa)) >= 0.51 or (p.pedido.pedido_variavel-(p.pedido.pedido_cota-p.pedido.pedido_fixa)) <= -0.51) %}
-                        <td>R${{(p.pedido.pedido_variavel-(p.pedido.pedido_cota-p.pedido.pedido_fixa))|number_format(2,",",".") }}</td>
+                    {# se consumidor só tiver cesta mensal, ao invés de calcular cota contra fixo, precisa comparar contra mensal #}
+                    {% if (p.pedido.pedido_fixa == 0) %}
+                        {% if ((p.pedido.pedido_variavel-(p.pedido.pedido_cota-p.pedido.pedido_mensal)) >= 0.51 or (p.pedido.pedido_variavel-(p.pedido.pedido_cota-p.pedido.pedido_mensal)) <= -0.51) %}
+                            <td>R${{(p.pedido.pedido_variavel-(p.pedido.pedido_cota-p.pedido.pedido_mensal))|number_format(2,",",".") }}</td>
+                        {% else %}
+                            <td>R${{0.0|number_format(2,",",".") }}</td>
+                        {% endif %}
                     {% else %}
-                        <td>R${{0.0|number_format(2,",",".") }}</td>
+                        {% if ((p.pedido.pedido_variavel-(p.pedido.pedido_cota-p.pedido.pedido_fixa)) >= 0.51 or (p.pedido.pedido_variavel-(p.pedido.pedido_cota-p.pedido.pedido_fixa)) <= -0.51) %}
+                            <td>R${{(p.pedido.pedido_variavel-(p.pedido.pedido_cota-p.pedido.pedido_fixa))|number_format(2,",",".") }}</td>
+                        {% else %}
+                            <td>R${{0.0|number_format(2,",",".") }}</td>
+                        {% endif %}
                     {% endif %}
                     <td>R${{p.pedido.pedido_valor_total|number_format(2,',','.')}}</td>
                     <td></td>
