@@ -376,29 +376,31 @@ class ConsolidarPedidos extends Livres {
                     if (is_array($pedidosCons) && array_key_exists($idConsumidor, $pedidosCons)) {
                         $idPedido = $pedidosCons[$idConsumidor];
                         $idProduto = $item["idProduto"];
-                        $produto = $produtos[$idProduto];
-                        $idAdmin = 1;
-                        $dados = [
-                            ":pedido_id"            => $idPedido,
-                            ":admin_id_consolidado" => $idAdmin,
-                            ":produto_id"           => $idProduto,
-                            ":item_qtde"            => $item["quantidade"],///$produto["multiplicador_unidade2"],
-                            ":item_produto"         => $produto["nome"],
-                            ":item_valor"           => $produto["preco"],//*$produto["multiplicador_unidade2"],
-                            ":item_produtor"        => $produtores[$produto["produtor"]],
-                            ":item_valor_produtor"  => $produto["preco_produtor"],
-                            ":item_tipo"            => $unidades[$produto["unidade"]],//$unidades[$produto["unidade2"]],
-                            ":item_tipo_cesta"      => "variavel",
-                            ":item_freq_cesta"      => 'variavel',
-                        ];
-                        if (is_array($itensCons) && is_array($pedidosCons) && array_key_exists($idPedido, $itensCons) && array_key_exists($idProduto, $itensCons[$idPedido])) {
-                            //item existente, atualizar
-                            $dados[":item_id"] = $itensCons[$idPedido][$idProduto];
-                            $this->novoItem('update',$dados);
-                        } else {
-                            //novo item, inserir
-                            $this->novoItem('insert',$dados);
-                        }                    
+                        if (!is_null($idProduto)) { //se o id do produto é null, significa que não foi escolhido produto para este consumidor e não há necessidade de criar nada.
+                            $produto = $produtos[$idProduto];
+                            $idAdmin = 1;
+                            $dados = [
+                                ":pedido_id"            => $idPedido,
+                                ":admin_id_consolidado" => $idAdmin,
+                                ":produto_id"           => $idProduto,
+                                ":item_qtde"            => $item["quantidade"],///$produto["multiplicador_unidade2"],
+                                ":item_produto"         => $produto["nome"],
+                                ":item_valor"           => $produto["preco"],//*$produto["multiplicador_unidade2"],
+                                ":item_produtor"        => $produtores[$produto["produtor"]],
+                                ":item_valor_produtor"  => $produto["preco_produtor"],
+                                ":item_tipo"            => $unidades[$produto["unidade"]],//$unidades[$produto["unidade2"]],
+                                ":item_tipo_cesta"      => "variavel",
+                                ":item_freq_cesta"      => 'variavel',
+                            ];
+                            if (is_array($itensCons) && is_array($pedidosCons) && array_key_exists($idPedido, $itensCons) && array_key_exists($idProduto, $itensCons[$idPedido])) {
+                                //item existente, atualizar
+                                $dados[":item_id"] = $itensCons[$idPedido][$idProduto];
+                                $this->novoItem('update',$dados);
+                            } else {
+                                //novo item, inserir
+                                $this->novoItem('insert',$dados);
+                            }
+                        }
                     }
                 }
                 //atualizar pedido para incluir forma de entrega (já que este dado é preenchido com o variável)
