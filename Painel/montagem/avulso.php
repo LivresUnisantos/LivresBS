@@ -57,9 +57,6 @@ endif;
                 <span style="font-size: .9rem; margin-bottom: 8px;display: block;">Escolha o consumidor:</span>
                 <?php
                 $Read->FullRead("SELECT consumidor FROM " . DB_CONSUMIDORES . " AS a "
-                        . "WHERE NOT EXISTS (SELECT consumidor_id FROM " . DB_PD_CONS . " AS b "
-                        . "WHERE b.pedido_data = '{$StartDate}' "
-                        . "AND a.id = b.consumidor_id) "
                         . "ORDER BY a.consumidor ASC");
                 $Read->getResult();
                 if ($Read->getResult()):
@@ -75,7 +72,56 @@ endif;
             <i class="form_load none"></i>
         </form>
     </header>
-<?php else: ?>
+    <?php
+else:
+
+
+    $RegistroId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    if ($RegistroId):
+        $Read->FullRead("SELECT * FROM " . DB_PD_CONS . " AS a "
+                . "INNER JOIN " . DB_CONSUMIDORES . " AS b "
+                . "ON a.consumidor_id = b.id "
+                . "WHERE pedido_id = :id", "id={$RegistroId}");
+        if ($Read->getResult()):
+            $Pedidos = $Read->getResult();
+            $FormData = array_map('htmlspecialchars', $Read->getResult()[0]);
+            extract($FormData);
+        endif;
+    endif;
+    ?>
+    <div class="box box100">
+        <div class="panel">
+            <div class='single_order j_item'>
+                <?php
+                foreach ($Pedidos as $Itens):
+                    extract($Itens);
+                    $Read->FullRead("SELECT * FROM " . DB_PD_CONS_ITENS . " AS a "
+                            . "LEFT JOIN " . DB_PD_CONS . " AS b "
+                            . "ON a.pedido_id = b.pedido_id "
+                            . "LEFT JOIN " . DB_PRODUTO . " AS d "
+                            . "ON a.produto_id = d.id "
+                            . "LEFT JOIN " . DB_UNIDADE . " AS e "
+                            . "ON a.item_tipo = e.id "
+                            . "WHERE a.pedido_id = :pi "
+//                        . "GROUP BY a.item_produto "
+                            . "ORDER BY a.item_produto, a.item_id", "pi={$pedido_id}");
+                    foreach ($Read->getResult() as $PedIens):
+                        extract($PedIens);                    
+
+                        echo "<article class='item itemDel' id='{$item_id}'>
+                            <div class='montagem_editar'>
+                                <p class='coll' style='text-align:left'>" . str_replace('.00', '', number_format($item_qtde, 2, '.', '.')) . " x {$unidade}</p>
+                                <p class='coll' style='min-width:30%;text-align:left'>{$item_produto} <span style='float:right; text-transform: uppercase;'>({$item_freq_cesta})</span></p>
+                                <p class='coll'>". number_format($item_valor, 2, ',', '.') ." <span class='j_itemValor' style='float:right;'>(Total: R$ " . number_format($item_valor * $item_qtde, 2, ",", ".") . ")</span></p>
+                            </div>
+                        </article>";
+                    endforeach;
+                    echo "</article>";
+                endforeach;
+                ?>
+            </div>
+        </div>
+    </div>
 
     <div class="box box100">
         <div class="panel">

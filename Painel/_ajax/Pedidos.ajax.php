@@ -184,12 +184,21 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
         //CRIA UM PEDIDO PARA CONSUMIDOR QUE NÃO TEM CESTA NO DIA - ESTILO AVULSO
         case 'criarCesta':
             $Read->FullRead("SELECT id, endereco FROM " . DB_CONSUMIDORES . " WHERE consumidor = :n", "n={$PostData['consumidor']}");
-            if ($Read->getResult()):
-                $Cons = $Read->getResult()[0];
-                $ArrConsumidor = ['consumidor_id' => $Cons['id'], 'pedido_endereco' => $Cons['endereco'], 'pedido_data' => $PostData['data']];
-                $Create->ExeCreate(DB_PD_CONS, $ArrConsumidor);
-                $jSON['redirect'] = "index.php?lbs=avulso&id={$Create->getResult()}";
+            $consumidor = $Read->getResult();
+            if ($consumidor):
+                $Read->ExeRead(DB_PD_CONS, "WHERE consumidor_id = :c AND pedido_data = :d", "c={$consumidor[0]['id']}&d={$PostData['data']}");
+                if ($Read->getResult()):
+                    $jSON['redirect'] = "index.php?lbs=avulso&id={$Read->getResult()[0]['pedido_id']}";
+                else:
+                    if ($consumidor):
+                        $Cons = $consumidor[0];
+                        $ArrConsumidor = ['consumidor_id' => $Cons['id'], 'pedido_endereco' => $Cons['endereco'], 'pedido_data' => $PostData['data']];
+                        $Create->ExeCreate(DB_PD_CONS, $ArrConsumidor);
+                        $jSON['redirect'] = "index.php?lbs=avulso&id={$Create->getResult()}";
+                    endif;
+                endif;
             endif;
+
             break;
 
         //CRIAR NOVO ITEM NO PEDIDO
