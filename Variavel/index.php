@@ -351,7 +351,9 @@ if (!isset($_GET["cpf"])) {
 	$rs = $st->fetch();
 	$cota = $rs["pedido_cota"];
 	$valorCesta = $rs["pedido_fixa"];
-	
+    if ($valorCesta == 0) {
+        $valorCesta = $rs["pedido_mensal"];
+    }
 	if (getFreq($frequencia[$comunidade],"q") || (getFreq($frequencia[$comunidade],"s") && $contaSemanal > 0)) {
 	} else {
 	    if (strlen($msg) == 0) {
