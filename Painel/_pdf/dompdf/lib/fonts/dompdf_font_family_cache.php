@@ -85,8 +85,8 @@
     '800' => $fontDir . '/open-sans-800_e662e90e3c0b230a04c07f948915bafa',
   ),
   'source code pro' => array(
-    '300' => $fontDir . '/source-code-pro-300_d94b67b5bead97f23b6416f70dfe14b2',
-    '500' => $fontDir . '/source-code-pro-500_2999713ddef5742c6a80f12dfbc6956d',
+    '300' => $fontDir . '/source-code-pro-300_266896d7f08b3b03dc103638d4699f8e',
+    '500' => $fontDir . '/source-code-pro-500_540e6d71e6b047389c1a80af1bca1f51',
   ),
   'icomoon' => array(
     'normal' => $fontDir . '/icomoon-normal_e5aa0a1a1b23e7b095b48a627b443a5e',
