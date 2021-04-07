@@ -312,6 +312,10 @@ if (!isset($_GET["data"])) {
         	
         	$cota = $rsCotaNova["pedido_cota"];
         	$valorCesta = $rsCotaNova["pedido_fixa"];
+        	//if abaixo permite que hajam cestas apenas mensais. nesse caso, o variável é calculado com base no preço da cesta mensal e não semanal/quinzenal
+        	if ($valorCesta == 0) {
+        	    $valorCesta = $rsCotaNova["pedido_mensal"];
+		    }
         	
         	/*if ($cota == 0 || $valorCesta == 0) {
         	    echo "Erro ao obter dados -> consumidor_id = ".$idConsumidor;
