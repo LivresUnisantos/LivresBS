@@ -67,8 +67,8 @@ class Pedidos extends Livres {
                         $variaveis[$row["idConsumidor"]]["diferenca"] = $row["diferenca"];
                         $delivery = $row["delivery"];
                         /* ARMENG TEMPORÁRIO PARA CONVERTER O FORMATO ANTIGO DE DESCRIÇÃO DE DELIVERY PARA O NOVO */
-                        if ($delivery == 'Sim') { $delivery = 1; }
-                        if ($delivery == 'Não') { $delivery = 2; }
+                        if ($delivery == 'Não') { $delivery = 1; }
+                        if ($delivery == 'Sim') { $delivery = 2; }
                         if ($delivery == 'Não sei ainda') { $delivery = 3; }
                         if (is_null($delivery)) { $delivery = 3; }
                         /* FIM ARMENG */
