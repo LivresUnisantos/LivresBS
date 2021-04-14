@@ -53,7 +53,7 @@ if (isset($_GET["codigo"])) {
         $limite = strtotime('+1 days', $dataCriacao);
         $agora = strtotime("-3 hours",strtotime(date("Y-m-d H:i:s")));
 
-        if (strtotime($agora) > strtotime($limite)) {
+        if ($agora > $limite) {
             $alerta = "Código inválido, inexistente ou expirado. Solicite recuperação de senha novamente.";
         } else {
             if (isset($_POST["senha1"])) {
