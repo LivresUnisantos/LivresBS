@@ -295,12 +295,16 @@ if (!isset($_GET["data"])) {
         	$rsSemanal=$st->fetchAll();
         	$contaSemanal=0;
         	$contaQuinzenal=0;
+        	$contaMensal=0;
         	foreach ($rsSemanal as $row) {
         	    if ($row["Frequencia"] == 'Semanal') {
         		    $contaSemanal++;
         	    }
         	    if ($row["Frequencia"] == 'Semanal' || $row["Frequencia"] == 'Quinzenal') {
         	        $contaQuinzenal++;
+        	    }
+        	    if ($row["Frequencia"] == 'Mensal') {
+        	        $contaMensal++;
         	    }
         	}
         	/* fim mudança 05/08/2020 */
@@ -321,10 +325,7 @@ if (!isset($_GET["data"])) {
         	    echo "Erro ao obter dados -> consumidor_id = ".$idConsumidor;
         	    exit();
         	}*/
-        	
-        	
-        	
-        	if (getFreq($frequenciaCodigo[$comunidade],"q") || (getFreq($frequenciaCodigo[$comunidade],"s") && $contaSemanal > 0)) {
+        	if ((getFreq($frequenciaCodigo[$comunidade],"q") && $contaQuinzenal>0) || (getFreq($frequenciaCodigo[$comunidade],"s") && $contaSemanal > 0) || (getFreq($frequenciaCodigo[$comunidade],"m") && $contaMensal > 0)) {
         	    if ($cota == 0 || $valorCesta == 0) {
         	        echo "Erro. Consumidor ativo e sem pedido consolidado -> ".$cons["consumidor"]."(".$cons["id"].")";
         	        exit();
