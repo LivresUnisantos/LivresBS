@@ -61,8 +61,8 @@ echo '</p>';
 if (!empty($_POST)) {
     foreach ($_POST as $id=>$value) {
         if ($id != "submit") {
-            if (strlen($value) > 0) {
-                $sql = "SELECT * FROM PedidosVar WHERE idConsumidor = ".$id." AND idCalendario = ".$getData;
+            //if (strlen($value) > 0) {
+                /*$sql = "SELECT * FROM PedidosVar WHERE idConsumidor = ".$id." AND idCalendario = ".$getData;
                 $st = $conn->prepare($sql);
                 $st->execute();
                 echo "<p>";
@@ -86,7 +86,27 @@ if (!empty($_POST)) {
                     }
                 }
                 echo "</p>";
-            }
+                */
+                /* ARMENG TEMPORÁRIO PARA CONVERTER O FORMATO ANTIGO DE DESCRIÇÃO DE DELIVERY PARA O NOVO */
+                if ($value == 'Não') {
+                        $delivery = 1;
+                } else {
+                    if ($value == 'Sim') {
+                        $delivery = 2;
+                    } else {
+                        $delivery = 3;
+                    }
+                }
+                /* FIM ARMENG */
+                $sql = "UPDATE pedidos_consolidados SET pedido_retirada = ".$delivery." WHERE pedido_id = ".$id;
+                setLog("log.txt","Alteração Delivery Consumidor",$sql);
+                $st = $conn->prepare($sql);
+                if ($st->execute()) {
+                    //echo "Alteração realizada";
+                } else {
+                    echo "Falha ao realizar alteração";
+                }
+            //}
         }
     }
 }
@@ -126,6 +146,17 @@ if (!isset($_GET["data"])) {
 	    
 		$sql = 'SELECT Consumidores.id AS ConsumidorId, Consumidores.*, PedidosVar.* FROM Consumidores LEFT JOIN PedidosVar';
 		$sql .= ' ON PedidosVar.idConsumidor = Consumidores.id AND PedidosVar.idCalendario = '.$getData.' WHERE Consumidores.ativo=1 ORDER BY consumidor';
+		
+		$sql = "SELECT ped.pedido_id as pedido_id, cons.id as ConsumidorId, cons.consumidor as consumidor, cons.telefone as telefone, ped.pedido_retirada as delivery,
+		        cons.comunidade as comunidade, cons.credito as credito,
+		        ped.pedido_endereco as endereco_entrega FROM pedidos_consolidados ped
+                LEFT JOIN Consumidores cons
+                ON cons.id = ped.consumidor_id
+                LEFT JOIN Calendario cal
+                ON cal.`data` = ped.pedido_data
+                WHERE cons.consumidor IS NOT NULL
+                AND cal.id=" . $getData . "
+                ORDER BY cons.consumidor";
 		$st = $conn->prepare($sql);
 		$st->execute();
 		if ($st->rowCount() > 0) {
@@ -143,16 +174,21 @@ if (!isset($_GET["data"])) {
 		    $rs = $st->fetchAll();
 		    foreach ($rs as $row) {
 		        $com = $row["comunidade"];
-		        /*if ($com == 1) {
-		            $freq = $frequencia1;
-		        }
-		        if ($com == 2) {
-		            $freq = $frequencia2;
-		        }*/
+		        /* ARMENG TEMPORÁRIO PARA CONVERTER O FORMATO ANTIGO DE DESCRIÇÃO DE DELIVERY PARA O NOVO */
+                if ($row["delivery"] == 1) {
+                        $delivery = "Não";
+                } else {
+                    if ($row["delivery"] == 2) {
+                        $delivery = "Sim";
+                    } else {
+                        $delivery = "";
+                    }
+                }
+                /* FIM ARMENG */
 		        $semanal = (!array_key_exists($row["ConsumidorId"],$entregas) || $entregas[$row["ConsumidorId"]]["Semanal"] == 0) ? false : true;
 		        $quinzenal = (!array_key_exists($row["ConsumidorId"],$entregas) || $entregas[$row["ConsumidorId"]]["Quinzenal"] == 0) ? false : true;
 		        $mensal = (!array_key_exists($row["ConsumidorId"],$entregas) || $entregas[$row["ConsumidorId"]]["Mensal"] == 0) ? false : true;
-	            if ((getFreq($frequencias[$com],"s") && $semanal) || (getFreq($frequencias[$com],"q") && $quinzenal) || (getFreq($frequencias[$com],"m") && $mensal)) {
+	            //if ((getFreq($frequencias[$com],"s") && $semanal) || (getFreq($frequencias[$com],"q") && $quinzenal) || (getFreq($frequencias[$com],"m") && $mensal)) {
 	                $idConsumidor = $row["ConsumidorId"];
 	                echo '<tr>';
     		        echo '<td>'.ucwords(mb_strtolower($row["consumidor"]),'UTF-8').'</td>';
@@ -160,13 +196,13 @@ if (!isset($_GET["data"])) {
     		        echo '<td>'.$row["endereco_entrega"].'</td>';
 	                if (!isset($_GET["imprimir"])) {
         		        echo '<td class="'.($row["credito"] < 0 ? "debito" : "credito").'">'.($row["credito"] < 0 ? "-" : "").'R$'.number_format(abs($row["credito"]),2,",",".").'</td>';
-        		        echo '<td>'.generateMenu($row["delivery"],$idConsumidor,$idConsumidor).'</td>';
+        		        echo '<td>'.generateMenu($delivery,$row["pedido_id"],$row["pedido_id"]).'</td>';
 	                } else {
         		        echo '<td class="'.($row["credito"] < 0 ? "debito" : "credito").'">'.($row["credito"] < 0 ? "-" : "").'R$'.number_format(abs($row["credito"]),2,",",".").'</td>';
-        		        echo '<td>'.$row["delivery"].'</td>';
+        		        echo '<td>'.$delivery.'</td>';
 	                }
 	                echo '</tr>';
-	            }
+	            //}
 		    }
 		    if (!isset($_GET["imprimir"])) {
     		    echo '<tr>';
