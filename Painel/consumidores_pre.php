@@ -84,6 +84,7 @@ if ($st->rowCount() > 0) {
     echo '<td>Nome</td>';
     echo '<td>Email</td>';
     echo '<td>CPF</td>';
+    echo '<td>Endereço</td>';
     echo '<td>Grupo</td>';
     echo '<td>Alterar Senha</td>';
     echo '</tr>';
@@ -100,6 +101,7 @@ if ($st->rowCount() > 0) {
         echo '<td>'.$row["nome"].'</td>';
         echo '<td>'.$row["email"].'</td>';
         echo '<td>'.$row["cpf"].'</td>';
+        echo '<td>'.$row["endereco"].'</td>';
         echo '<td>';//.$row["grupo"]
         echo '<form method="post" action="">';
         echo '<input type="hidden" id="id_consumidor_'.$row["id"].'" name="id_consumidor" value="'.$row["id"].'" />';
