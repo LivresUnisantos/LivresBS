@@ -289,7 +289,7 @@ if (!isset($_GET["data"])) {
         		}
         		$contaQuinzenal++;
         	}******/
-        	$sql = "SELECT * FROM Pedidos LEFT JOIN produtos ON Pedidos.IDProduto = produtos.id WHERE Pedidos.IDConsumidor = ".$idConsumidor." AND Pedidos.Frequencia = 'Semanal' AND Pedidos.Quantidade > 0 AND produtos.previsao <= '".$proximoSabado."' ORDER BY produtos.nome";
+        	$sql = "SELECT * FROM Pedidos LEFT JOIN produtos ON Pedidos.IDProduto = produtos.id WHERE Pedidos.IDConsumidor = ".$idConsumidor." AND Pedidos.Quantidade > 0 AND produtos.previsao <= '".$proximoSabado."' ORDER BY produtos.nome";
         	$st = $conn->prepare($sql);
         	$st->execute();
         	$rsSemanal=$st->fetchAll();
