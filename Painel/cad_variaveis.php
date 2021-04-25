@@ -95,6 +95,7 @@ if (!isset($_SESSION["data_id"])) {
 	        $sql = "DELETE FROM produtosVar WHERE id = ".$_GET["id"];
 	        $st = $conn->prepare($sql);
 	        $st->execute();
+	        setlog('log.txt','Produto removido variáveis ('.$_GET["id"].')',$sql);
 	    }
 	    //Cadastrar produto enviado
 	    if (isset($_POST["data"])) {
@@ -117,6 +118,7 @@ if (!isset($_SESSION["data_id"])) {
 					$preco="";
 					$preco_impessoal="";
 					$msg = "Produto cadastrado com sucesso. Confirme as informações na tabela acima.";
+					setlog('log.txt','Cadastro produto variáveis ('.$produto.')',$sql);
 				}
 	        } else {
 	            $msg = "Preencha todos os campos para que o produto seja cadastrado";
