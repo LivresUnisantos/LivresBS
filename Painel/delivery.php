@@ -147,6 +147,13 @@ if (!isset($_GET["data"])) {
 		$sql = 'SELECT Consumidores.id AS ConsumidorId, Consumidores.*, PedidosVar.* FROM Consumidores LEFT JOIN PedidosVar';
 		$sql .= ' ON PedidosVar.idConsumidor = Consumidores.id AND PedidosVar.idCalendario = '.$getData.' WHERE Consumidores.ativo=1 ORDER BY consumidor';
 		
+		$st = $conn->prepare($sql);
+		$st->execute();
+		$rs = $st->fetchAll();
+		foreach ($rs as $row) {
+		    $lEnderecos[$row["idConsumidor"]] = $row["endereco_entrega"];
+		}
+		
 		$sql = "SELECT ped.pedido_id as pedido_id, cons.id as ConsumidorId, cons.consumidor as consumidor, cons.telefone as telefone, ped.pedido_retirada as delivery,
 		        cons.comunidade as comunidade, cons.credito as credito,
 		        ped.pedido_endereco as endereco_entrega FROM pedidos_consolidados ped
@@ -193,7 +200,12 @@ if (!isset($_GET["data"])) {
 	                echo '<tr>';
     		        echo '<td>'.ucwords(mb_strtolower($row["consumidor"]),'UTF-8').'</td>';
     		        echo '<td>'.$row["telefone"].'</td>';
-    		        echo '<td>'.$row["endereco_entrega"].'</td>';
+    		        //echo '<td>'.$row["endereco_entrega"].'</td>';
+    		        if (array_key_exists($idConsumidor,$lEnderecos)) {
+    		            echo '<td>'.$lEnderecos[$idConsumidor].'</td>';
+    		        } else {
+    		            echo '<td>&nbsp;</td>';
+    		        }
 	                if (!isset($_GET["imprimir"])) {
         		        echo '<td class="'.($row["credito"] < 0 ? "debito" : "credito").'">'.($row["credito"] < 0 ? "-" : "").'R$'.number_format(abs($row["credito"]),2,",",".").'</td>';
         		        echo '<td>'.generateMenu($delivery,$row["pedido_id"],$row["pedido_id"]).'</td>';
