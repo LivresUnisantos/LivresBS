@@ -252,6 +252,11 @@ function defineLimitesQuantidade($unidade) {
             $arr["maximo"] = 10;
             $arr["incremento"] = 0.5;
             break;
+        case "daozia":
+            $arr["minimo"] = 0;
+            $arr["maximo"] = 10;
+            $arr["incremento"] = 0.5;
+            break;
         case "kg":
             $arr["minimo"] = 0;
             $arr["maximo"] = 5;
@@ -287,7 +292,7 @@ function cleanString($text) {
         '/[“”«»„]/'    =>   ' ', // Double quote
         '/ /'           =>   ' ', // nonbreaking space (equiv. to 0x160)
     );
-    return preg_replace(array_keys($dict), array_values($dict), $text);
+    return preg_replace(array_keys($dict), array_values($dict), $text,1);
 }
 
 function setLog($file,$msg,$sql) {
