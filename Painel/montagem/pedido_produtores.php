@@ -243,7 +243,7 @@ $wData[1] = "start={$StartDate}";
                 $precoPreProdutorTotal += $precoPreProdutor;
             endforeach;
 
-            $SomaProdutorTotal = $precoFixaProdutorTotal + $precoVariavelProdutorTotal + $precoAvulsoProdutorTotal;
+            $SomaProdutorTotal = $precoFixaProdutorTotal + $precoVariavelProdutorTotal + $precoAvulsoProdutorTotal + $precoPreProdutorTotal;
 
             $tbPdProd .= "<tr  class='trProdutores' style='font-weight:650; background:#000; color:#fff;'>";
             $tbPdProd .= "<td class='tdProdutores'>Soma Total</td>";
