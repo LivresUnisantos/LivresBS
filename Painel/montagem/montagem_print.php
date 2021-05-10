@@ -77,7 +77,7 @@ $StartDate = (!empty($_SESSION['data_consulta']) ? $_SESSION['data_consulta'] : 
                             . "LEFT JOIN " . DB_UNIDADE . " AS e "
                             . "ON a.item_tipo = e.id "
                             . "WHERE a.pedido_id = :pi "
-                            . "ORDER BY a.item_id", "pi={$pedido_id}");
+                            . "ORDER BY d.nome, a.item_id", "pi={$pedido_id}");
                     echo "<article class='single_order'>
                         <h1>{$i}) {$consumidor}</h1>";
                     foreach ($Read->getResult() as $PedIens):
