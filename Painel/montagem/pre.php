@@ -25,7 +25,7 @@ if ($RegistroId):
         $FormData = array_map('htmlspecialchars', $Read->getResult()[0]);
         extract($FormData);
     else:
-        $_SESSION['trigger_controll'] =  AjaxErro("<b>OPPSS</b>, você tentou editar um registro que não existe ou que foi removido recentemente!", E_USER_WARNING);
+        $_SESSION['trigger_controll'] = AjaxErro("<b>OPPSS</b>, você tentou editar um registro que não existe ou que foi removido recentemente!", E_USER_WARNING);
         header("Location: {$anterior}");
         exit;
     endif;
@@ -44,7 +44,7 @@ else:
             exit;
         endif;
     else:
-        $_SESSION['trigger_controll'] =  AjaxErro("<b>OPPSS</b>, você precisa selecionar uma data antes de cadastrar os produtos da Pré Comunidade!", E_USER_WARNING);
+        $_SESSION['trigger_controll'] = AjaxErro("<b>OPPSS</b>, você precisa selecionar uma data antes de cadastrar os produtos da Pré Comunidade!", E_USER_WARNING);
         header("Location: {$anterior}");
         exit;
     endif;
@@ -65,7 +65,7 @@ endif;
     </div>
 </header>
 <form name='montagem' action='' method='post' class='' enctype='multipart/form-data'>
-    <div class='action_pre'><button  name='public' value='1' class='btn btn_green btn_medium j_salvar_item'>SALVAR PRODUTOS</button><img class='form_load none' style='margin-left: 10px;' alt='Enviando!' title='Enviando Requisição!' src='../_img/load.gif'/></div>
+    
     <div class="box box100">
         <div class="panel">
             <input type="text" class="form-control" id="filtro" name="Filtro" placeholder="Filtre por nome, produtor ou número">
@@ -102,15 +102,17 @@ endif;
                 endif;
                 ?>
             </div>
+            <div class='action_pre'><button  name='public' value='1' class='btn btn_green btn_medium j_salvar_item'>SALVAR PRODUTOS</button><img class='form_load none' style='margin-left: 10px;' alt='Enviando!' title='Enviando Requisição!' src='../_img/load.gif'/></div>
             <div class="clear"></div>
         </div>
         <div class="clear"></div>
     </div>
+    
 </form>
 <script>
-    $("#filtro").on("keyup", function() {
+    $("#filtro").on("keyup", function () {
         var value = $(this).val().toLowerCase();
-        $("#tabela_produtos .item").filter(function() {
+        $("#tabela_produtos .item").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });

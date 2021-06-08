@@ -642,36 +642,37 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
         case 'editarPre':
             $IdAdmin = $PostData['admin_id_editar'];
             $IdPedido = $PostData['pedido_id'];
-            unset($PostData['admin_id_editar'], $PostData['pedido_id']);
+            unset($PostData['admin_id_editar'], $PostData['pedido_id'], $PostData['Filtro']);
 
             $ArrCreate = array();
+            $ArrUpdatePdt = array();
+            $ArrCreatePdt = array();
+            $ArrDeletePdt = array();
             $UpBoolean = false;
+
             foreach ($PostData['produto_id'] as $k => $v):
 
                 $Read->FullRead("SELECT item_id, item_qtde, item_valor FROM " . DB_PD_CONS_ITENS . " AS a WHERE a.pedido_id = :pi AND a.produto_id = :pdi", "pi={$IdPedido}&pdi={$v}");
                 $itemPre = $Read->getResult();
 
-                $Read->FullRead("SELECT a.nome, a.preco_pre AS preco, b.id AS idProdutor, a.preco_produtor, "
-                        . "c.id AS Unidade FROM " . DB_PRODUTO . " AS a "
-                        . "LEFT JOIN " . DB_PRODUTORES . " AS b "
-                        . "ON a.produtor = b.Produtor "
-                        . "LEFT JOIN " . DB_UNIDADE . " AS c "
-                        . "ON a.unidade2 = c.unidade "
-                        . "WHERE a.id = :id", "id={$v}");
-                $Produto = $Read->getResult()[0];
-
-                $Read->ExeRead(DB_PD_CONS, "WHERE pedido_id = :pi", "pi={$IdPedido}");
-                $pedidoPre = $Read->getResult();
-
                 if (!empty($PostData['item_qtde'][$k])):
                     if (!empty($itemPre)):
                         $QtdItem = str_replace(',', '.', $PostData['item_qtde'][$k]);
-                        if ($itemPre[0]['item_qtde'] != $$QtdItem):
+                        if ($itemPre[0]['item_qtde'] != $QtdItem):
                             $ArrUp = ['item_qtde' => $QtdItem];
                             $Update->ExeUpdate(DB_PD_CONS_ITENS, $ArrUp, "WHERE pedido_id = :pi AND produto_id = :pdi", "pi={$IdPedido}&pdi={$v}");
                             $UpBoolean = true;
                         endif;
                     else:
+                        $Read->FullRead("SELECT a.nome, a.preco_pre AS preco, b.id AS idProdutor, a.preco_produtor, "
+                                . "c.id AS Unidade FROM " . DB_PRODUTO . " AS a "
+                                . "LEFT JOIN " . DB_PRODUTORES . " AS b "
+                                . "ON a.produtor = b.Produtor "
+                                . "LEFT JOIN " . DB_UNIDADE . " AS c "
+                                . "ON a.unidade2 = c.unidade "
+                                . "WHERE a.id = :id", "id={$v}");
+                        $Produto = $Read->getResult()[0];
+
                         $ArrCreate[] = [
                             'pedido_id' => $IdPedido,
                             'admin_id_editar' => $IdAdmin,
