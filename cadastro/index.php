@@ -234,7 +234,7 @@ $rs=$st->fetchAll();
 		}*/
 		if ($unidade == "kg") {
 			$from = 0.25;
-			$to = 2;
+			$to = 6;
 			$step = 0.25;
 		} elseif ($unidade == "unidade") {
 			$from = 1;

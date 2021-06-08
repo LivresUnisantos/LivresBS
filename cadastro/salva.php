@@ -14,6 +14,7 @@ $conn = new PDO("mysql:host=".$c_db["host"].";dbname=".$c_db["name"],$c_db["user
 
 //Cadastrar consumidor
 $consumidor = ucwords(strtolower(trim($_GET["consumidor"])));
+$consumidor = str_replace("'","''",$consumidor);
 $email=trim(strtolower($_GET["email"]));
 $cpf=trim($_GET["cpf"]);
 $cpf=str_replace(".","",$cpf);
@@ -21,6 +22,7 @@ $cpf=str_replace(",","",$cpf);
 $cpf=str_replace("-","",$cpf);
 $cpf=str_replace(" ","",$cpf);
 $endereco=ucwords(strtolower(trim($_GET["endereco"])));
+$endereco = str_replace("'","''",$endereco);
 $telefone=trim($_GET["telefone"]);
 $telefone=str_replace(".","",$telefone);
 $telefone=str_replace(",","",$telefone);
@@ -52,6 +54,7 @@ $idConsumidor=$conn->lastInsertId();
 
 if ($idConsumidor == 0) {
 	echo "Erro ao cadastrar seu pedido. Por favor, tente novamente.";
+	echo "<br>Não foi possível salvar os dados de consumidor";
 	exit();
 } else {
 	//Cadastrar pedido, varrendo toda a lista de produtos cadastrada no banco
