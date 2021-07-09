@@ -119,10 +119,10 @@ endif;
 
                 echo "</article>";
             endforeach;
-            $Read->FullRead("SELECT id, nome, unidade FROM " . DB_PRODUTO . " ORDER BY nome");
+            $Read->FullRead("SELECT id, nome, unidade, produtor FROM " . DB_PRODUTO . " ORDER BY nome");
             $optPdt = "<option value=''>Selecione</option>";
             foreach ($Read->getResult() as $Pd):
-                $optPdt .= "<option value='{$Pd['id']}'>{$Pd['nome']} [{$Pd['unidade']}]</option>";
+                $optPdt .= "<option value='{$Pd['id']}'>{$Pd['nome']} [{$Pd['unidade']}] - {$Pd['produtor']}</option>";
             endforeach;
             ?>
             <div class='' style="padding: 20px; text-align: center; background-color: #1aa4db;color: #fff;">
