@@ -163,7 +163,7 @@ if (!isset($_SESSION["data_id"])) {
                     $st->execute();
                     $rsProdutos=$st->fetchAll();
                     foreach ($rsProdutos as $rowProdutos) {
-                        echo '<option value="'.$rowProdutos["id"].'">'.$rowProdutos["nome"].'('.$rowProdutos["unidade"].') - '.number_format($rowProdutos["preco"],2,",",".").'</option>';
+                        echo '<option value="'.$rowProdutos["id"].'">'.$rowProdutos["nome"].'('.$rowProdutos["unidade"].') - '.number_format($rowProdutos["preco"],2,",",".").' ('.$rowProdutos["produtor"].')</option>';
                     }
                     ?>
                     </select>
