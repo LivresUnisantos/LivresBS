@@ -90,6 +90,7 @@ class PedidosConsolidados extends Livres {
     }
 
     public function pedidoCompletoPorConsumidor() {
+        $corrigirValorTotal = $this->pedidoCorrigirValorTotal();
         $pedidos = $this->listaPedidos();
         $itensRS = $this->listaItensTodos();
         if (!is_array($pedidos) || !is_array($itensRS)) {
@@ -124,6 +125,18 @@ class PedidosConsolidados extends Livres {
                 $index++;
             }
             return $conteudo;
+        }
+    }
+    
+    //Essa função foi criada porque por algum motivo, o trigger do MySQL não está funcionando corretamente e não está atualizando o valor total do pedido dos consumidores.
+    //Sendo assim, ao consultar um pedido, checamos se algum consumidor está com total "null" e forçamos um update no pedido sem alterar nada para disparar o trigger
+    private function pedidoCorrigirValorTotal() {
+        $sql = "UPDATE pedidos_consolidados SET pedido_mensal = pedido_mensal WHERE ped.pedido_data = '".date('Y-m-d H:i:s',$this->dataEntrega)."' AND pedido_valor_total IS NULL";
+        $st = $this->conn()->prepare($sql);
+        if ($st->execute()) {
+            return true;
+        } else {
+            return false;
         }
     }
     
