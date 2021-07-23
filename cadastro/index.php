@@ -58,7 +58,7 @@ $rs=$st->fetchAll();
       <div class="grid-x grid-padding-x">
         <div class="large-8 medium-8 cell" id="cesta">
           <h5>Vamos agora amontar sua cesta.</h5>
-          <form id="myForm" name="myForm" method="GET" action="salva.php">
+          <form id="myForm" name="myForm" method="POST" action="salva.php">
 			<div class="grid-x grid-padding-x">
 				<div class="large-12 cell">
 					<div class="callout">
