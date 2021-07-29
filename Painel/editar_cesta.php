@@ -76,7 +76,7 @@ echo "Consumidor: ". ucwords(strtolower($rs["consumidor"]))."<br>";
 echo "CPF: ".substr($rs["cpf"],0,3).".".substr($rs["cpf"],3,3).".".substr($rs["cpf"],6,3)."-".substr($rs["cpf"],9,2)."<br>";
 
 $sql = "SELECT Pedidos.id AS idPedido, produtos.nome AS produto, Pedidos.Quantidade AS quantidade, produtos.unidade AS unidade, produtos.mensal AS mensal,";
-$sql .= " Pedidos.Frequencia AS frequencia, produtos.previsao AS previsao FROM Pedidos LEFT JOIN produtos ON produtos.id = Pedidos.IdProduto WHERE IDConsumidor = ".$idConsumidor;
+$sql .= " Pedidos.Frequencia AS frequencia, produtos.previsao AS previsao, produtos.produtor AS produtor FROM Pedidos LEFT JOIN produtos ON produtos.id = Pedidos.IdProduto WHERE IDConsumidor = ".$idConsumidor;
 $sql .= " ORDER BY produto";
 $st = $conn->prepare($sql);
 $st->execute();
@@ -85,6 +85,7 @@ if ($st->rowCount() > 0) {
     echo '<tr>';
     echo '<td>Produto</td>';
     echo '<td>Unidade</td>';
+    echo '<td>Produtor</td>';
     echo '<td>Em Linha</td>';
     echo '<td>Quantidade</td>';
     echo '<td>Frequência</td>';
@@ -98,6 +99,7 @@ if ($st->rowCount() > 0) {
         echo '<form method="POST" action="">';
         echo '<td>'.$row["produto"].'</td>';
         echo '<td>'.$row["unidade"].'</td>';
+        echo '<td>'.$row["produtor"].'</td>';
         echo '<td>';
         if (strtotime($row["previsao"]) <= strtotime(date('Y-m-d'))) {
             echo 'Sim';
@@ -157,6 +159,7 @@ if ($st->rowCount() > 0) {
         } else {
             echo "Compromisso";
         }
+        echo " (".$row["produtor"].")";
         echo '</option>';
     }
     echo '</select>';

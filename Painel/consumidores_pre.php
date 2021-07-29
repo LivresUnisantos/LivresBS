@@ -54,21 +54,37 @@ if (isset($alerta)) {
 
 <?php
 //alteração de grupo
-if (isset($_POST["id_consumidor"])) {
+if (isset($_POST["id_consumidor"]) && isset($_GET["act"])) {
+    $act = $_GET["act"];
     $id = $_POST["id_consumidor"];
-    $grupo = $_POST["grupo"];
+    $sqlSearch = "SELECT * FROM Usuarios WHERE id = ".$id;
+    $st = $conn->prepare($sqlSearch);
+    $st->execute();
+    $rsS = $st->fetch();
     
-    $sqlUpdate = "UPDATE Usuarios SET grupo = '$grupo' WHERE id = ".$id;
-    $st = $conn->prepare($sqlUpdate);
-    if ($st->execute()) {
-        echo "Grupo alterado<br>";
-        $sqlSearch = "SELECT * FROM Usuarios WHERE id = ".$id;
-        $st = $conn->prepare($sqlSearch);
-        $st->execute();
-        $rsS = $st->fetch();
-        echo $rsS["nome"]." alterado para ".$grupo."<br>";
-    } else {
-        echo "Falha ao alterar grupo<br>";
+    if ($act == "grupo") {
+        $grupo = $_POST["grupo"];
+        
+        $sqlUpdate = "UPDATE Usuarios SET grupo = '$grupo' WHERE id = ".$id;
+        $st = $conn->prepare($sqlUpdate);
+        if ($st->execute()) {
+            echo "Grupo alterado<br>";
+            echo $rsS["nome"]." alterado de ".$rsS["grupo"]." para ".$grupo."<br>";
+        } else {
+            echo "Falha ao alterar grupo<br>";
+        }
+    }
+    if ($act == "telefone") {
+        $telefone = $_POST["telefone"];
+    
+        $sqlUpdate = "UPDATE Usuarios SET telefone = '$telefone' WHERE id = ".$id;
+        $st = $conn->prepare($sqlUpdate);
+        if ($st->execute()) {
+            echo "Telefone alterado<br>";
+            echo $rsS["nome"]." alterado de ".$rsS["telefone"]." para ".$telefone."<br>";
+        } else {
+            echo "Falha ao alterar grupo<br>";
+        }
     }
 }
 
@@ -85,6 +101,7 @@ if ($st->rowCount() > 0) {
     echo '<td>Email</td>';
     echo '<td>CPF</td>';
     echo '<td>Endereço</td>';
+    echo '<td>Telefone</td>';
     echo '<td>Grupo</td>';
     echo '<td>Alterar Senha</td>';
     echo '</tr>';
@@ -102,8 +119,15 @@ if ($st->rowCount() > 0) {
         echo '<td>'.$row["email"].'</td>';
         echo '<td>'.$row["cpf"].'</td>';
         echo '<td>'.$row["endereco"].'</td>';
-        echo '<td>';//.$row["grupo"]
-        echo '<form method="post" action="">';
+        echo '<td width="300px">';
+        echo '<form method="post" action="?act=telefone">';
+        echo '<input type="hidden" id="id_consumidor_'.$row["id"].'" name="id_consumidor" value="'.$row["id"].'" />';
+        echo '<input type="text" id="telefone" name="telefone" value="'.$row["telefone"].'" />';
+        echo '<input type="submit" value="Alterar" />';
+        echo '</form>';
+        echo '</td>';
+        echo '<td width="300px">';
+        echo '<form method="post" action="?act=grupo">';
         echo '<input type="hidden" id="id_consumidor_'.$row["id"].'" name="id_consumidor" value="'.$row["id"].'" />';
         echo '<select id="grupo_'.$row["id"].'" name="grupo">';
         foreach ($grupos as $grupo) {
