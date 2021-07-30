@@ -56,7 +56,7 @@ foreach ($ReadPrincipal as $PedIens):
     $cesta_montagem .= "<p class='coll' style='text-align:right;
 '>" . str_replace(', 00', '', number_format($item_qtde, 2, ', ', '.')) . " x {$unidade}</p>
                 <p class='coll collPdt' style='text-align:left;
-'>{$item_produto} <span style='float:right;
+'>{$item_produto} - {$Produtor}<span style='float:right;
 text-transform: uppercase;
 '>({$item_freq_cesta})</span></p>
                 <p class='coll coll_r'>R$ " . number_format($item_valor * $item_qtde, 2, ', ', '.') . "</p>

@@ -107,6 +107,8 @@ $itensPD = $Read->getResult();
                         . "ON a.produto_id = d.id "
                         . "LEFT JOIN " . DB_UNIDADE . " AS e "
                         . "ON a.item_tipo = e.id "
+                        . "LEFT JOIN " . DB_PRODUTORES . " AS f "
+                        . "ON a.item_produtor = f.id "
                         . "WHERE a.pedido_id = :pi "
                         . "ORDER BY d.nome, a.item_id", "pi={$pedido_id}");
                 $ReadPrincipal = $Read->getResult();
