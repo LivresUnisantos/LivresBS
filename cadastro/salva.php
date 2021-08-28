@@ -15,6 +15,7 @@ $conn = new PDO("mysql:host=".$c_db["host"].";dbname=".$c_db["name"],$c_db["user
 //Cadastrar consumidor
 $consumidor = ucwords(strtolower(trim($_POST["consumidor"])));
 $consumidor = str_replace("'","''",$consumidor);
+$nascimento=$_POST["nascimento"];
 $email=trim(strtolower($_POST["email"]));
 $cpf=trim($_POST["cpf"]);
 $cpf=str_replace(".","",$cpf);
@@ -45,7 +46,7 @@ if ($st->rowCount() > 0) {
 	exit();
 }
 
-$sql = "INSERT INTO Consumidores (consumidor, email, cpf, endereco, telefone,preferencia_entrega) VALUES ('".$consumidor."','".$email."','".$cpf."','".$endereco."','".$telefone."','".$preferencia_entrega."')";
+$sql = "INSERT INTO Consumidores (consumidor, nascimento, email, cpf, endereco, telefone,preferencia_entrega) VALUES ('".$consumidor."','".$nascimento."','".$email."','".$cpf."','".$endereco."','".$telefone."','".$preferencia_entrega."')";
 //$sql = "INSERT INTO Consumidores (consumidor, email, cpf, endereco, telefone,preferencia_entrega, comunidade) VALUES ('".$consumidor."','".$email."','".$cpf."','".$endereco."','".$telefone."','".$preferencia_entrega."', ".$comunidade.")";
 /* FIM AJUSTE */
 $st=$conn->prepare($sql);

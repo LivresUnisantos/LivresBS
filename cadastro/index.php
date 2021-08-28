@@ -23,7 +23,7 @@ $rs=$st->fetchAll();
 ?>
     <div class="grid-container">
       <div class="grid-x grid-padding-x">
-        <div class="large-12 cell">
+        <div class="large-12 cell">n
           <h1>Livres - Comboio Agroecológico</h1>
         </div>
       </div>
@@ -69,6 +69,13 @@ $rs=$st->fetchAll();
 						  <div class="large-12 cell">
 							<label>Nome Completo</label>
 							<input name="consumidor" type="text" placeholder="Preencha seu nome completo" data-validation="length" data-validation-length="3-255" />
+						  </div>
+						</div>
+						<!-- Nascimento  -->
+						<div class="grid-x grid-padding-x">
+						  <div class="large-12 cell">
+							<label>Data Nascimento</label>
+							<input name="nascimento" type="date" placeholder="Preencha sua data de nascimento" data-validation="length" data-validation-length="8-10" />
 						  </div>
 						</div>
 						<!-- Email  -->
