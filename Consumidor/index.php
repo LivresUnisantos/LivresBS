@@ -171,6 +171,7 @@ if (strlen($alerta) == 0) {
     				<p><label for="telefone">Telefone</label><input type="text" id="telefone" name="telefone" placeholder="Telefone/Whatsapp" data-validation="brphone" data-validation-error-msg="Digite somente números e DDD" value="<?php echo $rs["telefone"];?>" /></p>
     				<p><label for="pedido">Pedido</label><textarea rows="10" cols="20" id="pedido" name="pedido" placeholder="Pedido" data-validation="length" data-validation-length="min1"></textarea></p>
     				<button>Fazer Pedido</button>
+    				<p class="message1">Dúvidas no preenchimento? <a href="/Consumidor/instrucoes" target="_blank">Veja instruções aqui</a></p>
     			</form>
     		</div>
     	<?php

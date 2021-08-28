@@ -154,11 +154,17 @@ if (isset($_POST["tipo"])) {
 				<p><input type="text" id="cpf" name="cpf" placeholder="CPF" data-validation="cpf" /></p>
 				<?php
 				$grupos = array("APROATE","AOVALE","pre-comunidade","não sei");
-				if (isset($_GET["grupo"])) {
-				    echo '<p><select id="grupo" name="grupo" data-validation="length" data-validation-length="min1">
+				if (isset($_SESSION["grupo"])) {
+				    $disabled="";
+				    foreach ($grupos as $grupo) {
+			            if (strtolower(strtolower($_SESSION["grupo"])) == strtolower($grupo)) {
+			                $disabled="disabled";
+			            }
+				    }
+				    echo '<p><select id="grupo" name="grupo" data-validation="length" data-validation-length="min1" '.$disabled.'>
 				        <option value=""></option>';
 				        foreach ($grupos as $grupo) {
-				            if (strtolower($_GET["grupo"]) == strtolower($grupo)) {
+				            if (strtolower(strtolower($_SESSION["grupo"])) == strtolower($grupo)) {
 				                echo '<option value="'.$grupo.'" selected="selected">'.$grupo.'</option>';
 				            } else {
     				            echo '<option value="'.$grupo.'">'.$grupo.'</option>';
@@ -192,6 +198,7 @@ if (isset($_POST["tipo"])) {
 				<p class="message">Não cadastrado? <a href="#">Cadastre-se</a></p>
 			</form>
 			<p class="message1">Esqueceu sua senha? <a href="recuperar_senha.php">Recupere aqui</a></p>
+			<p class="message1">Dúvidas no preenchimento? <a href="/Consumidor/instrucoes" target="_blank">Veja instruções aqui</a>
 			<!--
 			<p class="message">Esqueceu sua senha?</p>
 			<form class="senha-form" id="senha" name="senha" method="POST" action="">

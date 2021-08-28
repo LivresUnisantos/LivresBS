@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Pedidos Pré-Comunidade/APROATE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css" />
+
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+<div class="page-header">
+    <h1>Instruções <small>Pedidos Pré-Comunidade/APROATE</small></h1>
+</div>
+
+<!-- Bootstrap FAQ - START -->
+<div class="container">
+    <br />
+    <br />
+    <br />
+
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+        Por favor, leia com atenção as instruções para que possamos melhor atendê-lo!
+    </div>
+
+    <br />
+
+    <div class="panel-group" id="accordion">
+        <div class="faqHeader">INSTRUÇÕES</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">1º Passo: Vamos nos cadastrar?</a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse">
+                <div class="panel-body">
+					<p>Para se cadastrar, bem como para fazer os pedidos (no caso de quem já se cadastrou) é só entrar no site, clicando no link abaixo 👇🏼</p>
+					<p><a href="http://livresbs.com.br/Consumidor/" target="_blank">http://livresbs.com.br/Consumidor/</a>
+					<br>Para quem ainda não é cadastrado, clique em "Cadastre-se"</p>
+					<p><img src="img/instr-3.png" alt="Print-screen do sistema destacando o link de cadastro" /></p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTen">2º Passo: Preenchendo corretamente os campos</a>
+                </h4>
+            </div>
+            <div id="collapseTen" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>Preencha os campos em branco com suas informações e crie uma senha <strong>(guarde ou anote, de preferência).</strong></p>
+					<p>É muito importante também selecionar o grupo do qual faz parte.</p>
+					<p>Você deve selecionar qual grupo você pertence: <strong>APROATE</strong> ou <strong>PRÉ-COMUNIDADE</strong>, conforme indica a imagem abaixo</p>
+					<p><img src="img/instr-1.png" alt="Print-screen do sistema destacando o campo 'Grupo'" /></p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven">3º Passo: Fazendo seu pedido!</a>
+                </h4>
+            </div>
+            <div id="collapseEleven" class="panel-collapse collapse">
+                <div class="panel-body">
+                    O último passo é simples, basta <strong>consultar a lista de produtos disponíveis</strong> e depois escrever os itens que quer receber na caixa de texto escrito "Pedido", conforme exemplo a seguir
+					<p><img src="img/instr-2.png" alt="Print-screen do sistema destacando o link que contém a lista de produtos e o campo onde o pedido deve ser preenchido" /></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="faqHeader">IMPORTANTE</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Período dos Pedidos</a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>Os pedidos para <strong>sábado</strong> podem ser enviados até às <strong>12h de quinta-feira</strong> e pedidos para <strong>terça-feira</strong> podem ser feitos até às <strong>12h de domingo</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Classificação dos Alimentos</a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>Observem que agora nossa lista de alimentos disponíveis contém alguns asteriscos ao lado de certos itens. Fizemos isso para facilitar a identificação daqueles que têm alguma peculiaridade em específico, conforme segue abaixo:</p>
+					<p>(*) Itens não certificados mas sem veneno</p>
+					<p>(**) itens de produção local e/ou da Economia Solidária mas contendo algum ingrediente não-orgânico</p>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
+
+<style>
+    .faqHeader {
+        font-size: 27px;
+        margin: 20px;
+    }
+
+    .panel-heading [data-toggle="collapse"]:after {
+        font-family: 'Glyphicons Halflings';
+        content: "\e072"; /* "play" icon */
+        float: right;
+        color: #F58723;
+        font-size: 18px;
+        line-height: 22px;
+        /* rotate "play" icon from > (right arrow) to down arrow */
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+
+    .panel-heading [data-toggle="collapse"].collapsed:after {
+        /* rotate "play" icon from > (right arrow) to ^ (up arrow) */
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        transform: rotate(90deg);
+        color: #454444;
+    }
+</style>
+
+<!-- Bootstrap FAQ - END -->
+
+</div>
+
+</body>
+</html>
