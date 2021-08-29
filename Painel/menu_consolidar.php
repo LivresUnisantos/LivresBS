@@ -14,15 +14,26 @@ $calendario = new Calendario();
 $loader = new \Twig\Loader\FilesystemLoader('../templates/layouts/painel');
 $twig = new \Twig\Environment($loader, ['debug' => false]);
 
-$oConsolidar = new ConsolidarPedidos();
-
-$contagemConsolidado = $oConsolidar->totalPedidosConsolidadosPorData();
-
-echo $twig->render('consolidar.html', [
-    "titulo"            => "LivresBS - Consolidar Entregas",
-    "menu_datas"        => $calendario->listaDatas(),
-    "data_selecionada"  => (isset($_SESSION['data_consulta']) ? date('d/m/Y H:i',strtotime($_SESSION["data_consulta"])) : ""),
-    "frequencia_semana" => $calendario->montaDisplayFrequenciaSemana(),
-    "conteudo"          => $contagemConsolidado
-    ]);
+if (!isset($_SESSION["data_consulta"]) || $_SESSION["data_consulta"] == "") {
+    echo $twig->render('consolidar.html', [
+        "titulo"            => "LivresBS - Consolidar Entregas",
+        "menu_datas"        => $calendario->listaDatas(),
+        "data_selecionada"  => (isset($_SESSION['data_consulta']) ? date('d/m/Y H:i',strtotime($_SESSION["data_consulta"])) : ""),
+        "frequencia_semana" => $calendario->montaDisplayFrequenciaSemana(),
+        "alerta"          => "Selecione uma data"
+        ]);
+        
+} else {
+    $oConsolidar = new ConsolidarPedidos($_SESSION["data_consulta"]);
+    
+    $contagemConsolidado = $oConsolidar->totalPedidosConsolidadosPorData();
+    
+    echo $twig->render('consolidar.html', [
+        "titulo"            => "LivresBS - Consolidar Entregas",
+        "menu_datas"        => $calendario->listaDatas(),
+        "data_selecionada"  => (isset($_SESSION['data_consulta']) ? date('d/m/Y H:i',strtotime($_SESSION["data_consulta"])) : ""),
+        "frequencia_semana" => $calendario->montaDisplayFrequenciaSemana(),
+        "conteudo"          => $contagemConsolidado
+        ]);
+}
 ?>

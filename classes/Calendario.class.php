@@ -1,8 +1,12 @@
 <?php
 class Calendario extends Livres {
 
-    public function listaDatas() {
-        $sql = "SELECT * FROM Calendario WHERE data > '2019-12-01' ORDER BY data ASC";
+    public function listaDatas($dataSelecionada = "") {
+        if ($dataSelecionada == "") {
+            $sql = "SELECT * FROM Calendario WHERE data > '2020-12-01' ORDER BY data ASC";
+        } else {
+            $sql = "SELECT * FROM Calendario WHERE data = '".$dataSelecionada."' ORDER BY data ASC";
+        }
         $st = $this->conn()->prepare($sql);
         $st->execute();
         if ($st->rowCount() == 0) return false;

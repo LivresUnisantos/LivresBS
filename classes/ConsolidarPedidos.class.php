@@ -465,7 +465,11 @@ class ConsolidarPedidos extends Livres {
     public function totalPedidosConsolidadosPorData() {
 
         $oCalendario = new Calendario();
-        $datasRs = $oCalendario->listaDatas();
+        if ($this->dataEntrega == "") {
+            $datasRs = $oCalendario->listaDatas();
+        } else {
+            $datasRs = $oCalendario->listaDatas($this->dataTimeParaString($this->dataEntrega));
+        }
 
         foreach ($datasRs as $id=>$data)  {
             $datas[$id] = [
@@ -474,14 +478,18 @@ class ConsolidarPedidos extends Livres {
             ];                
         }
         
-                
         $sql = "SELECT it.item_tipo_cesta, COUNT(ped.pedido_id) AS totalPedidos, cal.id as dataId, cal.data as data
         FROM Calendario cal
         LEFT JOIN pedidos_consolidados ped
         ON cal.data = ped.pedido_data
         LEFT JOIN pedidos_consolidados_itens it
-        ON ped.pedido_id = it.pedido_id
-        GROUP BY cal.id,it.item_tipo_cesta";
+        ON ped.pedido_id = it.pedido_id";
+        
+        if ($this->dataEntrega != "") {
+            $sql .= " WHERE cal.data = '".$this->dataTimeParaString($this->dataEntrega)."'";
+        }
+        
+        $sql .= "GROUP BY cal.id,it.item_tipo_cesta";
         
         $st = $this->conn()->prepare($sql);
         $st->execute();
