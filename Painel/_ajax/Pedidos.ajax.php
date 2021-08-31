@@ -442,6 +442,8 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
                                 . "ON a.produto_id = d.id "
                                 . "LEFT JOIN " . DB_UNIDADE . " AS e "
                                 . "ON a.item_tipo = e.id "
+                                . "LEFT JOIN " . DB_PRODUTORES . " AS f "
+                                . "ON a.item_produtor = f.id "
                                 . "WHERE a.pedido_id = :pi "
                                 . "GROUP BY a.item_id "
                                 . "ORDER BY d.nome, a.item_id", "pi={$pedido_id}");
@@ -501,6 +503,8 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
                                 . "ON a.produto_id = d.id "
                                 . "LEFT JOIN " . DB_UNIDADE . " AS e "
                                 . "ON a.item_tipo = e.id "
+                                . "LEFT JOIN " . DB_PRODUTORES . " AS f "
+                                . "ON a.item_produtor = f.id "
                                 . "WHERE a.pedido_id = :pi "
                                 . "AND a.item_produto = :ip "
                                 . "GROUP BY a.item_id "
