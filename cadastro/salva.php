@@ -7,6 +7,7 @@ ini_set('display_errors', 1);
     <body>
 <?php
 include "../config.php";
+include "../Painel/helpers.php";
 
 $conn = new PDO("mysql:host=".$c_db["host"].";dbname=".$c_db["name"],$c_db["user"],$c_db["password"],
 	array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
@@ -43,6 +44,7 @@ if ($st->rowCount() > 0) {
 	echo "Seu CPF já está cadastrado e seu pedido não foi salvo.<br>";
 	echo 'Consulte seu pedido cadastrado em <a href="../Cestas?cpf='.$_POST["cpf"].'" target="_blank">'.$_SERVER["HTTP_HOST"].'/Cestas</a><br>';
 	echo "Entre em contato com os coordenadores do Livres caso queira alterá-lo.";
+	setLog("log.txt","Usuário com cadastro existente (cpf ".$cpf.") tentou realizar preenchimento",$sql);
 	exit();
 }
 
@@ -56,6 +58,7 @@ $idConsumidor=$conn->lastInsertId();
 if ($idConsumidor == 0) {
 	echo "Erro ao cadastrar seu pedido. Por favor, tente novamente.";
 	echo "<br>Não foi possível salvar os dados de consumidor";
+	setLog("log.txt","CPF ".$cpf." tentou realizar preenchimento, mas houve erro",$sql);
 	exit();
 } else {
 	//Cadastrar pedido, varrendo toda a lista de produtos cadastrada no banco
@@ -99,10 +102,12 @@ if ($idConsumidor == 0) {
 	}
 	echo "Olá ".$consumidor.",<br><br>";
 	echo "Seu pedido com ".$count." produto".($count > 1 ? "s" : "")." foi cadastrado com sucesso.";
+	setLog("log.txt","Pedido do cpf ".$cpf." cadastrado (verificar na próxima linha se houve erro)","");
 	if (strlen($erros)>0) {
 		echo "<br><br>";
 		echo "Os produtos abaixo não foram cadastrados. Entre em contato com o Livres para incluí-los manualmente.";
 		echo $erros;
+		setLog("log.txt","Erros ao cadastrar pedidos do cpf ".$cpf."\r\n".$erros,"");
 	}
 }
 ?>
