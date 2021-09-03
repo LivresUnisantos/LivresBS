@@ -23,7 +23,7 @@ $rs=$st->fetchAll();
 ?>
     <div class="grid-container">
       <div class="grid-x grid-padding-x">
-        <div class="large-12 cell">n
+        <div class="large-12 cell">
           <h1>Livres - Comboio Agroecológico</h1>
         </div>
       </div>
@@ -41,6 +41,11 @@ $rs=$st->fetchAll();
                 <p>Para que possamos ter maior variedade na nossa alimentação, para estimular a pedagogia das trocas de alimentos devido sua sazonalidade, para salvar plantas em extinção e conhecer produtos locais que jamais conheceríamos, instituímos as cotas que serão preenchidas por uma seleção de alimentos semanalmente. Veja à direita as cotas que temos próximas ao seu perfil de consumo.</p>
     
                 <p>Por isso tudo, preste atenção no preenchimento de seu carrinho comunitário.</p>
+                
+                <p>Observem que nossa lista de alimentos disponíveis contém alguns asteríscos ao lado de certos itens.<br>
+                Fizemos isso para facilitar a identificação daqueles que têm alguma peculiaridade em específico, conforme abaixo:<br>
+                (*) Itens não certificados, mas sem veneno<br>
+                (**) itens de produção local e/ou da Economia Solidária, mas contendo algum ingrediente não-orgânico</p>
             <?php } else { ?>
                 <h3>Parabéns pela escolha de fazer parte do Comboio Agroecológico do Livres!</h3>
                 <p>Antes de continuar, pedimos que você leia atentamente as instruções abaixo, para garantirmos que você receba sua cesta do jeitinho que você quer.</p>

@@ -313,6 +313,7 @@ if (!isset($_GET["cpf"])) {
                             <p><b>Valor total da cesta de compromisso: R$<?php echo number_format($livres->cotaIdeal($totalCompromisso),2,",","."); ?> (sendo
                             R$<?php echo number_format($livres->cotaIdeal($totalCompromisso)-$totalCompromisso,2,",","."); ?> de variável)</b></p>
                         </div>
+                        
                     </div>
                     <?php
                     }
@@ -407,16 +408,14 @@ if (!isset($_GET["cpf"])) {
     			<?php
             } //fecha IF da cesta já entregue
 			?>
-			<!--
 			<div class="grid-x grid-padding-x">
-				<div class="large-12">
-				<p></p>
-				<?php echo ccase($consumidor); ?><br>
-				CPF: <?php echo substr($cpf,0,3).".".substr($cpf,3,3).".".substr($cpf,6,3)."-".substr($cpf,9,2); ?><br>
-				Consumidor Consciente
-				</div>
-			</div>
-			-->
+                <div class="medium-12 text-left" style="font-size:0.9em">
+                    &nbsp;Observem que nossa lista de alimentos disponíveis contém alguns asteríscos ao lado de certos itens.<br>
+                    &nbsp;Fizemos isso para facilitar a identificação daqueles que têm alguma peculiaridade em específico, conforme abaixo:<br>
+                    &nbsp;(*) Itens não certificados, mas sem veneno<br>
+                    &nbsp;(**) itens de produção local e/ou da Economia Solidária, mas contendo algum ingrediente não-orgânico
+                </div>
+            </div>
 		</div>
 <?php
 }
