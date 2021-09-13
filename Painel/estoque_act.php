@@ -13,11 +13,14 @@ if (isset($_GET["idProduto"]) && isset($_GET["estoque"])) {
     $livres = new Livres();
     $conn = $livres->conn();
 
-    $idProdutos = explode(",",$_GET["idProduto"]);
-    $estoques = explode(",", $_GET["estoque"]);
+    $idProdutos = explode("@",$_GET["idProduto"]);
+    $estoques = explode("@", $_GET["estoque"]);
     
     if (count($idProdutos) != count($estoques)) {
         echo "Erro ao salvar dados. Arrays com dimensões erradas";
+        echo count($idProdutos);
+        echo "<br><br>";
+        echo count($estoques);
     } else {
         $erros = "";
         for($i = 0; $i < count($idProdutos); $i++) {
@@ -35,6 +38,7 @@ if (isset($_GET["idProduto"]) && isset($_GET["estoque"])) {
                 $estoqueAnterior = $rs["estoque"] ;
                 $produto = $rs["nome"];
                 $produtor = $rs["produtor"];
+                $estoque = str_replace(",",".",$estoque);
                 $sql = "UPDATE produtos SET estoque = ".$estoque." WHERE id = ".$idProduto;
                 $st = $conn->prepare($sql);
                 if ($st->execute()) {

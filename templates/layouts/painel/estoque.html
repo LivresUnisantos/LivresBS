@@ -131,8 +131,10 @@
                 /*$("input[name=estoque]").each(function(index) {
                   console.log(index + ": " + $(this).val());
                 });*/
-                var estoque = $("input[name=estoque]").map(function() { return this.value; }).get().join(',');
-                var id = $("input[name=id]").map(function() { return this.value; }).get().join(',');
+                var estoque = $("input[name=estoque]").map(function() { return this.value; }).get().join('@');
+                var id = $("input[name=id]").map(function() { return this.value; }).get().join('@');
+                console.log(id);
+                console.log(estoque);
                 $.ajax({
                     method: "GET",
                     url: "estoque_act.php?idProduto=" + id + "&estoque=" + estoque,
