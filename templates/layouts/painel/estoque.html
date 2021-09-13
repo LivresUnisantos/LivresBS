@@ -1,0 +1,160 @@
+{% extends "index.html" %}
+
+{% block content %}
+    <div class="input-group mb-2 mr-sm-2">
+        <div class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" id="filtro_estoquezero" name="filtro_estoquezero">
+          <label class="custom-control-label" for="filtro_estoquezero">Estoque zerado</label>
+        </div>
+        <div class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" id="filtro_estoquenaozero" name="filtro_estoquenaozero">
+          <label class="custom-control-label" for="filtro_estoquenaozero">Estoque não zerado</label>
+        </div>
+    </div>
+    <div id="popup" title="Editar Produto" style="display: none;">
+        <p>Aguarde, carregando...</p>
+    </div>
+    {% if conteudo %}
+        <div class="input-group mb-2 mr-sm-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Filtro</div>
+            </div>
+            <input type="text" class="form-control" id="filtro" name="Filtro" placeholder="Procure por produto, produtor ou categoria">
+            <button class="btn btn-success" type="button" id="salvar_tudo" name="salvar_tudo">Salvar tudo</button>
+        </div>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>Produto</th>
+                    <th>Categoria</th>
+                    <th>Unidade</th>
+                    <th>Produtor</th>
+                    <th>Estoque</th>
+                </tr>
+            </thead>
+            <tbody id="tabela_produtos">
+                {% for p in conteudo %}
+                    <tr>
+                        <td id="nome_{{ p.id }}">{{p.nome}}</td>
+                        <td id="categoria_{{ p.id }}">{{p.categoria}}</td>
+                        <td id="unidade_{{ p.id }}">{{p.unidade}}</td>
+                        <td id="produtor_{{ p.id }}">{{p.produtor}}</td>
+                        <td id="label_estoque_{{ p.id }}">
+                            <form name="salvarestoque" id="salvarestoque_{{ p.id }}" act="estoque_act.php" method="GET">
+                                <input type="hidden" name="id" id="id_estoque_{{ p.id }}" value="{{ p.id }}" />
+                                {% if (p.estoque == 0) %}
+                                    <input type="hidden" id="estoquezero_{{ p.id }}" name="estoquezero" value="1" />
+                                {% else %}
+                                    <input type="hidden" id="estoquezero_{{ p.id }}" name="estoquezero" value="0" />
+                                {% endif %}
+                                <input type="text" name="estoque" id="estoque_{{ p.id }}" value="{{ p.estoque }}" size="4" />
+                                {% if level_user >= level_write %}
+                                    <input type="submit" id="btn_{{ p.id }}" value="Salvar" />
+                                {% endif %}
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <span class="cabecalho_entregas">Não há produtos cadastrados</span>
+    {% endif %}
+    <script>
+        $(document).ready(function(){
+            $("#filtro_estoquezero, #filtro_estoquenaozero").on("click", function() {
+                if ($(this).prop('name') == 'filtro_estoquezero') {
+                    console.log(2);
+                    if ($(this).prop('checked')) {
+                        console.log(3);
+                        $("#filtro_estoquenaozero").prop('checked', false);
+                    }
+                } else {
+                    if ($(this).prop('checked')) {
+                        console.log(5);
+                        $("#filtro_estoquezero").prop('checked', false);
+                    }
+                }
+                console.log($(this).prop('checked'));
+            });
+            $("#filtro, #filtro_estoquezero, #filtro_estoquenaozero").on("keyup click", function() {
+                var value = $("#filtro").val().toLowerCase();
+                var estoquezero = $("#filtro_estoquezero").prop('checked');
+                var estoquenaozero = $("#filtro_estoquenaozero").prop('checked');
+                $("#tabela_produtos tr").filter(function() {
+                    if (estoquezero || estoquenaozero) {
+                        flagestoque=0;
+                        if (estoquezero) { flagEstoqueZero = 1; } else { flagEstoqueZero = 0; }
+                        estoque = $(this).find('td input[name="estoquezero"]').val() == flagEstoqueZero;
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1 && estoque);
+                    } else {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                    }
+                });
+            });
+            $("[name=salvarestoque]").submit(function(e) {
+                e.preventDefault(); // avoid to execute the actual submit of the form.
+
+                var form = $(this);
+                var url = form.attr('action');
+                
+                var dados = form.serializeArray().reduce(function(obj, item) {
+                    obj[item.name] = item.value;
+                    return obj;
+                }, {});
+                id = dados["id"];
+                estoque = dados["estoque"];
+                
+                $.ajax({
+                    method: "GET",
+                    url: "estoque_act.php?idProduto=" + id + "&estoque=" + estoque,
+                    })
+                .done(function(msg) {
+                    if (msg == "ok") {
+                        $("#estoque_"+id).stop().css("background-color", "#3a7d2d").animate({ backgroundColor: "#FFFFFF"}, 1500);
+                        if (estoque == 0) {
+                            $("#estoquezero_"+id).val(1);
+                        } else {
+                            $("#estoquezero_"+id).val(0);
+                        }
+                        
+                    } else {
+                        alert(msg);
+                        $("#estoque_"+id).stop().css("background-color", "#cf0437").animate({ backgroundColor: "#FFFFFF"}, 1500);
+                    }
+                });
+            });
+            
+            $("#salvar_tudo").on("click", function() {
+                /*$("input[name=estoque]").each(function(index) {
+                  console.log(index + ": " + $(this).val());
+                });*/
+                var estoque = $("input[name=estoque]").map(function() { return this.value; }).get().join(',');
+                var id = $("input[name=id]").map(function() { return this.value; }).get().join(',');
+                $.ajax({
+                    method: "GET",
+                    url: "estoque_act.php?idProduto=" + id + "&estoque=" + estoque,
+                    })
+                .done(function(msg) {
+                    if (msg == "ok") {
+                        alert("Dados salvos");
+                    } else {
+                        alert(msg);
+                    }
+                });
+            });
+        });
+        var notLocked = true;
+        $.fn.animateHighlight = function(highlightColor, duration) {
+            var highlightBg = highlightColor || "#FFFF9C";
+            var animateMs = duration || 1500;
+            var originalBg = this.css("backgroundColor");
+            if (notLocked) {
+                notLocked = false;
+                this.stop().css("background-color", highlightBg)
+                    .animate({backgroundColor: originalBg}, animateMs);
+                setTimeout( function() { notLocked = true; }, animateMs);
+            }
+        };
+    </script>
+{% endblock content %}
