@@ -27,6 +27,7 @@
         <table class="table">
             <thead class="thead-light">
                 <tr>
+                    <th>Código</th>
                     <th>Produto</th>
                     <th>Categoria</th>
                     <th>Unidade</th>
@@ -37,6 +38,7 @@
             <tbody id="tabela_produtos">
                 {% for p in conteudo %}
                     <tr>
+                        <td id="codigo_{{p.id}}">{{p.id}}</td>
                         <td id="nome_{{ p.id }}">{{p.nome}}</td>
                         <td id="categoria_{{ p.id }}">{{p.categoria}}</td>
                         <td id="unidade_{{ p.id }}">{{p.unidade}}</td>
