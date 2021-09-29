@@ -54,7 +54,7 @@ foreach ($ReadPrincipal as $PedIens):
     endif;
     $cesta_montagem .= $ExcPdt;
     $cesta_montagem .= "<p class='coll' style='text-align:right;
-'>" . str_replace(', 00', '', number_format($item_qtde, 2, ', ', '.')) . " x {$unidade}</p>
+'>" . str_replace(', 00', '', number_format($item_qtde, 3, ', ', '.')) . " x {$unidade}</p>
                 <p class='coll collPdt' style='text-align:left;
 '>{$item_produto} - {$Produtor}<span style='float:right;
 text-transform: uppercase;
