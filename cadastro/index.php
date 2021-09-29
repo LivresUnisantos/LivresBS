@@ -167,7 +167,7 @@ $rs=$st->fetchAll();
 				?>
 				<div class="grid-x grid-padding-x">
 					<div class="large-3 medium-3 cell">
-						<label id="nome_prod_<?php echo $row["id"] ;?>"><?php echo $row["nome"]; ?></label>
+						<label id="nome_prod_<?php echo $row["id"] ;?>"><?php echo stripslashes($row["nome"]); ?></label>
 						<label>R$<?php echo number_format($row["preco"]*$row["multiplicador_unidade2"],2)."/".$row["unidade2"]; ?></label>
 					</div>
 					<div class="large-3 medium-3 cell">
