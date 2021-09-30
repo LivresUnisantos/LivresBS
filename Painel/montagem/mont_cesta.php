@@ -53,8 +53,8 @@ foreach ($ReadPrincipal as $PedIens):
                 . "<span rel='itemDel' callback='Pedidos' callback_action='deleteItem' class='j_delete_action_confirm icon-warning btn btn_red' style='display: none' id='{$item_id}'>Tem certeza?</span></p>";
     endif;
     $cesta_montagem .= $ExcPdt;
-    $cesta_montagem .= "<p class='coll' style='text-align:right;
-'>" . str_replace(', 00', '', number_format($item_qtde, 3, ', ', '.')) . " x {$unidade}</p>
+    $cesta_montagem .= "<p class='coll' style='text-align:right;'>
+    " . str_replace(', 000', '', number_format($item_qtde, 3, ', ', '.')) . " x {$unidade}</p>
                 <p class='coll collPdt' style='text-align:left;
 '>{$item_produto} - {$Produtor}<span style='float:right;
 text-transform: uppercase;
