@@ -8,3 +8,5 @@
 config.php
 /config/Database.php
 /cadastro/log.txt
+/bot
+/pdv
