@@ -15,11 +15,61 @@ $loader = new \Twig\Loader\FilesystemLoader('../templates/layouts/painel');
 $twig = new \Twig\Environment($loader, ['debug' => true]);
 $twig->addExtension(new \Twig\Extension\DebugExtension());
 
-
-$idLista = 1;
-
 $oListas = new Listas();
-$produtos = $oListas->produtosListaTodos($idLista);
+$sucesso = "";
+$erro = "";
+
+//Lidar com formulários enviados
+if (isset($_POST["act"])) {
+    $act = $_POST["act"];
+    switch($act) {
+        case "editar_nome":
+            $listaUpdate = $_POST["lista_selecionada"];
+            $nomeUpdate = $_POST["nome_lista"];
+            if ($listaUpdate != "" && $nomeUpdate != "") {
+                if ($oListas->updateNomeLista($listaUpdate, $nomeUpdate)) {
+                    $sucesso = "Nome atualizado";
+                } else {
+                    $erro = "Falha ao atualizar nome";
+                }
+            }
+        break;
+        case "criar_lista":
+            $nomeInsert = $_POST["nome_lista"];
+            if ($nomeInsert != "") {
+                $exec = $oListas->createLista($nomeInsert);
+                if ($exec != "") {
+                    $idLista = "";
+                    $sucesso = "Lista Criada. Selecione abaixo para prosseguir com edição";
+                } else {
+                    $erro = "Falha ao criar lista";
+                }
+            }
+        break;
+        case "apagar_lista":
+            $listaUpdate = $_POST["lista_selecionada"];
+            if ($listaUpdate != "") {
+                if ($oListas->deleteLista($listaUpdate)) {
+                    $sucesso = "Lista excluída";
+                } else {
+                    $erro = "Falha ao excluir lista";
+                }
+            }
+        break;
+    }
+}
+
+if (isset($_GET["lista_selecionada"]) && !isset($idLista)) {
+    $idLista = $_GET["lista_selecionada"];
+    $nomeLista = $oListas->getNomeLista($idLista);
+    $produtos = $oListas->produtosListaTodos($idLista);
+} else {
+    $idLista = 0;
+    $nomeLista = "";
+    $produtos = "";
+}
+
+$listas = $oListas->listarListas();
 
 //print_r($produtos);
 
@@ -31,6 +81,10 @@ echo $twig->render('editar_listas.html', [
     "level_user"        => $_SESSION["level"],
     "level_write"       => 15000,
     "conteudo"          => $produtos,
-    "id_lista"          => $idLista
+    "listas"            => $listas,
+    "id_lista"          => $idLista,
+    "nome_lista"        => $nomeLista,
+    "sucesso"            => $sucesso,
+    "erro"              => $erro
     ]);
 ?>

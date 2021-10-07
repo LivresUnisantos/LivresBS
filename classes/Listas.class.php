@@ -3,8 +3,7 @@ class Listas extends Livres {
 
     public function produtosListaAtivos($lista = "1", $ordem = "nome", $categoria = "") {
         $sql = "SELECT *, l.id as id_item, l.ativo as item_ativo, p.id as id_produto, p.imagem as imagem FROM listas_itens l LEFT JOIN produtos p";
-        $sql .= " ON p.id = l.id_produto";
-        $sql .= " WHERE l.ativo = 1 AND l.id_lista = ".$lista;
+        $sql .= " ON p.id = l.id_produto WHERE l.id_lista = ".$lista;
         if ($categoria != "") {
             $sql .= " AND p.categoria = '".$categoria."'";
         }
@@ -19,10 +18,9 @@ class Listas extends Livres {
     
     public function produtosListaTodos($lista = "1", $ordem = "nome", $categoria = "") {
         $sql = "SELECT *, l.id as id_item, l.ativo as item_ativo, p.id as id_produto, p.imagem as imagem FROM produtos p LEFT JOIN listas_itens l";
-        $sql .= " ON p.id = l.id_produto";
-        $sql .= " WHERE (l.id_lista = ".$lista." OR l.id_lista IS NULL)";
+        $sql .= " ON (p.id = l.id_produto AND l.id_lista = ".$lista.")";
         if ($categoria != "") {
-            $sql .= " AND p.categoria = '".$categoria."'";
+            $sql .= " WHERE p.categoria = '".$categoria."'";
         }
         $ordem = strtolower($ordem);
         $ordem = str_replace("ç","c",$ordem);
@@ -31,6 +29,61 @@ class Listas extends Livres {
         }
         //echo $sql;
         return $this->listarProdutos($sql);
+    }
+    
+    public function listarListas() {
+        $sql = "SELECT * FROM listas_produtos ORDER BY id ASC";
+        $st = $this->conn()->prepare($sql);
+        $st->execute();
+        
+        if ($st->rowCount() > 0) {
+            $rs = $st->fetchAll();
+            return $rs;
+        } else {
+            return false;
+        }
+    }
+    
+    public function getNomeLista($id) {
+        $sql = "SELECT * FROM listas_produtos WHERE id = ".$id;
+        $st = $this->conn()->prepare($sql);
+        $st->execute();
+        if ($st->rowCount() > 0) {
+            $rs = $st->fetch();
+            //echo $rs["nome_lista"];
+            return $rs["nome_lista"];
+        }
+        return false;
+    }
+    
+    public function updateNomeLista($id, $nome) {
+        $sql = "UPDATE listas_produtos SET nome_lista = '".$nome."' WHERE id = ".$id;
+        $st = $this->conn()->prepare($sql);
+        if ($st->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function createLista($nome) {
+        $sql = "INSERT INTO listas_produtos (nome_lista) VALUES ('".$nome."')";
+        $st = $this->conn()->prepare($sql);
+        if ($st->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function deleteLista($id) {
+        $sql = "DELETE FROM listas_produtos WHERE id = ".$id;
+        $st = $this->conn()->prepare($sql);
+        $st->execute();
+        if ($st->rowCount() > 0) {
+            return true;
+        }
+        return false;
     }
 
     /*public function listarProdutosTodos($ordem = "nome") {
@@ -79,7 +132,6 @@ class Listas extends Livres {
             echo "</pre>";*/
             return $produtos;
         } else {
-            //echo 'erro';
             return false;
         }
     }

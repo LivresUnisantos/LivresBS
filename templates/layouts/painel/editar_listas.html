@@ -1,6 +1,72 @@
 {% extends "index.html" %}
 
 {% block content %}
+    {% if (erro != "") %}
+        <div class="alert alert-danger" role="alert">
+            {{ erro }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
+    {% if (sucesso != "") %}
+        <div class="alert alert-success" role="alert">
+            {{ sucesso }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
+    <div id="popup" title="Nova Lista" style="display: none;">
+        <form id="form_novalista" name="form_novalista" method="POST" action="" class="form-inline">
+            <input type="hidden" id="act_insert" name="act" value="criar_lista" />
+            <input type="text" class="form-control" id="nome_lista_insert" name="nome_lista" value="" />
+            <input type="submit" class="btn btn-success ml-1" value="Criar Lista" />
+        </form>
+    </div>
+    <div class="row pt-2 pb-2">
+        <div class="col-sm-9 inline">
+            <form id="selecionar_lista" name="selecionar_lista" action="" method="GET" class="form-inline">
+                <label for="lista_selecionada" class="pr-2">Lista de produtos: </label>
+                <select class="custom-select" id="lista_selecionada" name="lista_selecionada">
+                    {% if (id_lista == 0) %}
+                        <option value="" selected>Selecione a lista</option>
+                    {% else %}
+                        <option value="">Selecione a lista</option>
+                    {% endif %}
+                    {% for l in listas %}
+                        {% if (l.id == id_lista) %}
+                            <option value="{{ l.id }}" selected>Lista {{ l.id }} - {{ l.nome_lista }}</option>
+                        {% else %}
+                            <option value="{{ l.id }}">Lista {{ l.id }} - {{ l.nome_lista }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <input type="submit" id="btn_editar_lista" class="btn btn-primary ml-1" value="Editar lista" />
+                <input type="button" name="btn_apagar_lista" id="btn_apagar_lista" value="Apagar lista" class="btn btn-danger ml-1" />
+                <button type="button" id="btn_abrir_lista" class="btn btn-primary ml-1" onclick="window.open('http://www.livresbs.com.br/produtos/{{ id_lista }}')">Abrir Página</button>
+                <input type="button" id="btn_nova_lista" class="btn btn-primary ml-1" value="Criar Nova Lista" />
+            </form>
+        </div>
+    </div>
+    <!-- form fake para apagar listas -->
+    <form style="display: none;" id="form_apagar_lista" action="" method="POST">
+        <input type="hidden" id="act_update" name="act" value="apagar_lista" />
+        <input type="hidden" id="deletar_lista_id" name="lista_selecionada" value="" />
+    </form>
+    {% if (nome_lista != "") %}
+        <div class="row pb-1">
+            <div class="col-sm-7">
+                <form id="alterar_nome" name="alterar_nome" action="" method="POST" class="form-inline">
+                    <label for="nome_lista" class="pr-2">Lista {{ id_lista }}</label>
+                    <input type="hidden" id="act_update" name="act" value="editar_nome" />
+                    <input type="hidden" id="idLista" name="lista_selecionada" value="{{ id_lista }}" />
+                    <input type="text" class="form-control" id="nome_lista" name="nome_lista" value="{{ nome_lista }}" />
+                    <input type="submit" class="btn btn-primary ml-1" value="Alterar nome" />
+                </form>
+            </div>
+        </div>
+    {% endif %}
     <div class="input-group mb-2 mr-sm-2">
         <div class="custom-control custom-switch">
           <input type="checkbox" class="custom-control-input" id="filtro_estoquezero" name="filtro_estoquezero">
@@ -73,6 +139,16 @@
     {% endif %}
     <script>
         $(document).ready(function(){
+            dialog = $("#popup").dialog({
+                autoOpen: false,
+                height: 150,
+                width: 400,
+                modal: true,
+            });
+            $("#btn_nova_lista").click(function() {
+                dialog.dialog("open");
+            });
+            
             $("#filtro_estoquezero, #filtro_estoquenaozero").on("click", function() {
                 if ($(this).prop('name') == 'filtro_estoquezero') {
                     if ($(this).prop('checked')) {
@@ -100,6 +176,17 @@
                     }
                 });
             });
+            $("#btn_apagar_lista").click(function() {
+                idLista = $("#lista_selecionada").val();
+                if (idLista == "") {
+                    alert("Selecione uma lista para apagar");
+                } else {
+                    if (window.confirm("Deseja realmente apagar a lista?")) {
+                        $("#deletar_lista_id").val(idLista)
+                        $("#form_apagar_lista").submit();
+                    }
+                }
+            });
             $("[name=produto_ativo]").on("click", function() {
                 idProduto = $(this).attr("id_produto");
                 idLista = $("#lista_id").val();
@@ -108,6 +195,7 @@
                 } else {
                     ativo = 0;
                 }
+                console.log("editar_listas_act.php?idProduto=" + idProduto + "&ativo=" + ativo + "&idLista=" + idLista);
                 $.ajax({
                     method: "GET",
                     url: "editar_listas_act.php?idProduto=" + idProduto + "&ativo=" + ativo + "&idLista=" + idLista,
