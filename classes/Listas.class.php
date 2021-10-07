@@ -2,7 +2,7 @@
 class Listas extends Livres {
 
     public function produtosListaAtivos($lista = "1", $ordem = "nome", $categoria = "") {
-        $sql = "SELECT *, l.id as id_item, l.ativo as item_ativo, p.id as id_produto FROM listas_itens l LEFT JOIN produtos p";
+        $sql = "SELECT *, l.id as id_item, l.ativo as item_ativo, p.id as id_produto, p.imagem as imagem FROM listas_itens l LEFT JOIN produtos p";
         $sql .= " ON p.id = l.id_produto";
         $sql .= " WHERE l.ativo = 1 AND l.id_lista = ".$lista;
         if ($categoria != "") {
@@ -18,7 +18,7 @@ class Listas extends Livres {
     }
     
     public function produtosListaTodos($lista = "1", $ordem = "nome", $categoria = "") {
-        $sql = "SELECT *, l.id as id_item, l.ativo as item_ativo, p.id as id_produto FROM produtos p LEFT JOIN listas_itens l";
+        $sql = "SELECT *, l.id as id_item, l.ativo as item_ativo, p.id as id_produto, p.imagem as imagem FROM produtos p LEFT JOIN listas_itens l";
         $sql .= " ON p.id = l.id_produto";
         $sql .= " WHERE (l.id_lista = ".$lista." OR l.id_lista IS NULL)";
         if ($categoria != "") {
