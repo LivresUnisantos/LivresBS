@@ -4206,3 +4206,4 @@
 2021-10-07-16:51:16 (joaovaros@outlook.com) joaovaros@outlook.com alterou estoque do Cereal Matinal Orgânico (200g) (Mano Velho) de 3 para 0 | UPDATE produtos SET estoque = 0 WHERE id = 482
 2021-10-07-16:51:25 (joaovaros@outlook.com) joaovaros@outlook.com alterou estoque do Farinha de Aveia (500g) (Marfil) de 10 para 8 | UPDATE produtos SET estoque = 8 WHERE id = 234
 2021-10-07-16:51:43 (joaovaros@outlook.com) joaovaros@outlook.com alterou estoque do Aveia em Flocos Grossos (350g) (Coopernatural) de 11 para 10 | UPDATE produtos SET estoque = 10 WHERE id = 219
+2021-10-07-19:57:11 (joaovaros@outlook.com) joaovaros@outlook.com alterou estoque do Flocos De Milho Orgânico (para cuscuz) 500g (Mano Velho) de 13 para 0 | UPDATE produtos SET estoque = 0 WHERE id = 351

@@ -2,6 +2,7 @@
 .htaccess
 /Consumidor/log.txt
 /Painel/log*.txt
+/Painel/log_estoque.txt
 /Variavel/log.txt
 /_app/Config.inc.php
 /classes/Livres.class.php
