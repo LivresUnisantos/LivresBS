@@ -4,8 +4,10 @@
     <meta charset="utf-8">
     <!--  This file has been downloaded from bootdey.com @bootdey on twitter -->
     <!--  All snippets are MIT license http://bootdey.com/license -->
+    <!-- Layout geral -->
     <!-- https://www.bootdey.com/snippets/view/Shop-Product-List -->
-    <!-- https://www.bootdey.com/snippets/view/Box-Product-List#preview -->
+    <!-- lista de produtos -->
+    <!-- https://www.bootdey.com/snippets/view/Box-Product-List -->
     <title>Livres BS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -53,15 +55,34 @@
                 <!-- card produto -->
                 {% for p in produtos %}
                     {% if p.preco_mercado > 0 %}
-                        <div class="col-sm-4 col-md-3 box-product-outer">
-                            <div class="box-product">
-                                <h6>{{ p.nome }}</h6>
-                                <div class="price">
-                                    <div><img src="icon-livremercado.png" width="25" height="25" /> R${{p.preco_mercado|number_format(2,",",".")}}</div>
-                                    <div><img src="icon-consciente.png" width="25" height="25" /> R${{p.preco_lojinha|number_format(2,",",".")}}</div>
-                                    <div><img src="icon-comboio.png" width="25" height="25" /> R${{p.preco|number_format(2,",",".")}}<span class="price-down">-{{(100 - p.preco*100//p.preco_mercado)|number_format(0,",",".")}}%</span></div>
-                                </div>                        
-                            </div>
+                        <div class="col-sm-4 col-md-3 hidden-xs box-product-outer">
+                        	<div class="box-product">
+                        		<div class="img-wrapper">
+                        			<a href="#">
+                    			    {% if (p.imagem != "") %}
+                    				    <img alt="Product" src="../{{ p.imagem }}">
+                    				{% else %}
+                    				    <img alt="Product" src="../images/produtos/padrao.png">
+                    				{% endif %}
+                        			</a>
+                        			<div class="tags">
+                        				<span class="label-tags"><span class="label label-info">{{ p.produtor }}</span></span>
+                        				<span class="label-tags"><span class="label label-danger">{{ p.categoria }}</span></span>
+                        			</div>
+                        			<!-- HTML para exibir opções ao passar mouse em cima da foto -->
+                        			<!--<div class="option">
+                        				<a href="#" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Add to Cart"><i class="ace-icon fa fa-shopping-cart"></i></a>
+                        				<a href="#" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Compare"><i class="ace-icon fa fa-align-left"></i></a>
+                        				<a href="#" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Wishlist"><i class="ace-icon fa fa-heart"></i></a>
+                        			</div>-->
+                        		</div>
+                        		<h6><a href="detail.html">{{ p.nome }}</a></h6>
+                        		<div class="price">
+                        			<div><img src="icon-livremercado.png" width="25" height="25" /> R${{p.preco_mercado|number_format(2,",",".")}}</div>
+                        			<div><img src="icon-consciente.png" width="25" height="25" /> R${{p.preco_lojinha|number_format(2,",",".")}}</div>
+                        			<div><img src="icon-comboio.png" width="25" height="25" /> R${{p.preco|number_format(2,",",".")}}<span class="price-down">-{{(100 - p.preco*100//p.preco_mercado)|number_format(0,",",".")}}%</span></div>
+                        		</div>
+                        	</div>
                         </div>
                     {% endif %}
                 {% endfor %}
