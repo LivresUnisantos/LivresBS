@@ -22,7 +22,8 @@
 <link href="../../../produtos/catalogo-produtos.css" rel="stylesheet">
 <div class="container">
     <div class="row">
-        <div class="col-sm-3 hidden-xs">
+        <!--<div class="col-sm-3 hidden-xs">-->
+        <div class="col-sm-3">
             <div class="list-group">
                 <a href="./{{ lista }}/todos/{{ordem}}" class="list-group-item">Todos</a>
                 {% for c in categorias %}
@@ -51,11 +52,14 @@
                         {% endfor %}
                   </select>
                 </div>
-
+            </div>
+            <!--<div class="row">
+            <div class="col-md-12">-->
                 <!-- card produto -->
                 {% for p in produtos %}
                     {% if p.preco_mercado > 0 %}
-                        <div class="col-sm-4 col-md-3 hidden-xs box-product-outer">
+                        <!--<div class="col-sm-4 col-md-3 hidden-xs box-product-outer">-->
+                        <div class="col-sm-4 col-md-3 box-product-outer">
                         	<div class="box-product">
                         		<div class="img-wrapper">
                         			<a href="#">
@@ -76,7 +80,7 @@
                         				<a href="#" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Wishlist"><i class="ace-icon fa fa-heart"></i></a>
                         			</div>-->
                         		</div>
-                        		<h6><a href="detail.html">{{ p.nome }}</a></h6>
+                        		<h6><a href="#">{{ p.nome }}</a></h6>
                         		<div class="price">
                         			<div><img src="icon-livremercado.png" width="25" height="25" /> R${{p.preco_mercado|number_format(2,",",".")}}</div>
                         			<div><img src="icon-consciente.png" width="25" height="25" /> R${{p.preco_lojinha|number_format(2,",",".")}}</div>
@@ -86,7 +90,8 @@
                         </div>
                     {% endif %}
                 {% endfor %}
-            </div>
+            <!--</div>
+            </div>-->
         </div>
     </div>
 </div>
