@@ -79,7 +79,7 @@ class Listas extends Livres {
             echo "</pre>";*/
             return $produtos;
         } else {
-            echo 'erro';
+            //echo 'erro';
             return false;
         }
     }
