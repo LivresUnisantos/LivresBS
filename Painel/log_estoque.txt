@@ -4198,3 +4198,11 @@
 2021-09-26-15:16:59 (joaovaros@outlook.com) joaovaros@outlook.com alterou estoque do Vinho Seco Cabernet Hex von Wein (750ml) (Coopernatural) de 0 para 0 | UPDATE produtos SET estoque = 0 WHERE id = 61
 2021-09-26-15:17:31 (joaovaros@outlook.com) joaovaros@outlook.com alterou estoque do Banana Chips (salgada 50g) (COOPAFASB) de 0 para 4 | UPDATE produtos SET estoque = 4 WHERE id = 123
 2021-09-29-19:24:51 (hrmele@gmail.com) hrmele@gmail.com cadastrou e ativo produto (id=514) | INSERT INTO listas_itens (id_produto, id_lista, ativo) VALUES (514,1,1)
+2021-10-03-22:22:23 (joaovaros@outlook.com) joaovaros@outlook.com alterou estoque do Vinagre De Maça (510ml) (Marfil) de 0 para 4 | UPDATE produtos SET estoque = 4 WHERE id = 398
+2021-10-03-23:10:05 (joaovaros@outlook.com) joaovaros@outlook.com alterou estoque do Feijão Vermelho (500g) (Coopernatural) de 0 para 3 | UPDATE produtos SET estoque = 3 WHERE id = 223
+2021-10-03-23:15:24 (joaovaros@outlook.com) joaovaros@outlook.com alterou estoque do Café Muchoqueiro em Grãos (500g) * (Ana) de 0 para 40 | UPDATE produtos SET estoque = 40 WHERE id = 67
+2021-10-03-23:15:25 (joaovaros@outlook.com) joaovaros@outlook.com alterou estoque do Café Muchoqueiro Moído (500g) * (Ana) de 0 para 100 | UPDATE produtos SET estoque = 100 WHERE id = 54
+2021-10-07-16:51:05 (joaovaros@outlook.com) joaovaros@outlook.com alterou estoque do Aveia em Flocos Finos (350g) (Coopernatural) de 4 para 0 | UPDATE produtos SET estoque = 0 WHERE id = 218
+2021-10-07-16:51:16 (joaovaros@outlook.com) joaovaros@outlook.com alterou estoque do Cereal Matinal Orgânico (200g) (Mano Velho) de 3 para 0 | UPDATE produtos SET estoque = 0 WHERE id = 482
+2021-10-07-16:51:25 (joaovaros@outlook.com) joaovaros@outlook.com alterou estoque do Farinha de Aveia (500g) (Marfil) de 10 para 8 | UPDATE produtos SET estoque = 8 WHERE id = 234
+2021-10-07-16:51:43 (joaovaros@outlook.com) joaovaros@outlook.com alterou estoque do Aveia em Flocos Grossos (350g) (Coopernatural) de 11 para 10 | UPDATE produtos SET estoque = 10 WHERE id = 219
