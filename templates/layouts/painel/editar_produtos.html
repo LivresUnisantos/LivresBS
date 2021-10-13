@@ -78,6 +78,7 @@
             });
           
             $("[act=editProduto]").click(function() {
+                $("#popup").html("Aguarde, carregando...");
                 idProduto = $(this).attr("idProduto");
                 $.ajax({
                     method: "GET",
