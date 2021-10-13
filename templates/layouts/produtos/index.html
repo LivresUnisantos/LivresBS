@@ -24,10 +24,15 @@
     <div class="row">
         <!--<div class="col-sm-3 hidden-xs">-->
         <div class="col-sm-3">
+            <form method="GET">
+                <input type="text" value="{{ filtro }}" id="f" name="f" class="form-control" />
+                <input type="submit" value="Buscar" class="form-control" />
+            </form>
+            <div>&nbsp;</div>
             <div class="list-group">
                 <a href="./{{ lista }}/todos/{{ordem}}" class="list-group-item">Todos</a>
                 {% for c in categorias %}
-                    <a href="{{ lista }}/{{ c.Categoria }}/{{ordem}}" class="list-group-item">{{ c.Categoria }}</a>
+                    <a href="{{ lista }}/{{ c.Categoria }}/{{ordem}}{{ (filtro != '') ? '?f=' ~ filtro : '' }}" class="list-group-item">{{ c.Categoria }}</a>
                 {% endfor %}
             </div>
         </div>
@@ -44,11 +49,7 @@
                 <div class="col-sm-3 text-right">
                     <select id="input-sort" class="form-control">
                         {% for o in ordens %}
-                            {% if o == ordem %}
-                                <option value="{{ lista }}/{{ categoria }}/{{ o }}" selected="selected">{{ o }}</option>
-                            {% else %}
-                                <option value="{{ lista }}/{{ categoria }}/{{ o }}">{{ o }}</option>
-                            {% endif %}
+                            <option value="{{ lista }}/{{ categoria }}/{{ o }}" {{ (o == ordem) ? 'selected' : '' }}>{{ o }}</option>
                         {% endfor %}
                   </select>
                 </div>

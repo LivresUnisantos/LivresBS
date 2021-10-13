@@ -18,6 +18,7 @@ $ordens = array("Nome", "Preço");
 //$lista = 1;
 
 $categoria = "";
+$filtro = "";
 $ordem = $ordens[0];
 $categoria_display = "todos";
 $ordem_display = $ordens[0];
@@ -40,6 +41,11 @@ if (isset($_GET["categoria"])) {
         $categoria_display = $_GET["categoria"];
     }
 }
+if (isset($_GET["f"])) {
+    if ($_GET["f"] != "") {
+        $filtro = $_GET["f"];
+    }
+}
 if (isset($_GET["ordem"])) {
     if ($_GET["ordem"] != "") {
         $ordem = $_GET["ordem"];
@@ -54,7 +60,7 @@ if (isset($_GET["ordem"])) {
 }
 
 $categorias = $oProdutos->categorias();
-$produtos = $oListas->produtosListaAtivos($lista, $ordem, $categoria);
+$produtos = $oListas->produtosListaAtivos($lista, $ordem, $categoria, $filtro);
 
 echo $twig->render('index.html', [
     "base_url"          => $base_url,
@@ -63,6 +69,7 @@ echo $twig->render('index.html', [
     "ordem"             => $ordem_display,
     "categoria"         => $categoria_display,
     "lista"             => $lista,
-    "ordens"            => $ordens
+    "ordens"            => $ordens,
+    "filtro"            => $filtro
     ]);
 ?>

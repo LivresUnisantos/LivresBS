@@ -1,11 +1,14 @@
 <?php
 class Listas extends Livres {
 
-    public function produtosListaAtivos($lista = "1", $ordem = "nome", $categoria = "") {
-        $sql = "SELECT *, l.id as id_item, l.ativo as item_ativo, p.id as id_produto, p.imagem as imagem FROM listas_itens l LEFT JOIN produtos p";
+    public function produtosListaAtivos($lista = "1", $ordem = "nome", $categoria = "", $filtro = "") {
+        $sql = "SELECT *, l.id as id_item, l.ativo as item_ativo, p.id as id_produto, p.imagem as imagem, p.nome FROM listas_itens l LEFT JOIN produtos p";
         $sql .= " ON p.id = l.id_produto WHERE l.id_lista = ".$lista;
         if ($categoria != "") {
             $sql .= " AND p.categoria = '".$categoria."'";
+        }
+        if ($filtro != "") {
+            $sql .= " AND p.nome LIKE '%".$filtro."%'";
         }
         $ordem = strtolower($ordem);
         $ordem = str_replace("ç","c",$ordem);
