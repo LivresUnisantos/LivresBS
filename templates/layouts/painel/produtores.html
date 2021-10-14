@@ -1,0 +1,45 @@
+{% extends "index.html" %}
+
+{% block content %}
+    {% if (erro != "") %}
+        <div class="alert alert-danger" role="alert">
+            {{ erro }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
+    {% if (sucesso != "") %}
+        <div class="alert alert-success" role="alert">
+            {{ sucesso }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
+    {% if conteudo %}
+        <div class="input-group mb-2 mr-sm-2">
+            <form action="" method="POST" class="form-inline">
+                <label for="produtor">Criar Produtor</label>
+                <input type="text" id="produtor" name="produtor" value="" class="custom-input" />
+                <input type="submit" value="Criar" class="btn btn-secondary" />
+            </form>
+        </div>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>Produtores</th>
+                </tr>
+            </thead>
+            <tbody id="tabela_produtos">
+                {% for p in conteudo %}
+                    <tr>
+                        <td>{{ p }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <span class="cabecalho_entregas">Não há produtores cadastrados</span>
+    {% endif %}
+{% endblock content %}

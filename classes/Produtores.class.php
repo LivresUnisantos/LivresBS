@@ -15,8 +15,13 @@ class Produtores extends Livres {
         return $produtores;
     }
     
-    public function listaProdutoresPorID() {
-        $sql = "SELECT * FROM Produtores ORDER BY produtor";
+    public function listaProdutoresPorID($ordem = "") {
+        $sql = "SELECT * FROM Produtores";
+        if ($ordem == "") {
+            $sql .= " ORDER BY Produtor";
+        } else {
+            $sql .= " ORDER BY ".$ordem;
+        }
         $st = $this->conn()->prepare($sql);
         $st->execute();
         
@@ -39,6 +44,12 @@ class Produtores extends Livres {
         $rs = $st->fetch();
 
         return $rs["Produtor"];
+    }
+    
+    public function cadastrarProdutor($produtor) {
+        $sql = "INSERT INTO Produtores (Produtor) VALUES ('".$produtor."')";
+        $st = $this->conn()->prepare($sql);
+        return $st->execute();
     }
 
 }
