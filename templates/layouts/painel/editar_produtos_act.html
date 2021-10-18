@@ -10,7 +10,7 @@
                 {% if produto.id %}
                     <input type="hidden" id="id" name="id" value="{{ produto.id }}" />
                 {% endif %}
-                {% if level_user >= 100000 or not produto.id %}
+                {% if level_user >= 21000 or not produto.id %}
                     <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" value="{{ produto.nome }}">
                 {% else %}
                     <input type="text" class="form-control" id="aux1" name="aux1" placeholder="Nome" value="{{ produto.nome }}" disabled>
