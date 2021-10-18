@@ -93,6 +93,7 @@
             });
 
             $("#novo_produto").click(function() {
+                $("#popup").html("Aguarde, carregando...");
                 $.ajax({
                     method: "GET",
                     url: "editar_produtos_act.php",
