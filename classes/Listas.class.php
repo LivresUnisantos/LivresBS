@@ -4,6 +4,7 @@ class Listas extends Livres {
     public function produtosListaAtivos($lista = "1", $ordem = "nome", $categoria = "", $filtro = "") {
         $sql = "SELECT *, l.id as id_item, l.ativo as item_ativo, p.id as id_produto, p.imagem as imagem, p.nome FROM listas_itens l LEFT JOIN produtos p";
         $sql .= " ON p.id = l.id_produto WHERE l.id_lista = ".$lista;
+        $sql .= " AND l.ativo = 1";
         if ($categoria != "") {
             $sql .= " AND p.categoria = '".$categoria."'";
         }
@@ -80,6 +81,17 @@ class Listas extends Livres {
     }
     
     public function deleteLista($id) {
+        $nomeLista = $this->getNomeLista($id);
+        if (!$nomeLista) {
+            return false;
+        }
+        //Checar se existe grupo de consumidores avulsos associados à essa lista
+        $sql = "SELECT COUNT(grupo) FROM Usuarios WHERE grupo = '".$nomeLista."'";
+        $st = $this->conn()->prepare($sql);
+        $st->execute();
+        if ($st->rowCount() > 0) {
+            return false;
+        }
         $sql = "DELETE FROM listas_produtos WHERE id = ".$id;
         $st = $this->conn()->prepare($sql);
         $st->execute();
@@ -88,7 +100,7 @@ class Listas extends Livres {
         }
         return false;
     }
-
+    
     /*public function listarProdutosTodos($ordem = "nome") {
         $sql = "SELECT * FROM produtos ";
         $sql .= "ORDER BY ".$ordem." ASC";
