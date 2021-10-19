@@ -52,7 +52,7 @@ if (isset($_POST["act"])) {
                 if ($oListas->deleteLista($listaUpdate)) {
                     $sucesso = "Lista excluída";
                 } else {
-                    $erro = "Falha ao excluir lista";
+                    $erro = "Falha ao excluir lista. Verifique se existem grupos de consumidores avulsos associados à esta lista.";
                 }
             }
         break;
