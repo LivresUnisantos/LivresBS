@@ -76,6 +76,14 @@
           <input type="checkbox" class="custom-control-input" id="filtro_estoquenaozero" name="filtro_estoquenaozero">
           <label class="custom-control-label" for="filtro_estoquenaozero">Estoque não zerado</label>
         </div>
+        <div class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" id="filtro_apenasativos" name="filtro_apenasativos">
+          <label class="custom-control-label" for="filtro_apenasativos">Apenas ativos</label>
+        </div>
+        <div class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" id="filtro_apenasinativos" name="filtro_apenasinativos">
+          <label class="custom-control-label" for="filtro_apenasinativos">Apenas inativos</label>
+        </div>
         <input type="hidden" name="lista_id" id="lista_id" value="{{ id_lista }}" />
     </div>
     {% if conteudo %}
@@ -149,6 +157,7 @@
                 dialog.dialog("open");
             });
             
+            //impede que estoque zero/estoque não zero sejam ativados simultaneamente
             $("#filtro_estoquezero, #filtro_estoquenaozero").on("click", function() {
                 if ($(this).prop('name') == 'filtro_estoquezero') {
                     if ($(this).prop('checked')) {
@@ -161,18 +170,46 @@
                 }
                 console.log($(this).prop('checked'));
             });
-            $("#filtro, #filtro_estoquezero, #filtro_estoquenaozero").on("keyup click", function() {
+            
+            //impede que apenas ativos/apenas inativos sejam ativados simultanemanete
+            $("#filtro_apenasativos, #filtro_apenasinativos").on("click", function() {
+                if ($(this).prop('name') == 'filtro_apenasativos') {
+                    if ($(this).prop('checked')) {
+                        $("#filtro_apenasinativos").prop('checked', false);
+                    }
+                } else {
+                    if ($(this).prop('checked')) {
+                        $("#filtro_apenasativos").prop('checked', false);
+                    }
+                }
+                console.log($(this).prop('checked'));
+            });
+            
+            $("#filtro, #filtro_estoquezero, #filtro_estoquenaozero, #filtro_apenasativos, #filtro_apenasinativos").on("keyup click", function() {
                 var value = $("#filtro").val().toLowerCase();
                 var estoquezero = $("#filtro_estoquezero").prop('checked');
                 var estoquenaozero = $("#filtro_estoquenaozero").prop('checked');
+                var apenasativos = $("#filtro_apenasativos").prop('checked');
+                var apenasinativos = $("#filtro_apenasinativos").prop('checked');
+                
+                if (apenasativos) {
+                    valorFiltroAtivoInativo=true;
+                } else {
+                    valorFiltroAtivoInativo=false;
+                }
+                
                 $("#tabela_produtos tr").filter(function() {
+                    if (apenasativos || apenasinativos) {
+                        ativo = $(this).find('td input[name=produto_ativo]').prop('checked') == valorFiltroAtivoInativo;
+                    } else {
+                        ativo = true;
+                    }
                     if (estoquezero || estoquenaozero) {
-                        flagestoque=0;
                         if (estoquezero) { flagEstoqueZero = 1; } else { flagEstoqueZero = 0; }
                         estoque = $(this).find('td input[name="estoquezero"]').val() == flagEstoqueZero;
-                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1 && estoque);
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1 && estoque && ativo);
                     } else {
-                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1 && ativo);
                     }
                 });
             });
