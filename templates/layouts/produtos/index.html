@@ -13,13 +13,18 @@
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://kit.fontawesome.com/81e3d3f323.js" crossorigin="anonymous"></script>
     <base href="{{ base_url }}" />
 </head>
 <body>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="../../../produtos/catalogo-produtos.css" rel="stylesheet">
+<div id="popup" title="" style="display: none;">
+    <p><img src="entenda-precos.png" width="1056" height="352" /></p>
+</div>
 <div class="container">
     <div class="row">
         <!--<div class="col-sm-3 hidden-xs">-->
@@ -38,15 +43,15 @@
         </div>
         <div class="col-sm-9">
             <div class="row">
-                <div class="col-sm-7">
+                <div class="col-sm-9">
                     <img src="icon-livremercado.png" width="25" height="25" /> Livre mercado |
                     <img src="icon-consciente.png" width="25" height="25" /> Consumidor Consciente |
-                    <img src="icon-comboio.png" width="25" height="25" /> Comboio Orgânico
+                    <img src="icon-comboio.png" width="25" height="25" /> Comboio Orgânico <a href="#" id="comofunciona">Como funciona?</a>
                 </div>
-                <div class="col-sm-2 text-right">
-                    <label class="control-label" for="input-sort">Ordenar por:</label>
+                <div class="col-sm-1 text-right">
+                    <label class="control-label" for="input-sort">Ordenar:</label>
                 </div>                
-                <div class="col-sm-3 text-right">
+                <div class="col-sm-2 text-right">
                     <select id="input-sort" class="form-control">
                         {% for o in ordens %}
                             <option value="{{ lista }}/{{ categoria }}/{{ o }}" {{ (o == ordem) ? 'selected' : '' }}>{{ o }}</option>
@@ -63,11 +68,11 @@
                         <div class="col-sm-4 col-md-3 box-product-outer">
                         	<div class="box-product">
                         		<div class="img-wrapper">
-                        			<a href="#">
+                        			<a href="#" produto-link>
                     			    {% if (p.imagem != "") %}
-                    				    <img alt="Product" src="../{{ p.imagem }}">
+                    				    <img alt="Product" src="../{{ p.imagem }}" produto-link>
                     				{% else %}
-                    				    <img alt="Product" src="../images/produtos/padrao.png">
+                    				    <img alt="Product" src="../images/produtos/padrao.png" produto-link>
                     				{% endif %}
                         			</a>
                         			<div class="tags">
@@ -81,7 +86,7 @@
                         				<a href="#" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Wishlist"><i class="ace-icon fa fa-heart"></i></a>
                         			</div>-->
                         		</div>
-                        		<h6><a href="#">{{ p.nome }}</a></h6>
+                        		<h6><a href="" produto-link>{{ p.nome }}</a></h6>
                         		<div class="price">
                         			<div><img src="icon-livremercado.png" width="25" height="25" /> R${{p.preco_mercado|number_format(2,",",".")}}</div>
                         			<div><img src="icon-consciente.png" width="25" height="25" /> R${{p.preco_lojinha|number_format(2,",",".")}}</div>
@@ -97,8 +102,40 @@
     </div>
 </div>
 <script type="text/javascript">
+    $(document).ready(function(){
+        dialog = $("#popup").dialog({
+            autoOpen: false,
+            height: 420,
+            width: 1090,
+            modal: true,
+            closeOnEscape: false,
+            close: function() {
+                if (!sessionStorage.popupMostrado) {
+                    if (confirm("Deseja exibir esta janela no seu próximo acesso? Você pode acessá-la clicando no link 'Como Funciona' no topo da janela")) {
+                        console.log('exibir');
+                    } else {
+                        console.log('nao exibir');
+                        sessionStorage.popupMostrado = 1;
+                    }
+                }
+            }
+        });
+        if (!sessionStorage.popupMostrado) {
+            dialog.dialog("open").siblings('.ui-dialog-titlebar').removeClass('ui-widget-header');
+            //sessionStorage.popupMostrado = 1;
+            //sessionStorage.removeItem('popupMostrado');
+        }
+        
+        $("#comofunciona").click(function() {
+            event.preventDefault();
+            dialog.dialog("open").siblings('.ui-dialog-titlebar').removeClass('ui-widget-header');
+        });
+    });
     $("#input-sort").on('change', function() {
         window.location.href = $(this).val();
+    });
+    $("[produto-link]").click(function(event){
+        event.preventDefault();
     });
 </script>
 </body>
