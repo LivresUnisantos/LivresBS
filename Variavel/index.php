@@ -88,9 +88,17 @@ include "../Painel/helpers.php";
                 preco = preco.toString();
                 
                 preco=preco.replace(".",",");
+                if (preco.search(",") == -1) {
+                    preco=preco+",00";
+                }
                 int=preco.substring(0,preco.search(","));
+                if (int.length == 0) {
+                    int = "0";
+                }
                 dec=preco.substring(preco.search(",")+1);
                 dec=dec.substring(0,2);
+                
+                
                 if (dec.length == 1) {
                     dec = dec + "0";
                 }
@@ -226,7 +234,7 @@ if (!isset($_GET["cpf"])) {
 
     
     //Lista de variáveis
-    $sqlProdutos = "SELECT produtos.id AS id, produtos.nome AS nome FROM produtosVar LEFT JOIN produtos ON produtosVar.idProduto = produtos.id WHERE idCalendario = ".$idProximaEntrega." ORDER BY nome ASC";
+    $sqlProdutos = "SELECT produtos.id AS id, produtos.nome AS nome FROM produtosVar LEFT JOIN produtos ON produtosVar.idProduto = produtos.id WHERE produtosVar.idCalendario = ".$idProximaEntrega." ORDER BY nome ASC";
     $st = $conn->prepare($sqlProdutos);
     $st->execute();
     if ($st->rowCount() == 0) {
@@ -448,9 +456,14 @@ if (!isset($_GET["cpf"])) {
             					            <option value=""></option>
                     						<?php
                     						//Loop de produtos variáveis
-                    						foreach ($rsProdutos as $row) {					
+                    						$pdisp = "";
+                    						foreach ($rsProdutos as $row) {	
+                    						    if ($pdisp != "") $pdisp .= " | ";
+    						                    $pdisp .= $row["nome"]." (".$row["id"].")"; //logar produtos disponibilizados
                     							echo '<option value="'.$row["id"].'">'.ccase($row["nome"]).' ('.$row["unidade"].') - R$'.number_format($row["preco"],2,",",".").'</option>';
                     						}
+                    						//logar produtos listados
+    					                    setLog("log.txt","CPF: ".$cpf." - Produtos disponibilizados Opção 1: ".$pdisp,"");
                     						?>
                 						</select>
                 					</div>
@@ -491,9 +504,14 @@ if (!isset($_GET["cpf"])) {
             					            <option value=""></option>
                     						<?php
                     						//Loop de produtos variáveis
+                    						$pdisp = "";
                     						foreach ($rsProdutos as $row) {					
+                    						    if ($pdisp != "") $pdisp .= " | ";
+    						                    $pdisp .= $row["nome"]." (".$row["id"].")"; //logar produtos disponibilizados
                     							echo '<option value="'.$row["id"].'">'.ccase($row["nome"]).' ('.$row["unidade"].') - R$'.number_format($row["preco"],2,",",".").'</option>';
                     						}
+                    						//logar produtos listados
+    					                    setLog("log.txt","CPF: ".$cpf." - Produtos disponibilizados Opção 2: ".$pdisp,"");
                     						?>
                 						</select>
                 					</div>
