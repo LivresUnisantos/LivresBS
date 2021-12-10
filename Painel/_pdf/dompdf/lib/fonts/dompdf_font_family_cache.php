@@ -78,15 +78,15 @@
     'normal' => $fontDir . '/DejaVuSerif',
   ),
   'open sans' => array(
-    '300' => $fontDir . '/open-sans-300_ce33c7d61326f6d3321db9ddbd42f578',
-    'normal' => $fontDir . '/open-sans-normal_71cb315c4e66039720faf7f78f8ce4a6',
-    '600' => $fontDir . '/open-sans-600_b230af5918a0ec21e503a438db84425b',
-    'bold' => $fontDir . '/open-sans-bold_c928cbd7efb4ce31b558448a36a753b5',
-    '800' => $fontDir . '/open-sans-800_36cea3d09abec67675c9ae731e68f1d4',
+    '300' => $fontDir . '/open-sans-300_89cc7c620a0fc06c636a78901bc3d90c',
+    'normal' => $fontDir . '/open-sans-normal_d5c8574b9bdb2edd2b2d6153763d908a',
+    '600' => $fontDir . '/open-sans-600_50bb364a7fe911a2a48a6f505613df8b',
+    'bold' => $fontDir . '/open-sans-bold_2b29b70e8fdb444eafdbe10ae3ef325f',
+    '800' => $fontDir . '/open-sans-800_8d648359e5f3ba35434a219f01caa460',
   ),
   'source code pro' => array(
-    '300' => $fontDir . '/source-code-pro-300_266896d7f08b3b03dc103638d4699f8e',
-    '500' => $fontDir . '/source-code-pro-500_540e6d71e6b047389c1a80af1bca1f51',
+    '300' => $fontDir . '/source-code-pro-300_2d7c199335c246ee38d9b9c631c8531a',
+    '500' => $fontDir . '/source-code-pro-500_2cb2e1f8426aaf4b96654cb9beaadd60',
   ),
   'icomoon' => array(
     'normal' => $fontDir . '/icomoon-normal_e5aa0a1a1b23e7b095b48a627b443a5e',
