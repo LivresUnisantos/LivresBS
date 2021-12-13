@@ -3,6 +3,11 @@
 {% block content %}
 <div class="consolidar-pedidos">
     {% for d in conteudo %}
+    {% if (d.data <= ('now'|date('U'))) %}
+    <div class="alert alert-danger" role="alert">
+      ATENÇÃO. VOCÊ ESTÁ CONSOLIDANDO CESTA DE UMA ENTREGA PASSADA.
+    </div>
+    {% endif %}
     <div class="row item align-items-center">
         <div class="col-auto">{{d.data|date("d/m/Y")}}</div>
         <div class="col">
