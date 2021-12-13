@@ -43,6 +43,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="../../Painel/demanda_produto.php">Demanda</a>
+                    <a class="dropdown-item" href="../../Painel/pagamentos.php{% if (data_selecionada != '') %}?data={{data_selecionada}}{% endif %}">Pagamentos</a>
                     <a class="dropdown-item" href="../../Painel/contabilidade.php{% if (data_selecionada != '') %}?data={{data_selecionada}}{% endif %}">Resumo Contabilidade</a>
                 </div>
             </li>

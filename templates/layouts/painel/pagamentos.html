@@ -1,0 +1,204 @@
+{% extends "index.html" %}
+
+{% block content %}
+    {% if conteudo %}
+        <div class="input-group mb-2 mr-sm-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Filtro</div>
+            </div>
+            <input type="text" class="form-control" id="filtro" name="Filtro" placeholder="Procure por consumidor, grupo ou número do pedido">
+            <button class="btn btn-success" type="button" id="salvar_tudo" name="salvar_tudo">Salvar tudo</button>
+        </div>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>Pedido</th>
+                    <th>Consumidor</th>
+                    <th>G</th>
+                    <th>Cota</th>
+                    <th>Fixa</th>
+                    <th>Mensal</th>
+                    <th>Extra</th>
+                    <th>Entrega</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Valor Pago</th>
+                    <th>Forma de Pagamento</th>
+                    <th>Observação</th>
+                    <th>Salvar</th>
+                </tr>
+            </thead>
+            <tbody id="tabela_pagamentos">
+                {% for p in conteudo %}
+                    <tr id="tr_{{ p.pedido.pedido_id }}">
+                        <form action="pagamentos_act.php" method="POST" id="salvar_pagamento_{{ p.pedido.pedido_id}}" name="salvar_pagamento">
+                        <input type="hidden" id="id_pedido_{{ p.pedido.pedido_id }}" name="id_pedido" value="{{ p.pedido.pedido_id }}" />
+                        <td id="codigo_{{ p.pedido.pedido_id }}">{{p.pedido.pedido_id}}</td>
+                        <td id="consumidor_{{ p.pedido.pedido_id }}">{{p.consumidor.consumidor}}</td>
+                        <td id="comunidade_{{ p.pedido.pedido_id }}">{{p.consumidor.comunidade}}</td>
+                        <td id="cota_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_cota|number_format(2,",",".")}}</td>
+                        <td id="fixa_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_fixa|number_format(2,",",".")}}</td>
+                        <td id="mensal_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_mensal|number_format(2,",",".")}}</td>
+                        <td id="extra_{{ p.pedido.pedido_id }}">R${{ p.pedido.pedido_avulso|number_format(2,",",".") }}</td>
+                        <td id="entrega_{{ p.pedido.pedido_id }}">R${{ p.pedido.pedido_entrega_valor|number_format(2,",",".") }}</td>
+                        <td id="total_{{ p.pedido.ipedido_id }}">R${{p.pedido.pedido_valor_total|number_format(2,",",".")}}</td>
+                        <td id="status_{{ p.pedido.pedido_id }}">
+                            <select id="pgt_status_{{ p.pedido.pedido_id }}" name="pgt_status">
+                                {% for s, txt in status_pagamento %}
+                                    {% if (s == p.pedido.pgt_status) %}
+                                    	<option value="{{ s }}" selected>{{ txt }}</option>
+                                    {% else %}
+                                    	<option value="{{ s }}">{{ txt }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td id="valor_pago_{{ p.pedido.pedido_id }}">R$<input type="text" id="pgt_valorpago_{{ p.pedido.pedido_id }}" size="6" pedido_id="{{ p.pedido.pedido_id}}" name="pgt_valorpago" value="{{p.pedido.pgt_valorpago|number_format(2,",",".")}}" /></td>
+                        <td id="forma_pagamento_{{ p.pedido.pedido_id }}">
+                            <select id="pgt_forma_{{ p.pedido.pedido_id }}" name="pgt_forma">
+                                <option value=""></option>
+                                {% for f in formas_pagamento %}
+                                    {% if (f == p.pedido.pgt_forma) %}
+                                        <option value="{{ f }}" selected>{{ f }}</option>
+                                    {% else %}
+                                        <option value="{{ f }}">{{ f }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td id="coment_pagamento_{{ p.pedido.pedido_id}}"><input type="text" id="pgt_comentario_{{ p.pedido.pedido_id }}" name="pgt_comentario" value="{{ p.pedido.pgt_comentario }}"/></td>
+                        <td id="salvar_{{ p.pedido.pedido_id }}"><input type="submit" idPedido="{{p.pedido.pedido_id}}" act="editar_pagamento" id="btnsalvar_{{p.pedido.pedido_id}}" name="btnsalvar" value="Salvar" /></td>
+                        </form>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <span class="cabecalho_entregas">Não há pedidos consolidados para esta data</span>
+    {% endif %}
+    <script>
+        $(document).ready(function(){
+            $("#filtro").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#tabela_pagamentos tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            dialog = $("#popup").dialog({
+                autoOpen: false,
+                height: 600,
+                width: 600,
+                modal: true,
+            });
+          
+            $("[name=salvar_pagamento]").submit(function(e) {
+                e.preventDefault(); // avoid to execute the actual submit of the form.
+                
+                var form = $(this);
+                var url = form.attr('action');
+                
+                var dados = form.serializeArray().reduce(function(obj, item) {
+                    obj[item.name] = item.value;
+                    return obj;
+                }, {});
+                id = dados["id_pedido"];
+    
+                valor = dados["pgt_valorpago"];
+                if (valor.length == 0) {
+                    alert("Valor não pode ser em branco.\r\nPreencha com zero.");
+                    return;
+                }
+
+                $.ajax({
+                    method: "POST",
+                    data: dados,
+                    url: "pagamentos_act.php",
+                    })
+                .done(function(msg) {
+                    if (msg == "ok") {
+                        $("#tr_"+id).stop().css("background-color", "#3a7d2d").animate({ backgroundColor: "#FFFFFF"}, 1500);
+
+                    } else {
+                        alert(msg);
+                        $("#tr_"+id).stop().css("background-color", "#cf0437").animate({ backgroundColor: "#FFFFFF"}, 1500);
+                    }
+                });
+            });
+            $("#salvar_tudo").on("click", function() {
+                
+                error=false
+                $("input[name=pgt_valorpago]").each(function(index) {
+                    console.log($(this).val());
+                    if ($(this).val().length == 0) {
+                        alert("Valor não pode ser em branco.\r\nPreencha com zero o pedido "+$(this).attr('pedido_id'));
+                        error=true;
+                    }
+                });
+                if (error) return;
+                
+                var id_pedido = $("input[name=id_pedido]").map(function() { return this.value; }).get().join('@@@');
+                var status = $("select[name=pgt_status]").map(function() { return this.value; }).get().join('@@@');
+                var valor_pago = $("input[name=pgt_valorpago]").map(function() { return this.value; }).get().join('@@@');
+                var forma = $("select[name=pgt_forma]").map(function() { return this.value; }).get().join('@@@');
+                var comentario = $("input[name=pgt_comentario]").map(function() { return this.value; }).get().join('@@@');
+                
+                /*console.log(id_pedido);
+                console.log(status);
+                console.log(valor_pago);
+                console.log(forma);
+                console.log(comentario);*/
+                
+                $.ajax({
+                    method: "POST",
+                    url: "pagamentos_act.php",
+                    data: {
+                        "id_pedido": id_pedido,
+                        "pgt_status": status,
+                        "pgt_valorpago": valor_pago,
+                        "pgt_forma": forma,
+                        "pgt_comentario": comentario
+                    }
+                })
+                .done(function(msg) {
+                    if (msg == "ok") {
+                        alert("Dados salvos");
+                    } else {
+                        alert(msg);
+                    }
+                });
+            });
+
+            /*$("#novo_produto").click(function() {
+                $("#popup").html("Aguarde, carregando...");
+                $.ajax({
+                    method: "GET",
+                    url: "editar_produtos_act.php",
+                    })
+                    .done(function( msg ) {
+                        //alert( "Data Saved: " + msg );
+                        $("#popup").html(msg);
+                    });
+                dialog.dialog("open");
+            });            */
+
+            //form edição de produtos
+            // $("#formEditarProduto").submit(function(e) {
+            //     console.log("entrou");
+            //     e.preventDefault(); // avoid to execute the actual submit of the form.
+
+            //     var form = $(this);
+            //     var url = form.attr('action');
+
+            //     $.ajax({
+            //         type: "POST",
+            //         url: url,
+            //         data: form.serialize(), // serializes the form's elements.
+            //         success: function(data) {
+            //             alert(data); // show response from the php script.
+            //         }
+            //     });
+            // });
+        });
+    </script>
+{% endblock content %}

@@ -37,6 +37,7 @@ $twig = new \Twig\Environment($loader, ['debug' => false]);
   <?php
 if (isset($_GET["data"])) {
 	$getData = $livres->dataPelaString($_SESSION["data_consulta"]);
+	$dataStr = $livres->dataPeloID($getData);
 }
 
 echo $twig->render('menu.html', [
@@ -59,54 +60,35 @@ if (isset($_GET["data"])) {
 }
 echo '</p>';
 if (!empty($_POST)) {
-    foreach ($_POST as $id=>$value) {
-        if ($id != "submit") {
-            //if (strlen($value) > 0) {
-                /*$sql = "SELECT * FROM PedidosVar WHERE idConsumidor = ".$id." AND idCalendario = ".$getData;
-                $st = $conn->prepare($sql);
-                $st->execute();
-                echo "<p>";
-                if ($st->rowCount() == 0) {
-                    $sql = "INSERT INTO PedidosVar (idConsumidor,idCalendario,delivery) VALUES (".$id.",".$getData.",'".$value."')";
-                    setLog("log.txt","Inclusão Delivery Consumidor",$sql);
-                    $st = $conn->prepare($sql);
-                    if ($st->execute()) {
-                        echo "Alteração realizada";
-                    } else {
-                        echo "Falha ao realizar alteração";
-                    }
-                } else {
-                    $sql = "UPDATE PedidosVar SET delivery = '".$value."' WHERE idConsumidor = ".$id." AND idCalendario = ".$getData;
-                    setLog("log.txt","Alteração Delivery Consumidor",$sql);
-                    $st = $conn->prepare($sql);
-                    if ($st->execute()) {
-                        echo "Alteração realizada";
-                    } else {
-                        echo "Falha ao realizar alteração";
-                    }
-                }
-                echo "</p>";
-                */
-                /* ARMENG TEMPORÁRIO PARA CONVERTER O FORMATO ANTIGO DE DESCRIÇÃO DE DELIVERY PARA O NOVO */
-                if ($value == 'Não') {
-                        $delivery = 1;
-                } else {
-                    if ($value == 'Sim') {
-                        $delivery = 2;
-                    } else {
-                        $delivery = 3;
-                    }
-                }
-                /* FIM ARMENG */
-                $sql = "UPDATE pedidos_consolidados SET pedido_retirada = ".$delivery." WHERE pedido_id = ".$id;
-                setLog("log.txt","Alteração Delivery Consumidor",$sql);
-                $st = $conn->prepare($sql);
-                if ($st->execute()) {
-                    //echo "Alteração realizada";
-                } else {
-                    echo "Falha ao realizar alteração";
-                }
-            //}
+    $sql = "SELECT * FROM pedidos_consolidados WHERE pedido_data = '".$dataStr."'";
+    $st = $conn->prepare($sql);
+    $st->execute();
+    
+    $rs = $st->fetchAll();
+    foreach ($rs as $row) {
+        $id = $row["pedido_id"];
+        /* ARMENG TEMPORÁRIO PARA CONVERTER O FORMATO ANTIGO DE DESCRIÇÃO DE DELIVERY PARA O NOVO */
+        $value = $_POST[$id];
+        if ($value == 'Não') {
+                $delivery = 1;
+        } else {
+            if ($value == 'Sim') {
+                $delivery = 2;
+            } else {
+                $delivery = 3;
+            }
+        }
+        /* FIM ARMENG */
+        $valor = $_POST["valor_entrega_".$id];
+        $valor = str_replace(",",".",$valor);
+        $valor = str_replace("R$","",$valor);
+        $sql = "UPDATE pedidos_consolidados SET pedido_retirada = ".$delivery.", pedido_entrega_valor = ".$valor." WHERE pedido_id = ".$id;
+        setLog("log.txt","Alteração Delivery Consumidor",$sql);
+        $st = $conn->prepare($sql);
+        if ($st->execute()) {
+            //echo "Alteração realizada";
+        } else {
+            echo "Falha ao realizar alteração";
         }
     }
 }
@@ -115,7 +97,7 @@ if (!isset($_GET["data"])) {
 	echo "Selecione uma data";
 } else {
 	if (strlen($getData) > 0) {
-	    $sql = "SELECT * FROM Calendario WHERE id = ".$getData;
+	    /*$sql = "SELECT * FROM Calendario WHERE id = ".$getData;
 	    $st = $conn->prepare($sql);
 	    $st->execute();
 	    $rs = $st->fetch();
@@ -142,9 +124,9 @@ if (!isset($_GET["data"])) {
 	            }
 	        }
 	        $entregas[$row["IDConsumidor"]][$row["Frequencia"]]++;
-	    }
+	    }*/
 	    
-		$sql = 'SELECT Consumidores.id AS ConsumidorId, Consumidores.*, PedidosVar.* FROM Consumidores LEFT JOIN PedidosVar';
+		/*$sql = 'SELECT Consumidores.id AS ConsumidorId, Consumidores.*, PedidosVar.* FROM Consumidores LEFT JOIN PedidosVar';
 		$sql .= ' ON PedidosVar.idConsumidor = Consumidores.id AND PedidosVar.idCalendario = '.$getData.' WHERE Consumidores.ativo=1 ORDER BY consumidor';
 		
 		$st = $conn->prepare($sql);
@@ -164,6 +146,10 @@ if (!isset($_GET["data"])) {
                 WHERE cons.consumidor IS NOT NULL
                 AND cal.id=" . $getData . "
                 ORDER BY cons.consumidor";
+        */      
+        $sql = "SELECT * FROM pedidos_consolidados ped LEFT JOIN Consumidores cons on ped.consumidor_id = cons.id  ";
+        $sql .= "WHERE pedido_data = '".$dataStr."' AND cons.comunidade <> 0 AND ped.consumidor_id IS NOT NULL ";
+        $sql .= "ORDER BY cons.comunidade, cons.consumidor";
 		$st = $conn->prepare($sql);
 		$st->execute();
 		if ($st->rowCount() > 0) {
@@ -173,45 +159,51 @@ if (!isset($_GET["data"])) {
 		    echo '<table border="1">';
             echo '<tr>';
             echo '<td>Consumidor</td>';
+            echo '<td>Comunidade</td>';
             echo '<td>Telefone</td>';
             echo '<td>Endereço</td>';
             echo '<td>Crédito/Débito</td>';
             echo '<td>Delivery</td>';
+            echo '<td>Valor Entrega</td>';
             echo '</tr>';
 		    $rs = $st->fetchAll();
 		    foreach ($rs as $row) {
-		        $com = $row["comunidade"];
+		        //$com = $row["comunidade"];
 		        /* ARMENG TEMPORÁRIO PARA CONVERTER O FORMATO ANTIGO DE DESCRIÇÃO DE DELIVERY PARA O NOVO */
-                if ($row["delivery"] == 1) {
+                if ($row["pedido_retirada"] == 1) {
                         $delivery = "Não";
                 } else {
-                    if ($row["delivery"] == 2) {
+                    if ($row["pedido_retirada"] == 2) {
                         $delivery = "Sim";
                     } else {
                         $delivery = "";
                     }
                 }
                 /* FIM ARMENG */
-		        $semanal = (!array_key_exists($row["ConsumidorId"],$entregas) || $entregas[$row["ConsumidorId"]]["Semanal"] == 0) ? false : true;
+		        /*$semanal = (!array_key_exists($row["ConsumidorId"],$entregas) || $entregas[$row["ConsumidorId"]]["Semanal"] == 0) ? false : true;
 		        $quinzenal = (!array_key_exists($row["ConsumidorId"],$entregas) || $entregas[$row["ConsumidorId"]]["Quinzenal"] == 0) ? false : true;
 		        $mensal = (!array_key_exists($row["ConsumidorId"],$entregas) || $entregas[$row["ConsumidorId"]]["Mensal"] == 0) ? false : true;
+		        */
 	            //if ((getFreq($frequencias[$com],"s") && $semanal) || (getFreq($frequencias[$com],"q") && $quinzenal) || (getFreq($frequencias[$com],"m") && $mensal)) {
-	                $idConsumidor = $row["ConsumidorId"];
+	                $idConsumidor = $row["consumidor_id"];
 	                echo '<tr>';
     		        echo '<td>'.ucwords(mb_strtolower($row["consumidor"]),'UTF-8').'</td>';
+    		        echo '<td>'.$row["comunidade"].'</td>';
     		        echo '<td>'.$row["telefone"].'</td>';
-    		        //echo '<td>'.$row["endereco_entrega"].'</td>';
-    		        if (array_key_exists($idConsumidor,$lEnderecos)) {
+    		        echo '<td>'.$row["pedido_endereco"].'</td>';
+    		        /*if (array_key_exists($idConsumidor,$lEnderecos)) {
     		            echo '<td>'.$lEnderecos[$idConsumidor].'</td>';
     		        } else {
     		            echo '<td>&nbsp;</td>';
-    		        }
+    		        }*/
 	                if (!isset($_GET["imprimir"])) {
         		        echo '<td class="'.($row["credito"] < 0 ? "debito" : "credito").'">'.($row["credito"] < 0 ? "-" : "").'R$'.number_format(abs($row["credito"]),2,",",".").'</td>';
         		        echo '<td>'.generateMenu($delivery,$row["pedido_id"],$row["pedido_id"]).'</td>';
+        		        echo '<td><input type="text" name="valor_entrega_'.$row["pedido_id"].'" id="valor_entrega_'.$row["pedido_id"].'" value="'.number_format($row["pedido_entrega_valor"],2,",","").'" /></td>';
 	                } else {
         		        echo '<td class="'.($row["credito"] < 0 ? "debito" : "credito").'">'.($row["credito"] < 0 ? "-" : "").'R$'.number_format(abs($row["credito"]),2,",",".").'</td>';
         		        echo '<td>'.$delivery.'</td>';
+        		        echo '<td>'.number_format($row["pedido_entrega_valor"],2,",","").'</td>';
 	                }
 	                echo '</tr>';
 	            //}
