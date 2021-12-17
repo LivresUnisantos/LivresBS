@@ -206,6 +206,33 @@ $twig = new \Twig\Environment($loader, ['debug' => false]);
                 location.reload();
             });
         });
+        
+        //marcar/desmarcar consumidor como cliente do banco
+        $("input[name='checkbox_banco']").on('click', function() {
+            idConsumidor = $(this).attr('consumidor_id');
+            if ($(this).is(':checked')) {
+                banco = 1;
+            } else {
+                banco = 0;
+            }
+            //console.log(idConsumidor);
+            //console.log(banco);
+            
+            $.ajax({
+        		method: "POST",
+                url: "consumidores_act.php",
+        		data : {
+        		    act: 'banco',
+        		    id: idConsumidor,
+        		    banco: banco
+        		}
+        	}).done(function(html){ //
+        	    alert(html);
+        	    if (html != 'Alteração realizada.') {
+        	        location.reload();
+        	    }
+        	});
+        });
 	});
 	</script>
     </head>
@@ -280,6 +307,7 @@ for ($i = 1; $i <= $nGrupos; $i++) {
     echo '<td width="150">Ver Cesta</td>';
     echo '<td width="150">Editar Cesta</td>';
     echo '<td width="100">Ativar/Desativar</td>';
+    echo '<td>Banco</td>';
     echo '</tr>';
     foreach ($rs as $row) {
         $classeSaldo = "";
@@ -301,6 +329,7 @@ for ($i = 1; $i <= $nGrupos; $i++) {
         echo '<td><a href="../Cestas/?cpf='.$row["cpf"].'" target="_blank">Ver Cesta</a></td>';
         echo '<td><a href="editar_cesta.php?cpf='.$row["cpf"].'" target="_blank">Editar Cesta</a></td>';
         echo '<td><a href="javascript:desativar(\'?cpf='.$row["cpf"].'&ativo=0\','.$_SESSION["level"].')">Desativar</a></td>';
+        echo '<td><input type="checkbox" id="banco_'.$row["id"].'" name="checkbox_banco" consumidor_id="'.$row["id"].'" '.(($row["banco"] == 1) ? 'checked="checked"' : "").' /></td>';
         echo '</tr>';
     }
     echo '</table>';

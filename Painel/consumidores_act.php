@@ -148,6 +148,20 @@ if (isset($_POST["id"])) {
                 echo "Falha oa realizar alteração. A página será atualizada.";
             }
         }
+        
+        //Marcar/desmarcar consumidor como cliente do banco
+        if ($_POST["act"] == "banco") {
+            $id = $_POST["id"];
+            $banco = $_POST["banco"];
+            $sql = "UPDATE Consumidores SET banco = ".$banco." WHERE id = ".$id;
+            $st = $conn->prepare($sql);
+            if ($st->execute()) {
+                echo "Alteração realizada.";
+                setlog("log.txt","Alteração do cadastro do banco",$sql);
+            } else {
+                echo "Falha oa realizar alteração. A página será atualizada.";
+            }
+        }
     }
 }
 ?>
