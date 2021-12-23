@@ -146,7 +146,7 @@
 						</div>
 						<div class="col-10 py-0">
 							<p class=" white">
-								<a href="https://www.facebook.com/livresbaixadasantista">rede.livres.produtosdobem.bs
+								<a href="https://www.facebook.com/livrescoopbs" target="blank">livrescoopbs
 								</a>
 							</p>
 						</div>
@@ -157,7 +157,7 @@
 						</div>
 						<div class="col-10 py-0">
 							<p class=" white">
-								<a href="https://www.instagram.com/livresbaixadasantista/">livresbaixadasantista
+								<a href="https://www.instagram.com/livrescoopbs/" target="_blank">livrescoopbs
 								</a>
 							</p>
 						</div>
@@ -168,17 +168,7 @@
 						</div>
 						<div class="col-10 py-0">
 							<p class=" white">
-								<a href="https://wa.me/5513974137126" target="_blank">(13) 97413-7126</a>
-							</p>
-						</div>
-					</div>
-					<div class="row py-0">
-						<div class="col-2 p-2">
-							<img src="home-img/phoneIcon.png" alt="">
-						</div>
-						<div class="col-10 py-0">
-							<p class=" white">
-								<a href="https://wa.me/5513991386571" target="_blank">(13) 99138-6571</a>
+								<a href="https://wa.me/5513988092319" target="_blank">(13) 98809-2319</a>
 							</p>
 						</div>
 					</div>
