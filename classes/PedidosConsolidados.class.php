@@ -28,12 +28,16 @@ class PedidosConsolidados extends Livres {
             $colunasConv = join(", ",$colunasConv);
         }
 
-        $sql = "SELECT ".$colunasConv." FROM pedidos_consolidados ped
-                LEFT JOIN Consumidores cons ON ped.consumidor_id = cons.id
-                LEFT JOIN FormaEntrega fe ON fe.id = ped.pedido_retirada
-                WHERE ped.pedido_data = '".date('Y-m-d H:i:s',$this->dataEntrega)."'
-                AND consumidor_id IS NOT NULL
-                ORDER BY cons.consumidor ASC";
+        $sql = "SELECT ".$colunasConv." FROM pedidos_consolidados ped";
+        $sql .= " LEFT JOIN Consumidores cons ON ped.consumidor_id = cons.id";
+        $sql .= " LEFT JOIN FormaEntrega fe ON fe.id = ped.pedido_retirada";
+        if ($this->dataEntrega != "") {
+            $sql .= " WHERE ped.pedido_data = '".date('Y-m-d H:i:s',$this->dataEntrega)."'";
+            $sql .= " AND consumidor_id IS NOT NULL";
+        } else {
+            $sql .= " WHERE consumidor_id IS NOT NULL";
+        }
+        $sql .= " ORDER BY cons.consumidor ASC";
         $st = $this->conn()->prepare($sql);
         $st->execute();
 
@@ -48,12 +52,9 @@ class PedidosConsolidados extends Livres {
     }
 
     public function listaItensTodos() {
-        /*$sql = "SELECT * FROM pedidos_consolidados_itens it LEFT JOIN pedidos_consolidados ped
-                ON it.pedido_id = ped.pedido_id
-                WHERE ped.pedido_data = '".date('Y-m-d H:i:s',$this->dataEntrega)."'";*/
-        $sql = "SELECT * FROM pedidos_consolidados_itens it LEFT JOIN pedidos_consolidados ped
-                ON it.pedido_id = ped.pedido_id
-                WHERE ped.pedido_data = '".date('Y-m-d H:i:s',$this->dataEntrega)."'";
+        $sql = "SELECT * FROM pedidos_consolidados_itens it LEFT JOIN pedidos_consolidados ped";
+        $sql .= " ON it.pedido_id = ped.pedido_id";
+        $sql .= " WHERE ped.pedido_data = '".date('Y-m-d H:i:s',$this->dataEntrega)."'";
         return $this->listaItens($sql);
     }
 
@@ -128,8 +129,29 @@ class PedidosConsolidados extends Livres {
         }
     }
     
-    //Essa função foi criada porque por algum motivo, o trigger do MySQL não está funcionando corretamente e não está atualizando o valor total do pedido dos consumidores.
-    //Sendo assim, ao consultar um pedido, checamos se algum consumidor está com total "null" e forçamos um update no pedido sem alterar nada para disparar o trigger
+    public function pedidsoPagamentoPendente() {
+        $pedidos = $this->listaPedidos();
+        if (!is_array($pedidos)) {
+            return false;
+        } else {
+            $oConsumidores = new Consumidores();
+            $consumidores = $oConsumidores->consumidoresTodos();
+
+            //varrer pedidos e alterar layout do array
+            $index = 0;
+            foreach ($pedidos as $pedido) {
+                if ($pedido["pgt_status"] < 2) {
+                    $conteudo[$index]["consumidor"] = $consumidores[$pedido["consumidor_id"]];
+                    $conteudo[$index]["pedido"] = $pedido;
+                    $index++;
+                }
+            }
+            return $conteudo;
+        }
+    }
+    
+    //Essa fun莽茫o foi criada porque por algum motivo, o trigger do MySQL n茫 est谩 funcionando corretamente e n茫o est谩 tualizando o valor total do pedido dos consumidores.
+    //Sendo assim, ao consultar um pedido, checamos se algum consumidor est谩 com total "null" e for莽amos um update no pedido sem alterar nada para disparar o trigger
     private function pedidoCorrigirValorTotal() {
         $sql = "UPDATE pedidos_consolidados SET pedido_mensal = pedido_mensal WHERE ped.pedido_data = '".date('Y-m-d H:i:s',$this->dataEntrega)."' AND pedido_valor_total IS NULL";
         $st = $this->conn()->prepare($sql);

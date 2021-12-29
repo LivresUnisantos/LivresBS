@@ -1,88 +1,251 @@
 {% extends "index.html" %}
 
 {% block content %}
-    {% if conteudo %}
-        <div class="input-group mb-2 mr-sm-2">
-            <div class="input-group-prepend">
-              <div class="input-group-text">Filtro</div>
-            </div>
-            <input type="text" class="form-control" id="filtro" name="Filtro" placeholder="Procure por consumidor, grupo ou número do pedido">
-            <button class="btn btn-success" type="button" id="salvar_tudo" name="salvar_tudo">Salvar tudo</button>
-        </div>
-        <table class="table">
-            <thead class="thead-light">
-                <tr>
-                    <th>Pedido</th>
-                    <th>Consumidor</th>
-                    <th>G</th>
-                    <th>Cota</th>
-                    <th>Fixa</th>
-                    <th>Mensal</th>
-                    <th>Extra</th>
-                    <th>Entrega</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Valor Pago</th>
-                    <th>Forma de Pagamento</th>
-                    <th>Observação</th>
-                    <th>Salvar</th>
-                </tr>
-            </thead>
-            <tbody id="tabela_pagamentos">
-                {% for p in conteudo %}
-                    <tr id="tr_{{ p.pedido.pedido_id }}">
-                        <form action="pagamentos_act.php" method="POST" id="salvar_pagamento_{{ p.pedido.pedido_id}}" name="salvar_pagamento">
-                        <input type="hidden" id="id_pedido_{{ p.pedido.pedido_id }}" name="id_pedido" value="{{ p.pedido.pedido_id }}" />
-                        <td id="codigo_{{ p.pedido.pedido_id }}">{{p.pedido.pedido_id}}</td>
-                        <td id="consumidor_{{ p.pedido.pedido_id }}">{{p.consumidor.consumidor}}</td>
-                        <td id="comunidade_{{ p.pedido.pedido_id }}">{{p.consumidor.comunidade}}</td>
-                        <td id="cota_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_cota|number_format(2,",",".")}}</td>
-                        <td id="fixa_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_fixa|number_format(2,",",".")}}</td>
-                        <td id="mensal_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_mensal|number_format(2,",",".")}}</td>
-                        <td id="extra_{{ p.pedido.pedido_id }}">R${{ p.pedido.pedido_avulso|number_format(2,",",".") }}</td>
-                        <td id="entrega_{{ p.pedido.pedido_id }}">R${{ p.pedido.pedido_entrega_valor|number_format(2,",",".") }}</td>
-                        <td id="total_{{ p.pedido.ipedido_id }}">R${{p.pedido.pedido_valor_total|number_format(2,",",".")}}</td>
-                        <td id="status_{{ p.pedido.pedido_id }}">
-                            <select id="pgt_status_{{ p.pedido.pedido_id }}" name="pgt_status">
-                                {% for s, txt in status_pagamento %}
-                                    {% if (s == p.pedido.pgt_status) %}
-                                    	<option value="{{ s }}" selected>{{ txt }}</option>
-                                    {% else %}
-                                    	<option value="{{ s }}">{{ txt }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td id="valor_pago_{{ p.pedido.pedido_id }}">R$<input type="text" id="pgt_valorpago_{{ p.pedido.pedido_id }}" size="6" pedido_id="{{ p.pedido.pedido_id}}" name="pgt_valorpago" value="{{p.pedido.pgt_valorpago|number_format(2,",",".")}}" /></td>
-                        <td id="forma_pagamento_{{ p.pedido.pedido_id }}">
-                            <select id="pgt_forma_{{ p.pedido.pedido_id }}" name="pgt_forma">
-                                <option value=""></option>
-                                {% for f in formas_pagamento %}
-                                    {% if (f == p.pedido.pgt_forma) %}
-                                        <option value="{{ f }}" selected>{{ f }}</option>
-                                    {% else %}
-                                        <option value="{{ f }}">{{ f }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td id="coment_pagamento_{{ p.pedido.pedido_id}}"><input type="text" id="pgt_comentario_{{ p.pedido.pedido_id }}" name="pgt_comentario" value="{{ p.pedido.pgt_comentario }}"/></td>
-                        <td id="salvar_{{ p.pedido.pedido_id }}"><input type="submit" idPedido="{{p.pedido.pedido_id}}" act="editar_pagamento" id="btnsalvar_{{p.pedido.pedido_id}}" name="btnsalvar" value="Salvar" /></td>
-                        </form>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    {% if alerta != '' %}
     {% else %}
-        <span class="cabecalho_entregas">Não há pedidos consolidados para esta data</span>
+        {% if conteudo %}
+            {% if data_entrega == '' %}
+                <h3>Todos Pagamentos Pendentes</h3>
+            {% else %}
+                <h3>Pedidos referentes ao dia {{ data_entrega }}</h3>
+            {% endif %}
+            {% if pagamento_erro_valor != 0 %}
+            <div class="alert alert-danger" role="alert">
+                Há pedidos em que o valor pago não bate com o preço atual da cesta. Confira os pedidos destacados em vermelho abaixo.
+            </div>
+            {% endif %}
+            {% if pix_erro_valor != 0 %}
+            <div class="alert alert-warning" role="alert">
+                Há pedidos em que o link pix gerado não bate com o preço atual da cesta. Confira os pedidos destacados em amarelo abaixo.
+                Caso haja pedidos com link pix e valor pago errados simultâneamente, o pedido estará destacado em vermelho apenas.
+            </div>
+            {% endif %}
+            {% if data_entrega != '' %}
+                {% if (pix_pendentes > 0) %}
+                    <div class="input-group mb-2 mr-sm-2">
+                        <button type="button" class="btn btn-success" id="gerar_links_todos" name="gerar_links_todos">
+                        Gerar {{ pix_pendentes }} Links de Pagamentos Pendentes (total de pedidos: {{ conteudo|length }})
+                        </button>
+                    </div>
+                {% else %}
+                    <div class="input-group mb-2 mr-sm-2">
+                        <button type="button" class="btn btn-danger" id="regerar_links_todos" name="regerar_links_todos">
+                        Gerar Novamente Todos os Links (total de pedidos: {{ conteudo|length }})
+                        </button>
+                    </div>
+                {% endif %}
+            {% endif %}
+            <div class="input-group mb-2 mr-sm-2">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Filtro</div>
+                </div>
+                <input type="text" class="form-control" id="filtro" name="Filtro" placeholder="Procure por consumidor, grupo (G1, G2...) ou número do pedido">
+                <button class="btn btn-success" type="button" id="salvar_tudo" name="salvar_tudo">Salvar tudo</button>
+            </div>
+            
+            <!--
+            <div class="form-check form-check-inline" style="padding-left: 5px;">
+                <input type="radio" name="radio-logica" id="radio-todos" checked="checked" value="0" class="form-check-input">
+                <label for="radio-todos" class="form-check-label">Todos os filtros</label>
+            </div>
+            <div class="form-check form-check-inline" style="padding-left: 5px;">
+                <input type="radio" name="radio-logica" id="radio-qualquer" value="1" class="form-check-input">
+                <label for="radio-qualquer" class="form-check-label">Qualquer filtro</label>
+            </div> | -->
+            <div class="form-check form-check-inline" style="padding-left: 5px;">
+                <input type="checkbox" id="check-inc-pix" value="" class="form-check-input">
+                <label for="check-inc-pix" class="form-check-label">Inconsistência Link Pix</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="checkbox" id="check-inc-pagamento" value="" class="form-check-input">
+                <label for="check-inc-pagamento" class="form-check-label">Inconsistência Valor Pago</label>
+            </div> | 
+            <div class="form-check form-check-inline" style="padding-left: 5px;">
+                <input type="checkbox" name="check-status-nao-pago" id="check-status-nao-pago" value="1" class="form-check-input" checked="checked">
+                <label for="check-status-nao-pago" class="form-check-label">Não Pago</label>
+            </div>
+            <div class="form-check form-check-inline" style="padding-left: 5px;">
+                <input type="checkbox" name="check-status-em-aprovacao" id="check-status-em-aprovacao" value="1" class="form-check-input" checked="checked">
+                <label for="check-status-em-aprovacao" class="form-check-label">Em Aprovação</label>
+            </div>
+            <div class="form-check form-check-inline" style="padding-left: 5px;">
+                <input type="checkbox" name="check-status-pago" id="check-status-pago" value="1" class="form-check-input" checked="checked">
+                <label for="check-status-pago" class="form-check-label">Pago</label>
+            </div>
+            <div class="form-check form-check-inline" style="padding-left: 5px;">
+                <button id="limpar-filtro">Limpar Filtro</button>
+            </div>
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Pix</th>
+                        {% if data_entrega == '' %}
+                            <th>Data</th>
+                        {% endif %}
+                        <th>Pedido</th>
+                        <th>Consumidor</th>
+                        <th>G</th>
+                        <th>Cota</th>
+                        <th>Fixa</th>
+                        <th>Variável</th>
+                        <th>Mensal</th>
+                        <th>Extra</th>
+                        <th>Entrega</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Valor Pago</th>
+                        <th>Forma de Pagamento</th>
+                        <th>Observação</th>
+                        <th>Salvar</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela_pagamentos">
+                    {% for p in conteudo %}
+                        {% if (p.pedido.pgt_valorpago != p.pedido.pedido_valor_total and p.pedido.pgt_status > 0) %}
+                            <tr id="tr_{{ p.pedido.pedido_id }}" pedido_id="{{ p.pedido.pedido_id }}" class="alert-danger" erro-valor-pago="">
+                        {% else %}
+                            {% if (p.pedido.pgt_valor_linkpix != "" and p.pedido.pgt_valor_linkpix != p.pedido.pedido_valor_total) %}
+                                <tr id="tr_{{ p.pedido.pedido_id }}" pedido_id="{{ p.pedido.pedido_id }}" class="alert-warning" erro-valor-pix="">
+                            {% else %}
+                                <tr id="tr_{{ p.pedido.pedido_id }}" pedido_id="{{ p.pedido.pedido_id }}">
+                            {% endif %}
+                        {% endif %}
+                            <form action="pagamentos_act.php" method="POST" id="salvar_pagamento_{{ p.pedido.pedido_id}}" name="salvar_pagamento">
+                            <input type="hidden" id="id_pedido_{{ p.pedido.pedido_id }}" name="id_pedido" value="{{ p.pedido.pedido_id }}" />
+                            <td id="pix_{{ p.pedido.pedido_id }}">
+                                {% if (p.pedido.pgt_pix_copiacola == "") %}
+                                    <a href="#" link_pix_criar pedido_id="{{ p.pedido.pedido_id }}" title="Criar link de pagamento"><i class="bi bi-plus-circle" style="color: green"></i></i></a>
+                                {% else %}
+                                    <a href="{{ url_pix_pagamento }}{{p.pedido.pgt_pix_uuid }}" target="_blank" title="Acessar link de pagamento"><i class="bi bi-check-all" style="color:green"></i></a>
+                                    <a href="#" link_pix_atualizar pedido_id="{{ p.pedido.pedido_id }}" title="Atualizar link de pagamento"><i class="bi bi-arrow-clockwise"></i></a>
+                                    <a href="#" link_pix_apagar pedido_id="{{ p.pedido.pedido_id }}" title="Apagar link de pagamento"><i class="bi bi-x" style="color: red"></i></a>
+                                {% endif %}
+                            </td>
+                            {% if data_entrega == '' %}
+                                <td id="data_{{ p.pedido.pedido_id }}">{{p.pedido.pedido_data|date('d/m/Y')}}</td>
+                            {% endif %}
+                            <td id="codigo_{{ p.pedido.pedido_id }}">{{p.pedido.pedido_id}}</td>
+                            <td id="consumidor_{{ p.pedido.pedido_id }}">{{p.consumidor.consumidor}}</td>
+                            <td id="comunidade_{{ p.pedido.pedido_id }}">G{{p.consumidor.comunidade}}</td>
+                            <td id="cota_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_cota|number_format(2,",",".")}}</td>
+                            <td id="fixa_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_fixa|number_format(2,",",".")}}</td>
+                            <td id="variavel_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_variavel|number_format(2,",",".")}}</td>
+                            <td id="mensal_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_mensal|number_format(2,",",".")}}</td>
+                            <td id="extra_{{ p.pedido.pedido_id }}">R${{ p.pedido.pedido_avulso|number_format(2,",",".") }}</td>
+                            <td id="entrega_{{ p.pedido.pedido_id }}">R${{ p.pedido.pedido_entrega_valor|number_format(2,",",".") }}</td>
+                            <td id="total_{{ p.pedido.ipedido_id }}">R${{p.pedido.pedido_valor_total|number_format(2,",",".")}}</td>
+                            <td id="status_{{ p.pedido.pedido_id }}">
+                                <select id="pgt_status_{{ p.pedido.pedido_id }}" name="pgt_status">
+                                    {% for s, txt in status_pagamento %}
+                                        {% if (s == p.pedido.pgt_status) %}
+                                        	<option value="{{ s }}" selected>{{ txt }}</option>
+                                        {% else %}
+                                        	<option value="{{ s }}">{{ txt }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td id="valor_pago_{{ p.pedido.pedido_id }}">R$<input type="text" id="pgt_valorpago_{{ p.pedido.pedido_id }}" size="6" pedido_id="{{ p.pedido.pedido_id}}" name="pgt_valorpago" value="{{p.pedido.pgt_valorpago|number_format(2,",",".")}}" /></td>
+                            <td id="forma_pagamento_{{ p.pedido.pedido_id }}">
+                                <select id="pgt_forma_{{ p.pedido.pedido_id }}" name="pgt_forma">
+                                    <option value=""></option>
+                                    {% for f in formas_pagamento %}
+                                        {% if (f == p.pedido.pgt_forma) %}
+                                            <option value="{{ f }}" selected>{{ f }}</option>
+                                        {% else %}
+                                            <option value="{{ f }}">{{ f }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td id="coment_pagamento_{{ p.pedido.pedido_id}}"><input type="text" id="pgt_comentario_{{ p.pedido.pedido_id }}" name="pgt_comentario" value="{{ p.pedido.pgt_comentario }}"/></td>
+                            <td id="salvar_{{ p.pedido.pedido_id }}"><input type="submit" idPedido="{{p.pedido.pedido_id}}" act="editar_pagamento" id="btnsalvar_{{p.pedido.pedido_id}}" name="btnsalvar" value="Salvar" /></td>
+                            </form>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <span class="cabecalho_entregas">Não há pagamentos pendentes</span>
+        {% endif %}
     {% endif %}
     <script>
         $(document).ready(function(){
-            $("#filtro").on("keyup", function() {
+            function filtrar() {
+                texto = $("#filtro").val().toLowerCase();
+                inco_pix = $("#check-inc-pix").is(':checked');
+                inco_pag = $("#check-inc-pagamento").is(':checked');
+                status_naopago = $("#check-status-nao-pago").filter(':checked').val();
+                status_emaprovacao = $("#check-status-em-aprovacao").filter(':checked').val();
+                status_pago = $("#check-status-pago").filter(':checked').val();
+                //logica = $("[name='radio-logica']").filter(':checked').val();
+                
+                $("#tabela_pagamentos tr").filter(function() {
+                    pedido_id = $(this).attr('pedido_id');
+                    ftexto = $(this).text().toLowerCase().indexOf(texto) > -1;
+                    if (!inco_pix) {
+                        finco_pix = true;
+                    } else {
+                        finco_pix = $(this).attr('erro-valor-pix') != undefined;
+                    }
+                    if (!inco_pag) {
+                        finco_pag = true;
+                    } else {
+                        finco_pag = $(this).attr('erro-valor-pago') != undefined;
+                    }
+                    status_atual = $('#pgt_status_'+pedido_id).val();
+                    fstatus=false;
+                    if (status_atual == 0 && status_naopago == '1') {
+                        fstatus=true;
+                    }
+                    if (status_atual == 1 && status_emaprovacao == '1') {
+                        fstatus=true;
+                    }
+                    if (status_atual == 2 && status_pago == '1') {
+                        fstatus=true;
+                    }
+                    flag = ftexto && finco_pix && finco_pag && fstatus;
+                    /*if (logica == '0') {
+                        //todos (AND)
+                        flag = ftexto && finco_pix && finco_pag && fstatus;
+                    } else {
+                        //qualquer (OR)
+                        flag = ftexto || finco_pix || finco_pag || fstatus;
+                    }*/
+                    $(this).toggle(flag);
+                });
+            }
+            
+            $("#filtro").on("keyup", filtrar);
+            $("#check-status-nao-pago").on("click",filtrar);
+            $("#check-status-em-aprovacao").on("click",filtrar);
+            $("#check-status-pago").on("click",filtrar);
+            $("#check-inc-pix").on("click",filtrar);
+            $("#check-inc-pagamento").on("click",filtrar);
+            /*$("#filtro").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("#tabela_pagamentos tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    //texto
+                    param1 = $(this).text().toLowerCase().indexOf(value) > -1;
+                    
+                    //inconsistência pix
+                    //inconsistência valor pagamento
+                    //status
+                    
+                    //param2 = $(this).attr('erro-valor-pix') == '';
+                    //$(this).toggle(param1 || param2);
+                    $(this).toggle(param1);
                 });
+            });*/
+            
+            $("#limpar-filtro").on("click", function() {
+                $("#filtro").val("");
+                $("#check-inc-pix").prop('checked',false);
+                $("#check-inc-pagamento").prop('checked',false);
+                $("#check-status-nao-pago").prop('checked',true);
+                $("#check-status-em-aprovacao").prop('checked',true);
+                $("#check-status-pago").prop('checked',true);
+                filtrar();
             });
 
             dialog = $("#popup").dialog({
@@ -116,6 +279,7 @@
                     url: "pagamentos_act.php",
                     })
                 .done(function(msg) {
+                    console.log(id);
                     if (msg == "ok") {
                         $("#tr_"+id).stop().css("background-color", "#3a7d2d").animate({ backgroundColor: "#FFFFFF"}, 1500);
 
@@ -168,37 +332,122 @@
                     }
                 });
             });
-
-            /*$("#novo_produto").click(function() {
-                $("#popup").html("Aguarde, carregando...");
+            $("#gerar_links_todos").on("click", function() {
+                pedido_id = $(this).attr('pedido_id');
                 $.ajax({
-                    method: "GET",
-                    url: "editar_produtos_act.php",
-                    })
-                    .done(function( msg ) {
-                        //alert( "Data Saved: " + msg );
-                        $("#popup").html(msg);
-                    });
-                dialog.dialog("open");
-            });            */
-
-            //form edição de produtos
-            // $("#formEditarProduto").submit(function(e) {
-            //     console.log("entrou");
-            //     e.preventDefault(); // avoid to execute the actual submit of the form.
-
-            //     var form = $(this);
-            //     var url = form.attr('action');
-
-            //     $.ajax({
-            //         type: "POST",
-            //         url: url,
-            //         data: form.serialize(), // serializes the form's elements.
-            //         success: function(data) {
-            //             alert(data); // show response from the php script.
-            //         }
-            //     });
-            // });
+                    method: "POST",
+                    url: "pagamentos_act.php",
+                    data: {
+                        "act": 'gerar_links_todos'
+                    }
+                })
+                .done(function(msg) {
+                    if (msg == "ok") {
+                        alert("Links gerados");
+                        location.reload();
+                    } else {
+                        alert(msg);
+                    }
+                });
+            })
+            
+            $("#regerar_links_todos").on("click", function() {
+                conf = confirm('Essa ação irá apagar todos os links de pagamento anteriores e gerar novos com os valores atuais dos pedidos. Clique ok para continuar');
+                if (!conf) {
+                    return;
+                }
+                pedido_id = $(this).attr('pedido_id');
+                $.ajax({
+                    method: "POST",
+                    url: "pagamentos_act.php",
+                    data: {
+                        "act": 'regerar_links_todos'
+                    }
+                })
+                .done(function(msg) {
+                    if (msg == "ok") {
+                        alert("Links gerados novamente");
+                        location.reload();
+                    } else {
+                        alert(msg);
+                    }
+                });
+            })
+            
+            $("[link_pix_criar]").on("click", function() {
+                pedido_id = $(this).attr('pedido_id');
+                $.ajax({
+                    method: "POST",
+                    url: "pagamentos_act.php",
+                    data: {
+                        "act": 'gerar_link_unico',
+                        "pedido_id": pedido_id
+                    }
+                })
+                .done(function(msg) {
+                    if (msg == "ok") {
+                        alert("Link gerado");
+                        location.reload();
+                    } else {
+                        alert(msg);
+                    }
+                });
+            });
+            
+            $("[link_pix_atualizar]").on("click", function() {
+                conf1 = confirm('O link de pagamento anterior será removido e um novo será criado. Caso já tenha sido ou seja feito um pagamento pelo link antigo que ainda não foi confirmado, ele não será mais confirmado automaticamente. Pressione OK caso deseje continuar.');
+                if (!conf1) return;
+                pedido_id = $(this).attr('pedido_id');
+                status =$('#pgt_status_' + pedido_id).val();
+                if (status != 0) {
+                    conf2 = confirm('Este pagamento não está em estado pendente, o que significa que o consumidor já enviou comprovante ou seu pagamento foi confirmado automaticamente. Ainda assim deseja gerar um novo link de pagamento no valor cheio do pedido?');
+                    if (!conf2) return;
+                }
+                $.ajax({
+                    method: "POST",
+                    url: "pagamentos_act.php",
+                    data: {
+                        "act": 'gerar_link_unico',
+                        "atualizacao_link": 1,
+                        "pedido_id": pedido_id
+                    }
+                })
+                .done(function(msg) {
+                    if (msg == "ok") {
+                        alert("Link atualizado");
+                        location.reload();
+                    } else {
+                        alert(msg);
+                    }
+                });
+            });
+            
+            $("[link_pix_apagar]").on("click", function() {
+                conf1 = confirm('O link de pagamento anterior será removido. Caso já tenha sido ou seja feito um pagamento pelo link antigo que ainda não foi confirmado, ele não será mais confirmado automaticamente. Pressione OK caso deseje continuar.');
+                if (!conf1) return;
+                pedido_id = $(this).attr('pedido_id');
+                status =$('#pgt_status_' + pedido_id).val();
+                if (status != 0) {
+                    conf2 = confirm('Este pagamento não está em estado pendente, o que significa que o consumidor já enviou comprovante ou seu pagamento foi confirmado automaticamente. Ainda assim deseja apagar este link de pagamento?');
+                    if (!conf2) return;
+                }
+                $.ajax({
+                    method: "POST",
+                    url: "pagamentos_act.php",
+                    data: {
+                        "act": 'apagar_link',
+                        "pedido_id": pedido_id
+                    }
+                })
+                .done(function(msg) {
+                    if (msg == "ok") {
+                        alert("Link removido");
+                        location.reload();
+                    } else {
+                        alert(msg);
+                    }
+                });
+            });
         });
     </script>
 {% endblock content %}

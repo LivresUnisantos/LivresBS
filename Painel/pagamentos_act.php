@@ -49,7 +49,7 @@ if (isset($_POST["id_pedido"]) && isset($_POST["pgt_status"]) && isset($_POST["p
                 $rs = $st->fetch();
                 $dadosAnteriores = $rs["pgt_status"]."/".$rs["pgt_valorpago"]."/".$rs["pgt_forma"]."/".$rs["pgt_comentario"];
                 $dadosDepois = $status."/".str_replace(".",",",$valor)."/".$forma."/".stripslashes($comentario);
-                $sql = "UPDATE pedidos_consolidados SET pgt_status = ".$status.", pgt_valorpago=".$valor.", pgt_forma='".$forma."', pgt_comentario='".$comentario."' WHERE pedido_id = ".$idPedido;
+                $sql = "UPDATE pedidos_consolidados SET pgt_status = ".$status.", pgt_valorpago=".$valor.", pgt_forma='".$forma."', pgt_comentario='".$comentario."', pgt_aprovador='".$_SESSION["login"]."' WHERE pedido_id = ".$idPedido;
                 $st = $conn->prepare($sql);
                 if ($st->execute()) {
                     setlog("log_pagamentos.txt",$_SESSION["login"]." alterou pagamentos do pedido ".$idPedido." Status/valor/forma/comentario antes: ".$dadosAnteriores." | Depois ".$dadosDepois,$sql);
@@ -65,6 +65,67 @@ if (isset($_POST["id_pedido"]) && isset($_POST["pgt_status"]) && isset($_POST["p
         }
     }
 } else {
-    echo "Erro ao salvar os dados";
+    if (isset($_POST["act"])) {
+        switch($_POST['act']) {
+            case 'gerar_links_todos':
+                    setlog("log_pagamentos.txt",$_SESSION["login"]." disparou geração de links de pagamentos pendentes para dia".$_SESSION["data_consulta"],"");
+                    $oPix = new Pix();
+                    $gerarCodigos = $oPix->GerarCopiaColaPendentes();
+                    if ($gerarCodigos != "") {
+                        echo $gerarCodigos;
+                        setlog("log_pagamentos.txt","Erro ao gerar links pendentes","");
+                    } else {
+                        echo "ok";
+                        setlog("log_pagamentos.txt","Links pendentes gerados","");
+                    }
+            break;
+            
+            case 'regerar_links_todos':
+                    setlog("log_pagamentos.txt",$_SESSION["login"]." disparou geração NOVA de links de pagamentos pendentes para dia".$_SESSION["data_consulta"],"");
+                    $oPix = new Pix();
+                    $gerarCodigos = $oPix->GerarCopiaColaTodos();
+                    if ($gerarCodigos != "") {
+                        echo $gerarCodigos;
+                        setlog("log_pagamentos.txt","Erro ao gerar links pendentes","");
+                    } else {
+                        echo "ok";
+                        setlog("log_pagamentos.txt","Links pendentes gerados","");
+                    }
+            break;
+            
+            case 'gerar_link_unico':
+                if (isset($_POST['atualizacao_link'])) {
+                    $msg = "atualização do";
+                } else {
+                    $msg = "criação do primeiro";
+                }
+                setlog("log_pagamentos.txt",$_SESSION["login"]." disparou ".$msg." de link de pagamento para o pedido ".$_POST['pedido_id']." do dia".$_SESSION["data_consulta"],"");
+                $oPix = new Pix();
+                $gerarCodigos = $oPix->GerarCopiaColaUnico($_POST['pedido_id']);
+                if ($gerarCodigos != "") {
+                    echo $gerarCodigos;
+                    setlog("log_pagamentos.txt","Erro ao gerar link de pagamento","");
+                } else {
+                    echo "ok";
+                    setlog("log_pagamentos.txt","Link de pagamento gerado","");
+                }
+            break;
+            
+            case 'apagar_link':
+                setlog("log_pagamentos.txt",$_SESSION["login"]." solicitou remoção do link de pagamento para o pedido ".$_POST['pedido_id']." do dia".$_SESSION["data_consulta"],"");
+                $oPix = new Pix();
+                $apagarPix = $oPix->ApagarLinkPagamento($_POST["pedido_id"]);
+                if ($apagarPix != "") {
+                    echo $apagarPix;
+                    setlog("log_pagamentos.txt","Erro ao apagar link de pagamento","");
+                } else {
+                    echo "ok";
+                    setlog("log_pagamentos.txt","Link de pagamento apagado","");
+                }
+            break;
+        }
+    } else {
+        echo "Erro ao salvar os dados";
+    }
 }
 ?>
