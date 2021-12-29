@@ -20,6 +20,7 @@
                     {% if level_user >= level_write %}
                         <th>&nbsp;</th>
                     {% endif %}
+                    <th>Código</th>
                     <th>Produto</th>
                     <th>Categoria</th>
                     <th>Unidade</th>
@@ -38,6 +39,7 @@
                         {% if level_user >= level_write %}
                             <td><img src="../images/edit.png" act="editProduto" width="16" height="16" alt="Editar" idProduto="{{p.id}}" style="cursor: pointer;"></td>
                         {% endif %}
+                        <td id="codigo_{{ p.id }}">{{p.id}}</td>
                         <td id="nome_{{ p.id }}">{{p.nome}}</td>
                         <td id="categoria_{{ p.id }}">{{p.categoria}}</td>
                         <td id="unidade_{{ p.id }}">{{p.unidade}}</td>
