@@ -38,7 +38,7 @@ $(document).ready(function() {
             window.location = endereco;
         }
     });
-    $("#menuData").one('submit', function(eventObject) {
+    $("#menuData").on('submit', function(eventObject) {
         eventObject.preventDefault();
         let data = $("#data_selecao_menu_sup").val();
         $.ajax({
@@ -61,6 +61,33 @@ $(document).ready(function() {
             } else {
                 window.location = '?data=' + data;
             }
+        });
+        //$(this).submit();
+        //return;
+    });
+    
+    $("#btn-limpar-data").on('click', function(eventObject) {
+        $.ajax({
+                method: "GET",
+                url: '../../../Painel/defineDataSessao.php',
+                data: {
+                    data: 'limpar'
+                }
+            })
+        .done(function(msg) {
+            console.log(1,msg);
+            //$(this).attr('action', window.location.search);
+            //$(this).submit();
+            location.reload();
+            /*if (window.location.search !== '') {
+                var url = new URL(window.location.href);
+                var search_params = url.searchParams;
+                
+                search_params.set('data',data);
+                window.location = url.search;
+            } else {
+                window.location = '?data=' + data;
+            }*/
         });
         //$(this).submit();
         //return;
