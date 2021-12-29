@@ -370,6 +370,7 @@ class ConsolidarPedidos extends Livres {
             foreach ($variaveis as $idConsumidor=>$variavel) {
                 $delivery = $variavel["delivery"];
                 $idPedido = "";
+                $endereco = $variavel["endereco_entrega"];
                 foreach ($variavel["item"] as $item) {
                     //verificar se existe pedido para este consumidor
                     //caso não haja, não deve ser criado pedido só para variável
@@ -408,7 +409,7 @@ class ConsolidarPedidos extends Livres {
                 if ($idPedido != "") {
                     $delivery = $this->dadosDelivery($delivery);
                     $sql = "UPDATE pedidos_consolidados SET pedido_retirada = ".$delivery["id"].",
-                            pedido_entrega_valor = ".$delivery["valor_entrega"]."
+                            pedido_entrega_valor = ".$delivery["valor_entrega"].", pedido_endereco = '".$endereco."' 
                             WHERE pedido_id = ".$idPedido;
                     $st = $this->conn()->prepare($sql);
                     $st->execute();
