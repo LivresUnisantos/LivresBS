@@ -11,6 +11,8 @@ class ConsolidarPedidos extends Livres {
     }
 
     public function consolidarAgoraTudo() {
+        $oProdutos = new Produtos;
+        $produtos = $oProdutos->realizarBackupProdutos($this->dataEntrega);
         $this->populaPedidosCestaFixa();
         $this->populaItensCestaFixa();
         $this->populaItensCestaVariavel();
