@@ -1,0 +1,181 @@
+{% extends "index.html" %}
+
+{% block content %}
+    {% if sucesso != '' %}
+        <div class="alert alert-success" role="alert">
+            {{ sucesso }}
+        </div>
+    {% endif %}
+    {% if conteudo %}
+        <!--{% if permissao_aprovador %}
+            <h3>Ecoholerite de Todos</h3>
+        {% else %}
+            <h3>Ecoholerite de {{ conteudo[0].nome }}</h3>
+        {% endif %}
+        <div class="input-group mb-2 mr-sm-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Filtro</div>
+            </div>
+            <input type="text" class="form-control" id="filtro" name="Filtro" placeholder="Procure por nome, data ou atividade">
+            {% if permissao_aprovador %}
+            <button class="btn btn-success" type="button" id="aprovar_pendentes" name="aprovar_pendentes">Aprovar Pendentes</button>
+            {% endif %}
+        </div>
+        -->
+        <div class="row justify-content">
+            <div class="col-4">
+                {% for desc, c in conteudo %}
+                    {% if c %}
+                        <h5>{{ desc }}</h5>
+                        <table class="table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabela_atividades">
+                            {% for a in c %}
+                                <tr>
+                                    <td>{{ a.nome }}</td>
+                                    <td>R${{ a.valor_total|number_format(2,",",".") }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+    <h5>Não há atividades cadastradas</h5>
+    {% endif %}    
+    <script>
+        $(document).ready(function(){
+            $("#add_nome").val($("#add_nome2").find('option:selected').val());
+            $("#add_atividade").on('change', function() {
+                atividade = $(this).find("option:selected");
+                ecohoras = atividade.attr('ecohoras');
+                valor = atividade.attr('valor');
+                if (ecohoras != 0) {
+                    $("#add_ecohoras").prop('readonly', true);
+                    $("#add_valor").prop('readonly', true);
+                    $("#add_ecohoras").val(ecohoras);
+                    $("#add_valor").val(valor);
+                } else {
+                    $("#add_ecohoras").val(0);
+                    $("#add_valor").val(0);
+                    $("#add_ecohoras").prop('readonly', false);
+                    $("#add_valor").prop('readonly', false);
+                }
+            });
+            $("#add_nome2").on('change', function() {
+                $("#add_nome").val($(this).find('option:selected').val());
+            });
+            
+            $("[name='geren_atividade']").on('click',function() {
+                event.preventDefault();
+                dados = $(this).attr('href').substring(1);
+                if (confirm('Deseja realmente ' + $(this).attr('act') + '?')) {
+                    $.ajax({
+                        method: "GET",
+                        data: dados,
+                        url: "ecoholerites.php",
+                        })
+                    .done(function(msg) {
+                        window.location.href = "ecoholerites.php";
+                    });
+                }
+            });
+            
+            $("#aprovar_pendentes").on('click', function() {
+                if (confirm('Deseja realmente aprovar todas os ecoholerites pendentes?')) {
+                    $.ajax({
+                        method: "GET",
+                        data: {
+                            act: 'aprovar_todos'
+                        },
+                        url: "ecoholerites.php",
+                        })
+                    .done(function(msg) {
+                        window.location.href = "ecoholerites.php";
+                    });
+                }
+            });
+            
+            $("#form_add_atividade").on("submit", function() {
+                error=false;
+                console.log($(this));
+                $(this).find('input').each(function(){
+                    if ($(this).val() == "" && $(this).attr('validation') == 'mandatory') {
+                        error=true;
+                    }
+                });
+                /*$(this).filter(':select').each(function(){
+                    if ($(this).val() == "") {
+                        error=true;
+                    }
+                });*/
+                
+                if (error) {
+                    alert('Preencha todos os campos');
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+            
+            function filtrar() {
+                texto = $("#filtro").val().toLowerCase();
+                /*inco_pix = $("#check-inc-pix").is(':checked');
+                inco_pag = $("#check-inc-pagamento").is(':checked');
+                status_naopago = $("#check-status-nao-pago").filter(':checked').val();
+                status_emaprovacao = $("#check-status-em-aprovacao").filter(':checked').val();
+                status_pago = $("#check-status-pago").filter(':checked').val();
+                //logica = $("[name='radio-logica']").filter(':checked').val();*/
+                
+                $("#tabela_atividades tr").filter(function() {
+                    //pedido_id = $(this).attr('pedido_id');
+                    ftexto = $(this).text().toLowerCase().indexOf(texto) > -1;
+                    /*if (!inco_pix) {
+                        finco_pix = true;
+                    } else {
+                        finco_pix = $(this).attr('erro-valor-pix') != undefined;
+                    }
+                    if (!inco_pag) {
+                        finco_pag = true;
+                    } else {
+                        finco_pag = $(this).attr('erro-valor-pago') != undefined;
+                    }
+                    status_atual = $('#pgt_status_'+pedido_id).val();
+                    fstatus=false;
+                    if (status_atual == 0 && status_naopago == '1') {
+                        fstatus=true;
+                    }
+                    if (status_atual == 1 && status_emaprovacao == '1') {
+                        fstatus=true;
+                    }
+                    if (status_atual == 2 && status_pago == '1') {
+                        fstatus=true;
+                    }
+                    flag = ftexto && finco_pix && finco_pag && fstatus;*/
+                    flag = ftexto;
+                    /*if (logica == '0') {
+                        //todos (AND)
+                        flag = ftexto && finco_pix && finco_pag && fstatus;
+                    } else {
+                        //qualquer (OR)
+                        flag = ftexto || finco_pix || finco_pag || fstatus;
+                    }*/
+                    $(this).toggle(flag);
+                });
+            }
+            
+            $("#filtro").on("keyup", filtrar);
+            /*$("#check-status-nao-pago").on("click",filtrar);
+            $("#check-status-em-aprovacao").on("click",filtrar);
+            $("#check-status-pago").on("click",filtrar);
+            $("#check-inc-pix").on("click",filtrar);
+            $("#check-inc-pagamento").on("click",filtrar);*/
+        });
+    </script>
+{% endblock content %}

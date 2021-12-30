@@ -101,5 +101,49 @@ class Ecoholerite extends Livres {
         $st = $this->conn()->prepare($sql);
         return $st->execute();
     }
+
+    /*
+    regra para reembolso/entrega
+    reembolso = 0 / desconsidera reembolsos
+    reembolso = 1 / considera também reembolsos
+    reembolso = 2 / considera apenas reembolsos
+    */
+    public function relatorioPagamento($dataI = "", $dataF = "", $reembolso = 0, $entrega = 0) {
+
+        $sql = "";
+        $sql .= "SELECT ad.nome, SUM(eh.valor) AS valor_total, eh.*, ea.*, ad.* FROM Ecoholerites eh";
+        $sql .= " LEFT JOIN Ecoatividades ea";
+        $sql .= " ON eh.id_atividade = ea.id";
+        $sql .= " LEFT JOIN Admins ad";
+        $sql .= " ON eh.id_admin = ad.id";
+        $where = " WHERE eh.status = 2";
+        if ($reembolso == 0) {
+            $where .= " AND ea.descricao <> 'Reembolso'";
+        }
+        if ($reembolso == 2) {
+            $where .= " AND ea.descricao = 'Reembolso'";
+        }
+        if ($entrega == 0) {
+            $where .= " AND ea.descricao <> 'Entregas'";
+        }
+        if ($entrega == 2) {
+            $where .= " AND ea.descricao = 'Entregas'";
+        }
+        if ($dataI != "") {
+            $where .= " AND eh.data >= '".$dataI."'";
+        }
+        if ($dataF != "") {
+            $where .= " AND eh.data <= '".$dataF."'";
+        }
+        $sql .= $where;
+        $sql .= " GROUP BY eh.id_admin";
+        //echo $sql."<br><br>";
+        $st = $this->conn()->prepare($sql);
+        $st->execute();
+
+        if ($st->rowCount() == 0) return false;
+
+        return $st->fetchAll();
+    }
 }
 ?>
