@@ -46,10 +46,12 @@ if (!isset($_SESSION["data_consulta"]) || $_SESSION["data_consulta"] == "") {
     $totalEntregas = $oEcoholerite->relatorioPagamento($data->format('Y-m-d'), $data->format('Y-m-d'), 0, 1);
     $totalMes = $oEcoholerite->relatorioPagamento($data->format('Y-m-1'), $data->format('Y-m-t'), 1, 1);
 
-    $conteudo["Total do dia " . $data->format('d/m/Y')] = $totalDia;
-    $conteudo["Apenas ecohoras do dia " . $data->format('d/m/Y')] = $totalTrabalho;
-    $conteudo["Apenas ecopedaladas " . $data->format('d/m/Y')] = $totalEntregas;
-    $conteudo["Total mês " . $data->format('F')] = $totalMes;
+    if ($totalDia) $conteudo["Total do dia " . $data->format('d/m/Y')] = $totalDia;
+    if ($totalTrabalho) $conteudo["Apenas ecohoras do dia " . $data->format('d/m/Y')] = $totalTrabalho;
+    if ($totalEntregas) $conteudo["Apenas ecopedaladas " . $data->format('d/m/Y')] = $totalEntregas;
+    if ($totalMes) $conteudo["Total mês " . $data->format('F')] = $totalMes;
+
+    if (!isset($conteudo)) $conteudo="";
     
     echo $twig->render('ecoholerites_rel.html', [
         "titulo"                => "LivresBS - Ecoholerite",
