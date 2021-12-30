@@ -1,0 +1,81 @@
+{% extends "index.html" %}
+
+{% block content %}
+    {% if sucesso != '' %}
+        <div class="alert alert-success" role="alert">
+            {{ sucesso | raw }}
+        </div>
+    {% endif %}
+    <div class="input-group mb-2 mr-sm-2">
+        <button type="button" class="btn btn-success" id="novo_backup" name="novo_backup" placeholder="Realizar Backup Agora">Realizar Backup Agora</button>
+    </div>
+    <div id="popup" title="Editar Produto" style="display: none;">
+        <p>Aguarde, carregando...</p>
+    </div>
+    {% if conteudo %}
+        <div class="input-group mb-2 mr-sm-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Filtro</div>
+            </div>
+            <input type="text" class="form-control" id="filtro" name="Filtro" placeholder="Procure por produto, produtor ou categoria">
+        </div>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>Código Backup</th>
+                    <th>Data Pedido</th>
+                    <th>Consolidado em</th>
+                    <th>Consolidado por</th>
+                    <th>Restaurar</th>
+                </tr>
+            </thead>
+            <tbody id="tabela_backups">
+                {% for c in conteudo %}
+                    <tr>
+                        <td id="codigo_{{ c.id }}">{{ c.id }}</td>
+                        {% if (c.pedido_data is null) %}
+                        <td id="data_{{ c.id }}">Manual</td>
+                        {% else %}
+                            <td id="data_{{ c.id }}">{{ c.pedido_data|date("d/m/Y") }}</td>
+                        {% endif %}
+                        <td id="cons_em_{{ c.id }}">{{ c.consolidado_em|date("d/m/Y H:m:i") }}</td>
+                        <td id="cons_por_{{ c.id }}">{{ c.consolidado_por_nome }}</td>
+                        <td id="restaurar_{{ c.id }}"><a href="?id={{ c.id }}" id="href_{{c.id}}" name="link_restaurar">Restaurar Backup</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <span class="cabecalho_entregas">Não há backups disponíveis</span>
+    {% endif %}
+    <script>
+        $(document).ready(function(){
+            $("#filtro").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#tabela_backups tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            dialog = $("#popup").dialog({
+                autoOpen: false,
+                height: 600,
+                width: 600,
+                modal: true,
+            });
+
+            $("[name='link_restaurar']").on('click',function() {
+                if (!confirm('Tem certeza que deseja restaurar este backup? Esta operação não pode ser desfeita')) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+
+            $("#novo_backup").on('click', function() {
+                if (confirm('Deseja realizar um backup avulso (sem data de pedido) com o status de disponibilidade dos produtos agora?')) {
+                    window.location = "?backup=1";
+                }
+            });
+        });
+    </script>
+{% endblock content %}
