@@ -14,7 +14,7 @@ $calendario = new Calendario();
 $loader = new \Twig\Loader\FilesystemLoader('../templates/layouts/painel');
 $twig = new \Twig\Environment($loader, ['debug' => false]);
 
-if (!isset($_SESSION["data_consulta"]) || $_SESSION["data_consulta"] == "") {
+if (!isset($_SESSION["data_id"]) || $_SESSION["data_id"] == "") {
     echo $twig->render('consolidar.html', [
         "titulo"            => "LivresBS - Consolidar Entregas",
         "menu_datas"        => $calendario->listaDatas(),

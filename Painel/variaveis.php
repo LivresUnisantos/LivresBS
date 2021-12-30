@@ -80,8 +80,8 @@ if (!isset($_GET["imprimir"])) {
 
 <?php
 $conn = new PDO("mysql:host=".$c_db["host"].";dbname=".$c_db["name"].";charset=utf8",$c_db["user"],$c_db["password"]);
-if (!isset($_GET["data"])) {
-	echo "Selecione uma data";
+if (!isset($_GET["data"]) || !isset($_SESSION["data_id"])) {
+	echo '<div class="alert alert-danger" role="alert">Selecione uma data com entrega planejada</div>';
 } else {
 	if (strlen($_GET["data"]) > 0) {
 	    /* Salvar dados manuais das cestas */

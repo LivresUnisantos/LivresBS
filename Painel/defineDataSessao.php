@@ -10,6 +10,12 @@ if (isset($_GET["data"])) {
             unset($_SESSION["data_id"]);
         }
     } else {
+        if (isset($_SESSION["data_consulta"])) {
+            unset($_SESSION["data_consulta"]);
+        }
+        if (isset($_SESSION["data_id"])) {
+            unset($_SESSION["data_id"]);
+        }
         $livres = new Livres;
     
         $data = $_GET["data"];
@@ -19,7 +25,9 @@ if (isset($_GET["data"])) {
         $dataId = $livres->dataPelaString($data);
     
         $_SESSION['data_consulta'] = $data;
-        $_SESSION['data_id'] = $dataId;
+        if ($dataId > 0) {
+            $_SESSION['data_id'] = $dataId;
+        }
         echo $_SESSION['data_consulta'];
     }
 } else {

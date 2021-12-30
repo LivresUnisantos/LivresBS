@@ -59,7 +59,7 @@ class Calendario extends Livres {
 
     //public function montaDisplayFrequenciaSemana($dataEntrega) {
     public function montaDisplayFrequenciaSemana() {
-        if (!isset($_SESSION["data_id"])) return false;
+        if (!isset($_SESSION["data_id"])) return "Sem entrega";
         $dataStr = $this->dataPeloID($_SESSION["data_id"],'string');
         $frequencias = $this->frequenciasEntrega(strtotime($dataStr));
         foreach ($frequencias as $grupo=>$fcod) {
