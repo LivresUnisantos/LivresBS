@@ -30,7 +30,7 @@
         <section id="content">
             {% if alerta != "" %}
             <div class="alert alert-danger" role="alert">
-                {{ alerta }}            
+                {{ alerta | raw}}            
             </div>
             {% endif %}
             {% block content %}
