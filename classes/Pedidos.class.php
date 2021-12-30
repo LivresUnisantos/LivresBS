@@ -73,7 +73,7 @@ class Pedidos extends Livres {
                         if (is_null($delivery)) { $delivery = 3; }
                         /* FIM ARMENG */
                         $variaveis[$row["idConsumidor"]]["delivery"] = $delivery;
-                        $variaveis[$row["idConsumidor"]]["endereco"] = $row["endereco_entrega"];
+                        $variaveis[$row["idConsumidor"]]["endereco_entrega"] = $row["endereco_entrega"];
                         $contador++;
                     }
                 }
