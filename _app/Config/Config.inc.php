@@ -4,7 +4,7 @@
  * URL DO SISTEMA
  */
 if ($_SERVER['HTTP_HOST'] == 'localhost'):
-    define('BASE', 'https://localhost/LivresBS'); //Url raiz do site no localhost
+    define('BASE', 'http://localhost'); //Url raiz do site no localhost
 else:
     if ($_SERVER["HTTP_HOST"] == "livresbs.com.br"):
         define('BASE', 'https://livresbs.com.br'); //Url raiz do site no servidor
