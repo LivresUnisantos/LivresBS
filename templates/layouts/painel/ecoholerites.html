@@ -1,0 +1,258 @@
+{% extends "index.html" %}
+
+{% block content %}
+    {% if sucesso != '' %}
+        <div class="alert alert-success" role="alert">
+            {{ sucesso }}
+        </div>
+    {% endif %}
+    {% if conteudo %}
+        {% if permissao_aprovador %}
+            <h3>Ecoholerite de Todos</h3>
+        {% else %}
+            <h3>Ecoholerite de {{ conteudo[0].nome }}</h3>
+        {% endif %}
+        <div class="input-group mb-2 mr-sm-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Filtro</div>
+            </div>
+            <input type="text" class="form-control" id="filtro" name="Filtro" placeholder="Procure por nome, data ou atividade">
+            {% if permissao_aprovador %}
+            <button class="btn btn-success" type="button" id="aprovar_pendentes" name="aprovar_pendentes">Aprovar Pendentes</button>
+            {% endif %}
+        </div>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Data</th>
+                    <th>Atividade</th>
+                    <th>Ecohoras</th>
+                    <th>Valor</th>
+                    <th>Comentário</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tabela_atividades">
+            {% for a in conteudo %}
+                <tr>
+                    <td>{{ a.id_ecoholerite }}</td>
+                    <td>{{ a.nome }}</td>
+                    <td>{{ a.data|date('d/m/Y') }}</td>
+                    <td>{{ a.descricao }}</td>
+                    <td>{{ a.ecohoras }}</td>
+                    <td>R${{ a.valor_receber|number_format(2,",",".") }}</td>
+                    <td>{{ a.comentario }}</td>
+                    {% if a.status == 0 %}
+                        <td>Pendente</td>
+                    {% else %}
+                        {% if a.status == 1 %}
+                            <td>Reprovado</td>
+                        {% else %}
+                            <td>Aprovado</td>
+                        {% endif %}
+                    {% endif %}
+                    <td>
+                        {% if permissao_aprovador %}
+                            <a href="?act=remover&id_atividade={{a.id_ecoholerite}}" act="remover" name="geren_atividade" title="Remover"><i class="bi bi-trash" style="color:blue;"></i></a>
+                            {% if a.status == 0 %}
+                                <a href="?act=aprovar&id_atividade={{a.id_ecoholerite}}" act="aprovar" name="geren_atividade" title="Aprovar"><i class="bi bi-check-circle" style="color:green;"></i></i></a>
+                                <a href="?act=reprovar&id_atividade={{a.id_ecoholerite}}" act="reprovar" name="geren_atividade" title="Reprovar"><i class="bi bi-x-circle" style="color:red;"></i></a>
+                            {% else %}
+                                {% if a.status == 1 %}
+                                    <a href="?act=aprovar&id_atividade={{a.id_ecoholerite}}" act="aprovar" name="geren_atividade" title="Aprovar"><i class="bi bi-check-circle" style="color:green;"></i></a>
+                                {% else %}
+                                    <a href="?act=reprovar&id_atividade={{a.id_ecoholerite}}" act="reprovar" name="geren_atividade" title="Reprovar"><i class="bi bi-x-circle" style="color:red;"></i></a>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            {% if a.status == 0 %}
+                                <a href="?act=remover&id_atividade={{a.id_ecoholerite}}" act="remover" name="geren_atividade" title="Remover"><i class="bi bi-trash" style="color:blue;"></i></a>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+    <h5>Não há atividades cadastradas</h5>
+    {% endif %}
+    <h5>Adicionar atividade</h5>
+    <form class="form-row" id="form_add_atividade" method="POST" action="">
+        <div class="form-group col-md-2">
+            <input type="hidden" name="add_nome" id="add_nome" value="" >
+            <label for="add_nome2" class="control-label">Nome</label>
+            <select id="add_nome2" name="add_nome2" class="form-control" {{ disabled }} validation="mandatory">
+                {% for p in pessoas %}
+                    {% if (p.id == admin_logado) %}
+                        <option value="{{p.id}}" selected=selected>{{p.nome}}</option>
+                    {% else %}
+                        <option value="{{p.id}}">{{p.nome}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group col-md-1">
+            <label for="add_data" class="control-label">Data</label>
+            <input readonly="readonly" value="{{ data_selecionada }}" id="add_data" name="add_data" type="text" data-language="pt-BR" data-timepicker="true" class="jwc_datepicker_start form-control" style="width: 190px;" validation="mandatory"/>
+        </div>
+        <div class="form-group col-md-2">
+            <label for="add_atividade" class="control-label">Atividade</label>
+            <select id="add_atividade" name="add_atividade" class="form-control" validation="mandatory">
+                <option value=""></option>
+                {% for at in atividades %}
+                    <option value="{{at.id}}" ecohoras="{{at.ecohoras}}" valor="{{at.valor}}">
+                        {{at.descricao}}{% if at.ecohoras == 0 %}*{% endif %}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group col-md-1">
+            <label for="add_ecohoras" class="control-label">Ecohoras</label>
+            <input type="text" id="add_ecohoras" name="add_ecohoras" value="" readonly="readonly" class="form-control" validation="mandatory">
+        </div>
+        <div class="form-group col-md-1">
+            <label for="add_valor" class="control-label">Valor</label>
+            <input type="text" id="add_valor" name="add_valor" value="" readonly="readonly" class="form-control" validation="mandatory">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="add_comentario" class="control-label">Comentário</label>
+            <input type="text" id="add_comentario"  name="add_comentario" value="" class="form-control">
+        </div>
+        <div class="form-group col-md-1">
+            <label for="add_salvar" class="control-label">&nbsp;</label>
+            <input type="submit" id="add_salvar" name="add_salvar" class="form-control" value="Adicionar">
+        </div>
+    </form>
+    <script>
+        $(document).ready(function(){
+            $("#add_nome").val($("#add_nome2").find('option:selected').val());
+            $("#add_atividade").on('change', function() {
+                atividade = $(this).find("option:selected");
+                ecohoras = atividade.attr('ecohoras');
+                valor = atividade.attr('valor');
+                if (ecohoras != 0) {
+                    $("#add_ecohoras").prop('readonly', true);
+                    $("#add_valor").prop('readonly', true);
+                    $("#add_ecohoras").val(ecohoras);
+                    $("#add_valor").val(valor);
+                } else {
+                    $("#add_ecohoras").val(0);
+                    $("#add_valor").val(0);
+                    $("#add_ecohoras").prop('readonly', false);
+                    $("#add_valor").prop('readonly', false);
+                }
+            });
+            $("#add_nome2").on('change', function() {
+                $("#add_nome").val($(this).find('option:selected').val());
+            });
+            
+            $("[name='geren_atividade']").on('click',function() {
+                event.preventDefault();
+                dados = $(this).attr('href').substring(1);
+                if (confirm('Deseja realmente ' + $(this).attr('act') + '?')) {
+                    $.ajax({
+                        method: "GET",
+                        data: dados,
+                        url: "ecoholerites.php",
+                        })
+                    .done(function(msg) {
+                        window.location.href = "ecoholerites.php";
+                    });
+                }
+            });
+            
+            $("#aprovar_pendentes").on('click', function() {
+                if (confirm('Deseja realmente aprovar todas os ecoholerites pendentes?')) {
+                    $.ajax({
+                        method: "GET",
+                        data: {
+                            act: 'aprovar_todos'
+                        },
+                        url: "ecoholerites.php",
+                        })
+                    .done(function(msg) {
+                        window.location.href = "ecoholerites.php";
+                    });
+                }
+            });
+            
+            $("#form_add_atividade").on("submit", function() {
+                error=false;
+                console.log($(this));
+                $(this).find('input').each(function(){
+                    if ($(this).val() == "" && $(this).attr('validation') == 'mandatory') {
+                        error=true;
+                    }
+                });
+                /*$(this).filter(':select').each(function(){
+                    if ($(this).val() == "") {
+                        error=true;
+                    }
+                });*/
+                
+                if (error) {
+                    alert('Preencha todos os campos');
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+            
+            function filtrar() {
+                texto = $("#filtro").val().toLowerCase();
+                /*inco_pix = $("#check-inc-pix").is(':checked');
+                inco_pag = $("#check-inc-pagamento").is(':checked');
+                status_naopago = $("#check-status-nao-pago").filter(':checked').val();
+                status_emaprovacao = $("#check-status-em-aprovacao").filter(':checked').val();
+                status_pago = $("#check-status-pago").filter(':checked').val();
+                //logica = $("[name='radio-logica']").filter(':checked').val();*/
+                
+                $("#tabela_atividades tr").filter(function() {
+                    //pedido_id = $(this).attr('pedido_id');
+                    ftexto = $(this).text().toLowerCase().indexOf(texto) > -1;
+                    /*if (!inco_pix) {
+                        finco_pix = true;
+                    } else {
+                        finco_pix = $(this).attr('erro-valor-pix') != undefined;
+                    }
+                    if (!inco_pag) {
+                        finco_pag = true;
+                    } else {
+                        finco_pag = $(this).attr('erro-valor-pago') != undefined;
+                    }
+                    status_atual = $('#pgt_status_'+pedido_id).val();
+                    fstatus=false;
+                    if (status_atual == 0 && status_naopago == '1') {
+                        fstatus=true;
+                    }
+                    if (status_atual == 1 && status_emaprovacao == '1') {
+                        fstatus=true;
+                    }
+                    if (status_atual == 2 && status_pago == '1') {
+                        fstatus=true;
+                    }
+                    flag = ftexto && finco_pix && finco_pag && fstatus;*/
+                    flag = ftexto;
+                    /*if (logica == '0') {
+                        //todos (AND)
+                        flag = ftexto && finco_pix && finco_pag && fstatus;
+                    } else {
+                        //qualquer (OR)
+                        flag = ftexto || finco_pix || finco_pag || fstatus;
+                    }*/
+                    $(this).toggle(flag);
+                });
+            }
+            
+            $("#filtro").on("keyup", filtrar);
+            /*$("#check-status-nao-pago").on("click",filtrar);
+            $("#check-status-em-aprovacao").on("click",filtrar);
+            $("#check-status-pago").on("click",filtrar);
+            $("#check-inc-pix").on("click",filtrar);
+            $("#check-inc-pagamento").on("click",filtrar);*/
+        });
+    </script>
+{% endblock content %}
