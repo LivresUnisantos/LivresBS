@@ -18,8 +18,10 @@ class Pix extends Livres {
     public $pixCidadeConta;
     
     function __construct() {
-        $this->dataEntregaID = $this->dataPelaString($_SESSION["data_consulta"]);
-        $this->dataEntrega = $this->dataPeloID($this->dataEntregaID,'string');
+        if (isset($_SESSION["data_consulta"])) {
+            $this->dataEntregaID = $this->dataPelaString($_SESSION["data_consulta"]);
+            $this->dataEntrega = $this->dataPeloID($this->dataEntregaID,'string');
+        }
         
         $this->pixChave = $this->getParametro('pixChave');
         $dt = $this->dataParaTime($this->dataEntrega);
