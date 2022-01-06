@@ -100,23 +100,28 @@ $diasSemana[6] = "Sab";
 $diasSemana[7] = "Dom";
 $conn = new PDO("mysql:host=".$c_db["host"].";dbname=".$c_db["name"],$c_db["user"],$c_db["password"]);
 $nGrupos=getTotalGrupos($conn);
-$sql = "SELECT * FROM Calendario WHERE data > '".date("Y-m-d",strtotime((date("Y")-1)."-12-01"))."' ORDER BY data ASC";
+$sql = "SELECT * FROM Calendario WHERE data > '".date("Y-m-d",strtotime((date("Y")-1)."-12-01"))."' ORDER BY WEEKDAY(data), data ASC";
 //echo $sql;
 $st = $conn->prepare($sql);
 $st->execute();
 $rs=$st->fetchAll();
 echo 'Ordem: semanal/quinzenal/mensal';
 echo '<table>';
-echo '<tr class="firstLine">';
-echo '<td>id</td>';
-echo '<td>Data</td>';
-echo '<td>Dia</td>';
+$header = '<tr class="firstLine">';
+$header .= '<td>id</td>';
+$header .= '<td>Data</td>';
+$header .= '<td>Dia</td>';
 for ($i = 1; $i <= $nGrupos; $i++) {
-    echo '<td>Grupo '.$i.'</td>';
+    $header .= '<td>Grupo '.$i.'</td>';
 }
-echo '</tr>';
+$header .= '</tr>';
+$diaAnterior = "";
 $count=0;
 foreach ($rs as $row) {
+    if (date("N",strtotime($row["data"])) != $diaAnterior) {
+        echo $header;
+    }
+    $diaAnterior = date("N",strtotime($row["data"]));
     $count++;
     if ($count % 2 == 0) {
         echo '<tr bgcolor="#d1f1ff">';
@@ -125,6 +130,7 @@ foreach ($rs as $row) {
     }
     echo '<td>'.$row["id"].'</td>';
     echo '<td>'.date("d/m/Y",strtotime($row["data"])).'</td>';
+    
     echo '<td>'.$diasSemana[date("N",strtotime($row["data"]))].'</td>';
     for ($i = 1; $i <= $nGrupos; $i++) {
         echo '<td>';
