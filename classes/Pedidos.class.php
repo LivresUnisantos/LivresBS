@@ -82,5 +82,18 @@ class Pedidos extends Livres {
         if (!isset($variaveis)) return;
         return $variaveis;
     }
+    
+    public function pedidoPeloPix($pix) {
+        $sql = "SELECT * FROM pedidos_consolidados ped";
+        $sql .= " LEFT JOIN Consumidores cons ON cons.id = ped.consumidor_ID";
+        $sql .= " WHERE ped.pgt_pix_uuid = '".$pix."'";
+        $st = $this->conn()->prepare($sql);
+        if (!$st->execute()) return false;
+        if ($st->rowCount() != 1) {
+            return false;
+        }
+        
+        return $st->fetch();
+    }
 }
 ?>
