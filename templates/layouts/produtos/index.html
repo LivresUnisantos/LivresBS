@@ -111,10 +111,7 @@
             closeOnEscape: false,
             close: function() {
                 if (!sessionStorage.popupMostrado) {
-                    if (confirm("Deseja exibir esta janela no seu próximo acesso? Você pode acessá-la clicando no link 'Como Funciona' no topo da janela")) {
-                        console.log('exibir');
-                    } else {
-                        console.log('nao exibir');
+                    if (confirm("Deseja que esta janela não seja exibida no seu próximo acesso? Você pode acessá-la a qualquer momento clicando no link 'Como Funciona' no topo da janela")) {
                         sessionStorage.popupMostrado = 1;
                     }
                 }
