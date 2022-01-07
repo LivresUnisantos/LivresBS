@@ -129,14 +129,14 @@ if (strlen($alerta) == 0) {
     		    <h5>Confirme seus dados e faça seu pedido</h5>
     		    <?php
     		    //Obter o link
-    		    $sqlLink = "SELECT * FROM Parametros WHERE parametro = 'arquivo".$grupo."'";
+    		    $sqlLink = "SELECT * FROM listas_produtos WHERE nome_lista = '".$rs["grupo"]."'";
                 $st = $conn->prepare($sqlLink);
                 $st->execute();
                 if ($st->rowCount() == 0) {
                     $link = "";
                 } else {
                     $rsLink = $st->fetch();
-                    $link = $rsLink["valor"];
+                    $link = "https://livresbs.com.br/produtos/".$rsLink["id"];
                 }
     		    /*if (strtolower($rs["grupo"]) == "aproate") {
     		        echo '<a href="lista_produtos_APROATE_202004141301.pdf" target="_blank">Consulte a lista de produtos disponíveis clicando aqui</a>';
