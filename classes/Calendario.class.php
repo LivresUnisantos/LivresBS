@@ -19,7 +19,7 @@ class Calendario extends Livres {
     }
 
     public function montaArrayDatas() {
-        $sql = "SELECT * FROM Calendario WHERE data > '2019-12-01' ORDER BY data ASC";
+        $sql = "SELECT * FROM Calendario WHERE data > '".(date("Y")-1)."-12-01' ORDER BY data ASC";
         $st = $this->conn()->prepare($sql);
         $st->execute();
         if ($st->rowCount() == 0) return false;
@@ -35,7 +35,7 @@ class Calendario extends Livres {
     }
 
     public function montaMenuDatas($dataSelecionada = "") {
-        $sql = "SELECT * FROM Calendario WHERE data > '2019-12-01' ORDER BY data ASC";
+        $sql = "SELECT * FROM Calendario WHERE data > '".(date("Y")-1)."' ORDER BY data ASC";
         $st = $this->conn()->prepare($sql);
         $st->execute();
         if ($st->rowCount() == 0) return false;
