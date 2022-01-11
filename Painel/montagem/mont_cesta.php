@@ -1,8 +1,8 @@
 <?php
-
+$bc = ($banco == true ? '*' : '');
 $cesta_montagem = "<article class='single_order cestaDel' id='{$pedido_id}'>
     <header>
-        <h1 style='display:inline-block;'>{$i}) {$consumidor} (G{$comunidade})</h1>";
+        <h1 style='display:inline-block;'>{$i}) {$consumidor}{$bc} (G{$comunidade})</h1>";
 if ($_SESSION["level"] >= LEVEL_BIKERS):
     $cesta_montagem .= "<span class='icon-shrink2 btn btn_sanfona icon-notext j_sanfona wc_tooltip' style='margin:11px 0 0 8px !important;'><span class='wc_tooltip_balloon'>Recolher</span></span>";
     $cesta_montagem .= "<div style='display:inline-block; float:right;padding:10px;'>";
