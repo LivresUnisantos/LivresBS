@@ -33,31 +33,42 @@
                     <th>Unidade</th>
                     <th>Produtor</th>
                     <th>Estoque</th>
+                    <th>Última Entada</th>
+                    <th>Próximo Vencimento</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="tabela_produtos">
                 {% for p in conteudo %}
-                    <tr>
-                        <td id="codigo_{{p.id}}">{{p.id}}</td>
-                        <td id="nome_{{ p.id }}">{{p.nome}}</td>
-                        <td id="categoria_{{ p.id }}">{{p.categoria}}</td>
-                        <td id="unidade_{{ p.id }}">{{p.unidade}}</td>
-                        <td id="produtor_{{ p.id }}">{{p.produtor}}</td>
-                        <td id="label_estoque_{{ p.id }}">
-                            <form name="salvarestoque" id="salvarestoque_{{ p.id }}" act="estoque_act.php" method="GET">
-                                <input type="hidden" name="id" id="id_estoque_{{ p.id }}" value="{{ p.id }}" />
-                                {% if (p.estoque == 0) %}
-                                    <input type="hidden" id="estoquezero_{{ p.id }}" name="estoquezero" value="1" />
-                                {% else %}
-                                    <input type="hidden" id="estoquezero_{{ p.id }}" name="estoquezero" value="0" />
-                                {% endif %}
+                    <form name="salvarestoque" id="salvarestoque_{{ p.id }}" act="estoque_act.php" method="GET">
+                        {% if (p.estoque == 0) %}
+                            <input type="hidden" id="estoquezero_{{ p.id }}" name="estoquezero" value="1" />
+                        {% else %}
+                            <input type="hidden" id="estoquezero_{{ p.id }}" name="estoquezero" value="0" />
+                        {% endif %}
+                        <input type="hidden" name="id" id="id_estoque_{{ p.id }}" value="{{ p.id }}" />
+                        <tr>
+                            <td id="codigo_{{p.id}}">{{p.id}}</td>
+                            <td id="nome_{{ p.id }}">{{p.nome}}</td>
+                            <td id="categoria_{{ p.id }}">{{p.categoria}}</td>
+                            <td id="unidade_{{ p.id }}">{{p.unidade}}</td>
+                            <td id="produtor_{{ p.id }}">{{p.produtor}}</td>
+                            <td id="label_estoque_{{ p.id }}">
                                 <input type="text" name="estoque" id="estoque_{{ p.id }}" value="{{ p.estoque }}" size="4" />
+                            </td>
+                            <td id="ultimaentrada_{{ p.id }}">
+                                <input type="date" name="data_ultimaentrada" id="data_ultimaentrada_{{ p.id }}" value="{{ (p.data_ultimaentrada == '') ? '' : p.data_ultimaentrada|date('Y-m-d') }}" size="10" />
+                            </td>
+                            <td id="proximovencimento_{{ p.id }}">
+                                <input type="date" name="data_proximovencimento" id="data_proximovencimento{{ p.id }}" value="{{ (p.data_proximovencimento == '') ? '' : p.data_proximovencimento|date('Y-m-d') }}" size="10" />
+                            </td>
+                            <td id="botao_{{ p.id }}">
                                 {% if level_user >= level_write %}
                                     <input type="submit" id="btn_{{ p.id }}" value="Salvar" />
                                 {% endif %}
-                            </form>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    </form>
                 {% endfor %}
             </tbody>
         </table>
@@ -108,11 +119,19 @@
                 }, {});
                 id = dados["id"];
                 estoque = dados["estoque"];
+                ultima = dados["data_ultimaentrada"];
+                proxima = dados["data_proximovencimento"];
                 
                 $.ajax({
-                    method: "GET",
-                    url: "estoque_act.php?idProduto=" + id + "&estoque=" + estoque,
-                    })
+                    method: "POST",
+                    url: "estoque_act.php",
+                    data: {
+                        idProduto: id,
+                        estoque: estoque,
+                        ultima: ultima,
+                        proxima: proxima
+                    }
+                })
                 .done(function(msg) {
                     if (msg == "ok") {
                         $("#estoque_"+id).stop().css("background-color", "#3a7d2d").animate({ backgroundColor: "#FFFFFF"}, 1500);
@@ -124,6 +143,7 @@
                         
                     } else {
                         alert(msg);
+                        //console.log(msg);
                         $("#estoque_"+id).stop().css("background-color", "#cf0437").animate({ backgroundColor: "#FFFFFF"}, 1500);
                     }
                 });
@@ -135,17 +155,27 @@
                 });*/
                 var estoque = $("input[name=estoque]").map(function() { return this.value; }).get().join('@');
                 var id = $("input[name=id]").map(function() { return this.value; }).get().join('@');
-                console.log(id);
-                console.log(estoque);
+                var ultima = $("input[name=data_ultimaentrada]").map(function() { return this.value; }).get().join('@');
+                var proxima = $("input[name=data_proximovencimento]").map(function() { return this.value; }).get().join('@');
+                //console.log(id);
+                //console.log(estoque);
                 $.ajax({
-                    method: "GET",
-                    url: "estoque_act.php?idProduto=" + id + "&estoque=" + estoque,
-                    })
+                    method: "POST",
+                    //url: "estoque_act.php?idProduto=" + id + "&estoque=" + estoque,
+                    url: "estoque_act.php",
+                    data: {
+                        idProduto: id,
+                        estoque: estoque,
+                        ultima: ultima,
+                        proxima: proxima
+                    }
+                })
                 .done(function(msg) {
                     if (msg == "ok") {
                         alert("Dados salvos");
                     } else {
                         alert(msg);
+                        //console.log(msg);
                     }
                 });
             });
