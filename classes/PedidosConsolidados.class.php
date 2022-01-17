@@ -153,7 +153,7 @@ class PedidosConsolidados extends Livres {
     //Essa função foi criada porque por algum motivo, o trigger do MySQL nã está funcionando corretamente e não está tualizando o valor total do pedido dos consumidores.
     //Sendo assim, ao consultar um pedido, checamos se algum consumidor está com total "null" e forçamos um update no pedido sem alterar nada para disparar o trigger
     private function pedidoCorrigirValorTotal() {
-        $sql = "UPDATE pedidos_consolidados SET pedido_mensal = pedido_mensal WHERE ped.pedido_data = '".date('Y-m-d H:i:s',$this->dataEntrega)."' AND pedido_valor_total IS NULL";
+        $sql = "UPDATE pedidos_consolidados SET pedido_mensal = pedido_mensal WHERE pedido_data = '".date('Y-m-d H:i:s',$this->dataEntrega)."'";
         $st = $this->conn()->prepare($sql);
         if ($st->execute()) {
             return true;
