@@ -83,21 +83,25 @@ class Listas extends Livres {
     public function deleteLista($id) {
         $nomeLista = $this->getNomeLista($id);
         if (!$nomeLista) {
+            echo 1;
             return false;
         }
         //Checar se existe grupo de consumidores avulsos associados à essa lista
-        $sql = "SELECT COUNT(grupo) FROM Usuarios WHERE grupo = '".$nomeLista."'";
+        $sql = "SELECT grupo FROM Usuarios WHERE grupo = '".$nomeLista."'";
         $st = $this->conn()->prepare($sql);
         $st->execute();
         if ($st->rowCount() > 0) {
+            echo 2;
             return false;
         }
         $sql = "DELETE FROM listas_produtos WHERE id = ".$id;
         $st = $this->conn()->prepare($sql);
         $st->execute();
         if ($st->rowCount() > 0) {
+            echo 3;
             return true;
         }
+        echo 4;
         return false;
     }
     

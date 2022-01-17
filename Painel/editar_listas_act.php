@@ -9,10 +9,10 @@ require_once '../twig/autoload.php';
 require_once "acesso.php";
 require_once "helpers.php";
 
-if (isset($_GET["idProduto"]) && isset($_GET["ativo"]) && isset($_GET["idLista"])) {
-    $livres = new Livres();
-    $conn = $livres->conn();
+$livres = new Livres();
+$conn = $livres->conn();
 
+if (isset($_GET["idProduto"]) && isset($_GET["ativo"]) && isset($_GET["idLista"])) {
     $idProdutos = explode("@",$_GET["idProduto"]);
     $ativos = explode("@", $_GET["ativo"]);
     $idLista = $_GET["idLista"];
@@ -59,6 +59,24 @@ if (isset($_GET["idProduto"]) && isset($_GET["ativo"]) && isset($_GET["idLista"]
         }
     }
 } else {
-    echo "Erro ao salvar os dados";
+    if (isset($_GET["act"])) {
+        $act = $_GET["act"];
+        switch($act) {
+            case "resetar":
+                $idLista = $_GET["idLista"];
+                $sql = "UPDATE listas_itens SET ativo = 0 WHERE id_lista = ".$idLista;
+                $st = $conn->prepare($sql);
+                if ($st->execute()) {
+                    setlog("log_listas.txt",$_SESSION["login"]." desativou todos os produtos da lista",$sql);
+                    echo "ok";
+                } else {
+                    echo "Erro ao desativar produtos (".$sql.")";
+                    setlog("log_listas.txt",$_SESSION["login"].": Erro ao desativar produtos da lista",$sql);
+                }
+            break;
+        }
+    } else {
+        echo "Erro ao salvar os dados";
+    }
 }
 ?>

@@ -92,6 +92,7 @@
               <div class="input-group-text">Filtro</div>
             </div>
             <input type="text" class="form-control" id="filtro" name="Filtro" placeholder="Procure por produto, produtor ou categoria">
+            <button class="btn btn-danger ml-1" id="desativar_tudo" name="desativar_tudo">Desativar tudo</button>
         </div>
         <table class="table">
             <thead class="thead-light">
@@ -246,6 +247,26 @@
                         $("#linha_"+idProduto).stop().css("background-color", "#cf0437").animate({ backgroundColor: "#FFFFFF"}, 1500);
                     }
                 });
+            });
+            
+            $("#desativar_tudo").on("click", function() {
+                listaDesc = $("#lista_selecionada option:selected").text();
+                idLista = $("#lista_selecionada").val();
+                if (confirm("Deseja realmente desativar todos os produtos da lista '" + listaDesc + "'?")) {
+                    $.ajax({
+                        method: "GET",
+                        url: "editar_listas_act.php?act=resetar&idLista=" + idLista
+                    })
+                    .done(function(msg) {
+                        if (msg == "ok") {
+                            alert('Produtos desativados. A página será recarregada.');
+                            location.href = "editar_listas.php?lista_selecionada=" + idLista
+                        } else {
+                            alert(msg);
+                        }
+                    });
+                    
+                }
             });
             
             /*$("#salvar_tudo").on("click", function() {
