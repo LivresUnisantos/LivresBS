@@ -13,6 +13,7 @@
             <td width="70">Mensal</td>
             <td width="70">Extra</td>
             <td width="70">Diferença</td>
+            <td width="70">Entrega</td>
             <td width="70">Total</td>
             <td width="100">Forma Entrega</td>
             <td width="100">Forma Pagamento</td>
@@ -40,6 +41,7 @@
                             <td>R${{0.0|number_format(2,",",".") }}</td>
                         {% endif %}
                     {% endif %}
+                    <td>R${{p.pedido.pedido_entrega_valor|number_format(2,',','.')}}</td>
                     <td>R${{p.pedido.pedido_valor_total|number_format(2,',','.')}}</td>
                     <td></td>
                     <td></td>
