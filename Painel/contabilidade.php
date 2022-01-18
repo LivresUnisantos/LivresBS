@@ -45,7 +45,8 @@ $twig = new \Twig\Environment($loader, ['debug' => false]);
       </head>
   <body>
 <?php
-if (isset($_SESSION["data_consulta"]) && $dataStr = $livres->dataPeloID($_SESSION["data_id"])) {
+
+if (isset($_SESSION["data_id"]) && $dataStr = $livres->dataPeloID($_SESSION["data_id"])) {
     $frequencia_semana = $calendario->montaDisplayFrequenciaSemana(strtotime($dataStr));
 } else {
     $frequencia_semana = "";    
@@ -61,17 +62,17 @@ echo $twig->render('menu.html', [
 //echo "Página em atualização para que sejam exibidos dados conforme pedido consolidado implementado em 12/06/2020";
 
 $conn = new PDO("mysql:host=".$c_db["host"].";dbname=".$c_db["name"].";charset=utf8",$c_db["user"],$c_db["password"]);
-if (!isset($_SESSION["data_id"])) {
+if (!isset($_SESSION["data_consulta"])) {
 	echo 'Selecione uma data de entrega';
 } else {
-	if (strlen($_SESSION["data_id"]) > 0) {		
+	if (strlen($_SESSION["data_consulta"]) > 0) {		
 		$oProdutos = new Produtos();
 		$produtos = $oProdutos->listarProdutosTodos();
 
 		$oProdutor = new Produtores();
 		$produtores = $oProdutor->listaProdutoresPorID();
 
-		$oPedidos = new PedidosConsolidados($calendario->dataPeloID($_SESSION["data_id"]));
+		$oPedidos = new PedidosConsolidados($_SESSION["data_consulta"]);
 		$pedidos = $oPedidos->listaPedidos();
 		$pedidoPre = $oPedidos->valorPedidoPre();
 
@@ -79,7 +80,7 @@ if (!isset($_SESSION["data_id"])) {
 
 		// $totais["receitas"]["total"] = 0;
 		// $totais["despesas"]["total"] = 0;
-
+        
 		foreach ($itens as $item) {
 			$produto = $produtos[$item["produto_id"]];
 			$produtor = $produtores[$item["item_produtor"]];
@@ -89,13 +90,16 @@ if (!isset($_SESSION["data_id"])) {
 				$totais["despesas"][$produtor][$item["item_tipo_cesta"]] = 0;
 			}
 			if ($item["produto_id"] == 136 || $item["produto_id"] == 137) {
-				if (!isset($totais) || !is_array($totais) || !array_key_exists("receitas", $totais) || !array_key_exists("contribuicao", $totais["receitas"])) {
+				/*if (!isset($totais) || !is_array($totais) || !array_key_exists("receitas", $totais) || !array_key_exists("contribuicao", $totais["receitas"])) {
 					$totais["receitas"]["contribuicao"] = 0;					
-				}				
+				}*/
 				$totais["receitas"]["contribuicao"] += $item["item_qtde"]*$item["item_valor_produtor"];
 			} else {
 				$totais["despesas"][$produtor][$item["item_tipo_cesta"]] += $item["item_qtde"]*$item["item_valor_produtor"];
 			}
+		}
+		if (!isset($totais) || !is_array($totais) || !array_key_exists("receitas", $totais) || !array_key_exists("contribuicao", $totais["receitas"])) {
+			$totais["receitas"]["contribuicao"] = 0;					
 		}
 
 		foreach ($pedidos as $pedido) {
@@ -123,7 +127,7 @@ if (!isset($_SESSION["data_id"])) {
 		$totais["totalReceitas"] = 0;
 		$totais["totalDespesas"] = 0;
 		echo '<div class="container">';
-		echo '<p><span>Exibindo resumo de contabilidade para entrega de '.date('d/m/Y',strtotime($calendario->dataPeloID($_SESSION["data_id"]))).'</span></p>';
+		echo '<p><span>Exibindo resumo de contabilidade para entrega de '.date('d/m/Y',strtotime($_SESSION["data_consulta"])).'</span></p>';
 
 		/************ */
 		//Despesas
