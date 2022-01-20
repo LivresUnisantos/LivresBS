@@ -1,18 +1,59 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 include "../config.php";
 include "../Painel/helpers.php";
 include "../Painel/acesso.php";
+require_once "../includes/autoloader.inc.php";
+require_once '../twig/autoload.php';
 ?>
 <html>
     <head>
         <meta charset="UTF-8">
-        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link href="../css/style.css" rel="stylesheet">
     </head>
 <body>
+    
+    <div class="container-fluid">
+	<div class="row">
+	    <!-- MENU SUPERIOR -->
+		<div class="col-md-12">
+			<ul class="nav">
+				<li class="nav-item">
+					<a class="nav-link active" href="index.php">Início do Caixa</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link active" href="../Painel">Voltar para o Painel</a>
+				</li>
+				<!--
+				<li class="nav-item">
+					<a class="nav-link" href="#">Profile</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link disabled" href="#">Messages</a>
+				</li>
+				<li class="nav-item dropdown ml-md-auto">
+					 <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">Dropdown link</a>
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+						 <a class="dropdown-item" href="#">Action</a> <a class="dropdown-item" href="#">Another action</a> <a class="dropdown-item" href="#">Something else here</a>
+						<div class="dropdown-divider">
+						</div> <a class="dropdown-item" href="#">Separated link</a>
+					</div>
+				</li>
+				-->
+			</ul>
+			<!-- FIM MENU SUPERIOR -->
+		</div>
+	</div>
 <?php
 //Variáveis de controle
-$conn = new PDO("mysql:host=".$c_db["host"].";dbname=".$c_db["name"],$c_db["user"],$c_db["password"]);
+$livres = new Livres();
+$oCaixa = new Caixa();
+
+$conn = $livres->conn();
 $idAdmin = $_SESSION["id"];
 $nowStamp = strtotime(date("Y-m-d H:i:s")) - 3*60*60;
 $nowStr = date("Y-m-d H:i:s", $nowStamp);
@@ -28,53 +69,45 @@ function isDate($date) {
 
 //Abertura de caixa sendo realizada
 if (isset($_POST["abrirCaixa"])) {
-    if (strlen($_POST["valor"]) == 0 || strlen($_POST["data"]) == 0)  {
-        echo "<p>Preencha valor e data de abertura</p>";
+    if (strlen($_POST["valor"]) == 0 )  {
+        echo "<p>Preencha o valor de abertura (preencha com 0 se necessário)</p>";
     } else {
-        if (!isDate($_POST["data"])) {
-            echo "<p>A data preenchida não é válida</p>";
+        if ($oCaixa->listarCaixasAbertos()) {
+            echo "<p>Já existe um caixa aberto. Feche primeiro antes de abrir outro.</p>";
         } else {
             //Salvar abertura de caixa
-            $dataAbertura = $_POST["data"];
-            $horaAbertura = date("Y-m-d H:i:s");
+            /*$dataAbertura = date("Y-m-d H:i:s");
             $valorAbertura = $_POST["valor"];
+            $valorAbertura = str_replace("R","",$valorAbertura);
+            $valorAbertura = str_replace("$","",$valorAbertura);
+            $valorAbertura = str_replace(" ","",$valorAbertura);
             $valorAbertura = str_replace(",",".",$valorAbertura);
-            $sql = "INSERT INTO Caixa (idAdmin, dataAbertura, horaAbertura, valorAbertura) VALUES (".$idAdmin.",'".$dataAbertura."','".$horaAbertura."',".$valorAbertura.")";
+            $sql = "INSERT INTO Caixa (id_admin, dataAbertura, valorAbertura) VALUES (".$idAdmin.",'".$dataAbertura."', ".$valorAbertura.")";
             $st = $conn->prepare($sql);
             if ($st->execute()) {
                 echo "<p>Caixa aberto</p>";
-                //Tratar das transações automáticas
-                $sql = "SELECT * FROM Calendario WHERE data = ".$dataAbertura;
-                $st = $conn->prepare($sql);
-                $st->execute();
-                if ($_POST["autogerar"]) {
-                    //Gerar transações automáticas caso seja dia de entrega
-                    $sql = "SELECT * FROM Calendario WHERE data = ".$dataAbertura;
-                    $st = $conn->prepare($sql);
-                    $st->execute();
-                    if ($st->rowCount() == 0) {
-                        echo "<p>Não foram geradas transações automáticas porque o dia ".date("d/m/Y",strtotime($dataAbertura))." não é dia de entrega</p>";
-                    } else {
-                        //Buscar todos os dados de produtos e consumidores para gerar transações.
-                        /*
-                        PENDENTE
-                        echo "Transações automáticas criadas"
-                        */
-                    }
-                } else {
-                    if ($st->rowCount() > 0) {
-                        echo "<p>Atente para o fato de que você não realizou a geração de transações automáticas para esse dia, mesmo ele possuindo entregas.</p>";
-                    }
-                }
+            } else {
+                echo "<p>Erro ao abrir o caixa.</p>";
+            }*/
+            if ($oCaixa->abrirCaixa($idAdmin, $_POST["valor"])) {
+                echo "<p>Caixa aberto</p>";
             } else {
                 echo "<p>Erro ao abrir o caixa.</p>";
             }
         }
     }
 }
+
+if (isset($_GET["fecharCaixa"]) && isset($_POST["id_fechar_caixa"]) && isset($_POST["valor_fechar_caixa"])) {
+    if ($oCaixa->fecharCaixa($_POST["id_fechar_caixa"], $_POST["valor_fechar_caixa"])) {
+        echo "<p>Caixa fechado</p>";
+    } else {
+        echo "<p>Falha ao fechar caixa</p>";
+    }
+}
 //Selecionar caixa
 if (isset($_GET["selecionarCaixa"])) {
-    $_SESSION["idCaixa"] = 0;
+    //$_SESSION["idCaixa"] = 0;
     $idCaixa = $_GET["selecionarCaixa"];
     $sql = "SELECT * FROM Caixa WHERE id = ".$idCaixa;
     $st = $conn->prepare($sql);
@@ -84,200 +117,282 @@ if (isset($_GET["selecionarCaixa"])) {
     } else {
         $rs = $st->fetch();
         if (is_null($rs["dataFechamento"])) {
-            $_SESSION["idCaixa"] = $idCaixa;
+            //$_SESSION["idCaixa"] = $idCaixa;
         } else {
             echo "<p>O caixa selecionado já está fechado;</p>";
         }
     }
 }
 //Buscar se existe caixa aberto, caso nenhum caixa esteja selecionado
-if (!isset($_SESSION["idCaixa"]) || $_SESSION["idCaixa"] == 0) {
-    $sql = "SELECT * FROM Caixa WHERE idAdmin = ".$idAdmin." AND dataFechamento IS NULL";
+if (!isset($_GET["selecionarCaixa"])) {
+    //$sql = "SELECT * FROM Caixa WHERE id_admin = ".$idAdmin." AND dataFechamento IS NULL";
+    $sql = "SELECT * FROM Caixa WHERE dataFechamento IS NULL";
     $st = $conn->prepare($sql);
     $st->execute();
     if ($st->rowCount() > 1) {
-        exit ("Erro: existe mais de um caixa aberto para seu usuário. Consultar administrador");
+        exit ("Erro: existe mais de um caixa aberto. Feche os caixas antes de abrir outro.");
     } else {
         if ($st->rowCount() == 0) {
             echo "Não há caixa aberto. Deseja abrir o caixa? Preencha os dados abaixo e prossiga.";
+            echo '<p>O caixa será aberto para o dia '.date("d/m/Y").'</p>';
             ?>
-            <form role="form" method="POST" action="">
-                <div class="form-group">
-                    <label for="data">Data de abertura</label>
-                    <input type="date" class="form-control" id="data" name="data" value="'.$todayStr.'" />
-                </div>
+            <form role="form" method="POST" action="index.php">
                 <div class="form-group">
                     <label for="valor">Valor de abertura</label>
                     <input type="text" class="form-control dinheiro" id="valor" name="valor"/>
                 </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" id="autogerar" name="autogerar" /> Gerar transações automáticas referente entregas/produtores do dia?
-                    </label>
-                </div> 
                 <button type="submit" id="abrirCaixa" name="abrirCaixa" class="btn btn-primary">Abrir Caixa</button>
             </form>
             <?php
-            exit();
+            //exit();
         } else {
             $rs = $st->fetch();
             if (strtotime($rs["dataAbertura"]) != $todayStr) {
-                echo '<p>Caixa aberto para o dia '.date("d/m/Y",strtotime($rs["dataAbertura"])).'. Deseja:</p>';
-                echo '<a href="">Fechar Caixa</a> | <a href="?selecionarCaixa='.$rs["id"].'">Prosseguir com caixa do dia '.date("d/m/Y",strtotime($rs["dataAbertura"])).'</a>';
-                exit();
+                echo '<p>Caixa aberto em '.date("d/m/Y H:i",strtotime($rs["dataAbertura"])).'<br>';
+                echo '<a href="?selecionarCaixa='.$rs["id"].'">Prosseguir com caixa aberto</a></p>';
+                //exit();
             }
         }
     }
 }
 //Prosseguir com caixa selecionado
-$idCaixa = $_SESSION["idCaixa"];
-    //Obter transações realizadas
-$sql = "SELECT * FROM TransacoesRealizadas WHERE idCaixa = ".$idCaixa;
-$st = $conn->prepare($sql);
-$st->execute();
-if ($st->rowCount() > 0)  {
-    $rs = $st->fetchAll();
-    foreach ($rs as $row) {
-        $tRealizadas[$row["id"]]["idPrevista"] = $row["idPrevista"];
-        $tRealizadas[$row["id"]]["data"] = $row["data"];
-        $tRealizadas[$row["id"]]["tempo"] = $row["tempo"];
-        $tRealizadas[$row["id"]]["tipo"] = $row["tipo"];
-        $tRealizadas[$row["id"]]["descricao"] = $row["descricao"];
-        $tRealizadas[$row["id"]]["observacao"] = $row["observacao"];
-        $tRealizadas[$row["id"]]["valor"] = $row["valor"];
-    }
-}
-    //Obter transações previstas
-$sql = "SELECT * FROM TransacoesPrevistas WHERE idCaixa = ".$idCaixa;
-$st = $conn->prepare($sql);
-$st->execute();
-if ($st->rowCount() > 0)  {
-    $rs = $st->fetchAll();
-    foreach ($rs as $row) {
-        $tRealizadas[$row["id"]]["idRealizada"] = $row["idRealizada"];
-        $tPrevistas[$row["id"]]["data"] = $row["data"];
-        $tPrevistas[$row["id"]]["tempo"] = $row["tempo"];
-        $tPrevistas[$row["id"]]["tipo"] = $row["tipo"];
-        $tPrevistas[$row["id"]]["descricao"] = $row["descricao"];
-        $tPrevistas[$row["id"]]["valor"] = $row["valor"];
-    }
-}
+if (isset($_GET["selecionarCaixa"])) {
+    $idCaixa = $_GET["selecionarCaixa"];
+    $formas = $oCaixa->getFormas();
+}   
 ?>
-<div class="container-fluid">
-	<div class="row">
-	    <!-- MENU SUPERIOR -->
-		<div class="col-md-12">
-			<ul class="nav">
-				<li class="nav-item">
-					<a class="nav-link active" href="#">Home</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Profile</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link disabled" href="#">Messages</a>
-				</li>
-				<li class="nav-item dropdown ml-md-auto">
-					 <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">Dropdown link</a>
-					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-						 <a class="dropdown-item" href="#">Action</a> <a class="dropdown-item" href="#">Another action</a> <a class="dropdown-item" href="#">Something else here</a>
-						<div class="dropdown-divider">
-						</div> <a class="dropdown-item" href="#">Separated link</a>
-					</div>
-				</li>
-			</ul>
-			<!-- FIM MENU SUPERIOR -->
-		</div>
-	</div>
-	<div class="row">
-	    <div class="col-md-12 .table-responsive">
-	        <table class="table table-hover table-bordered table-striped table-sm">
-            	<thead>
-            		<tr>
-            			<th>#</th>
-            			<th>Tipo</th>
-            			<th>Descrição</th>
-            			<th>Observação</th>
-            			<th>Valor</th>
-            			<th></th>
-            		</tr>
-            	</thead>
-            	<tbody>
-            	    <?php
-                	foreach ($tRealizadas as $id=>$dados) {
-                    ?>
-            		<tr>
-            		    <td><?php echo $id; ?></td>
-            			<td><?php echo $dados["tipo"]; ?></td>
-            			<td><?php echo $dados["descricao"]; ?></td>
-            			<td><?php echo $dados["observacao"]; ?></td>
-            			<td>R$<?php echo number_format($dados["valor"],2,",","."); ?></td>
-            			<td><button type="button" class="btn btn-danger">Cancelar</button></td>
-            		</tr>
-            		<?php
-                	}
-                    ?>
-            	</tbody>
-            </table>
-	    </div>
-	</div>
-	<div class="row">
-		<div class="col-md-12">
-		    <form role="form" method="POST">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">Venda Prevista</label>
-                    </div>
-                    <select class="custom-select" id="inputGroupSelect01">
-                        <option selected>Escolher...</option>
-                        <option value="1">Venda 1</option>
-                        <option value="2">Venda 2</option>
-                        <option value="3">Venda 3</option>
+	<?php if (isset($_GET["selecionarCaixa"])) { ?>
+    	<div class="row">
+    	    <div class="col-md-12 .table-responsive" id="container_transacoes">
+                <?php
+                echo '<b>Caixa aberto em '.date('d/m/Y H:i:s', strtotime($oCaixa->getCaixa($idCaixa)["dataAbertura"])).'</b>';
+                echo $oCaixa->listaTransacoes($idCaixa);
+                ?>
+    	    </div>
+    	</div>
+    	
+    	<div class="row">
+    		<div class="col-md-12">
+                <form role="form" method="POST" class="form-inline">
+                    Lançar venda&nbsp;
+                    <label class="sr-only" for="descricao">Descrição</label>
+                    <input type="text" class="form-control mb-2 mr-sm-2" id="descricao" placeholder="Descrição">
+                    
+                    <label class="sr-only" for="valor">Valor</label>
+                    <input type="text" class="form-control mb-2 mr-sm-2 dinheiro" id="valor" placeholder="Valor">
+                    
+                    <label class="sr-only my-1 mr-2" for="forma_pagamento">Forma Pagamento</label>
+                    <select class="custom-select my-1 mr-sm-2" id="forma_pagamento">
+                        <option value="">Forma de Pagamento</option>
+                        <?php
+                        if (isset($formas)) {
+                            foreach ($formas as $id=>$forma) {
+                                echo '<option value="'.$id.'">'.$forma.'</option>';
+                            }
+                        }
+                        ?>
                     </select>
-                    <button type="submit" id="VendaPrevistaAdd" name="adicionarTransacao" class="btn btn-primary">Adicionar</button>
-                </div>
-            </form>
-        </div>
+                    <button type="submit" id="adicionarTransacao" name="adicionarTransacao" class="btn btn-primary">Adicionar</button>
+                </form>
+            </div>
+    	</div>
+    	
+    	<div class="row">
+    		<div class="col-md-12">
+                <form role="form" method="POST" class="form-inline" action="?fecharCaixa=1">
+                    <input type="hidden" id="id_fechar_caixa" name="id_fechar_caixa" value="<?php echo $_GET["selecionarCaixa"]; ?>" />
+                    <label for="valor_fechar_caixa" class="my-1 mr-2">Saldo em dinheiro no caixa</label>
+                    <input type="text" id="valor_fechar_caixa" name="valor_fechar_caixa" value="" class="form-control mb-2 mr-sm-2 dinheiro" />
+                    <button type="submit" id="fecharCaixa" name="fecharCaixa" class="btn btn-primary">Fechar Caixa</button>
+                </form>
+            </div>
+    	</div>
+	<?php } ?>
+	<div id="container_relatorio">
+    	<?php
+    	if (!isset($_GET["selecionarCaixa"])) {
+        	if ($caixas = $oCaixa->listarCaixasFechados()) {
+        	    echo "<h5>Relatório de Caixas Fechados</h5>";
+            	foreach ($caixas as $row) {
+            	    echo date("d/m/Y H:i",strtotime($row["dataAbertura"])).' - <a href="?verRelatorio=1&id_caixa_rel='.$row["id"].'">Ver Relatório</a><br>';
+            	}
+        	}
+        	
+        	if (isset($_GET["verRelatorio"]) && isset($_GET["id_caixa_rel"])) {
+        	    echo $oCaixa->relatorioCaixa($_GET["id_caixa_rel"]);
+        	}
+    	} else {
+    	    echo $oCaixa->relatorioCaixa($_GET["selecionarCaixa"]);
+    	}
+    	?>
 	</div>
-	<!--
-	<div class="row">
-		<div class="col-md-12">
-			<div class="row">
-				Vendas Previstas
-				<div class="col-md-12">
-					caixas
-				</div>
-			</div>
-			<div class="row">
-				Compras Previstas
-				<div class="col-md-12">
-					caixas
-				</div>
-			</div>
-			<div class="row">
-				Vendas Avulsas
-				<div class="col-md-12">
-					Caixas
-				</div>
-			</div>
-			<div class="row">
-				Compras Avulsas
-				<div class="col-md-12">
-					Caixas
-				</div>
-			</div>
-		</div>
-	</div>
-	-->
 </div>
 </body>
-<script src="../js/vendor/jquery.js"></script>
-<script src="../js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+
 <script src="../js/scripts.js"></script>
 <script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>  
 <script>
-            $(document).ready(function() {
-                $('.dinheiro').mask('#.##0,00', {reverse: true});
+    $(document).ready(function() {
+        $('.dinheiro').mask('#.##0,00', {reverse: true});
+
+        function atualizaTransacoes() {
+            idCaixa = $('#id_caixa').val();
+            
+            $.ajax({
+                method: "POST",
+                url: "ajax.php",
+                data: {
+                    "act": 'listaTransacoes',
+                    "id_caixa": idCaixa,
+                }
+            })
+            .done(function(msg) {
+                //refresh transacoes
+                $("#container_transacoes").html(msg);
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
             });
-        </script>
+        }
+        
+        function limparFormTransacoes() {
+            $("#descricao").val("");
+            $("#valor").val("");
+            $("#forma_pagamento").val("");
+        }
+        
+        function atualizaRelatorio() {
+            idCaixa = $('#id_caixa').val();
+            
+            $.ajax({
+                method: "POST",
+                url: "ajax.php",
+                data: {
+                    "act": 'relatorioCaixa',
+                    "id_caixa": idCaixa,
+                }
+            })
+            .done(function(msg) {
+                //refresh transacoes
+                $("#container_relatorio").html(msg);
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+            });
+        }
+        
+        $("#fecharCaixa").on("click", function() {
+            if ($("#valor_fechar_caixa").val() == "") {
+                event.preventDefault();
+                alert('Preencha o valor em dinheiro no caixa no momento do fechamento.');
+            } else {
+                if (!confirm("Deseja realmente fechar o caixa?")) {
+                    event.preventDefault();
+                }
+            }
+        });
+        
+        $(document).on("click", "[name='apagar_transacao']", function() {
+            id = $(this).attr('id_transacao');
+            conf1 = confirm('Deseja prosseguir a apagar a transacao ' + id + '?');
+            if (!conf1) return;
+            $.ajax({
+                method: "POST",
+                url: "ajax.php",
+                data: {
+                    "act": 'apagaTransacao',
+                    "id_transacao": id,
+                }
+            })
+            .done(function(msg) {
+                //refresh transacoes
+                atualizaTransacoes();
+                atualizaRelatorio();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+            });
+        });
+        
+        $("#adicionarTransacao").on("click", function() {
+            event.preventDefault();
+            idCaixa = $('#id_caixa').val();
+            descricao = $("#descricao").val();
+            valor = $("#valor").val();
+            forma_pagamento = $("#forma_pagamento").val();
+            
+            if (idCaixa == "" || descricao == "" || valor == "" || forma_pagamento == "") {
+                alert("Preencha todos os campos");
+                return false;
+            }
+            
+            $.ajax({
+                method: "POST",
+                url: "ajax.php",
+                data: {
+                    "act": 'cadastraTransacao',
+                    "id_caixa": idCaixa,
+                    "descricao": descricao,
+                    "valor": valor,
+                    "forma_pagamento": forma_pagamento
+                }
+            })
+            .done(function(msg) {
+                //refresh transacoes
+                atualizaTransacoes();
+                atualizaRelatorio();
+                limparFormTransacoes();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+            });
+        });
+        
+    });
+    
+</script>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
