@@ -1,7 +1,7 @@
 <?php
 class Listas extends Livres {
 
-    public function produtosListaAtivos($lista = "1", $ordem = "nome", $categoria = "", $filtro = "") {
+    public function produtosListaAtivos($lista = "1", $ordem = "nome", $categoria = "", $filtro = "", $ignorarSoftdelete = false) {
         $sql = "SELECT *, l.id as id_item, l.ativo as item_ativo, p.id as id_produto, p.imagem as imagem, p.nome FROM listas_itens l LEFT JOIN produtos p";
         $sql .= " ON p.id = l.id_produto WHERE l.id_lista = ".$lista;
         $sql .= " AND l.ativo = 1";
@@ -10,6 +10,9 @@ class Listas extends Livres {
         }
         if ($filtro != "") {
             $sql .= " AND p.nome LIKE '%".$filtro."%'";
+        }
+        if ($ignorarSoftdelete) {
+            $sql .= " soft_delete = 0";
         }
         $ordem = strtolower($ordem);
         $ordem = str_replace("ç","c",$ordem);
@@ -20,11 +23,18 @@ class Listas extends Livres {
         return $this->listarProdutos($sql);
     }
     
-    public function produtosListaTodos($lista = "1", $ordem = "nome", $categoria = "") {
+    public function produtosListaTodos($lista = "1", $ordem = "nome", $categoria = "", $ignorarSoftdelete = false) {
         $sql = "SELECT *, l.id as id_item, l.ativo as item_ativo, p.id as id_produto, p.imagem as imagem FROM produtos p LEFT JOIN listas_itens l";
         $sql .= " ON (p.id = l.id_produto AND l.id_lista = ".$lista.")";
         if ($categoria != "") {
             $sql .= " WHERE p.categoria = '".$categoria."'";
+            if ($ignorarSoftdelete) {
+                $sql .= " soft_delete = 0";
+            }
+        } else {
+            if ($ignorarSoftdelete) {
+                $sql .= " WHERE soft_delete = 0";
+            }
         }
         $ordem = strtolower($ordem);
         $ordem = str_replace("ç","c",$ordem);

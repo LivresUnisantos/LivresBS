@@ -1,9 +1,12 @@
 <?php
 class Produtos extends Livres {
 
-    public function listarProdutosTodos($ordem = "nome") {
-        $sql = "SELECT * FROM produtos ";
-        $sql .= "ORDER BY ".$ordem." ASC";
+    public function listarProdutosTodos($ordem = "nome", $ignorarSoftdelete = false) {
+        $sql = "SELECT * FROM produtos";
+        if ($ignorarSoftdelete) {
+            $sql .= " WHERE soft_delete = 0";
+        }
+        $sql .= " ORDER BY ".$ordem." ASC";
         return $this->listarProdutos($sql);
     }
 

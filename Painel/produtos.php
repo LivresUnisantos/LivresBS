@@ -16,7 +16,7 @@ $twig = new \Twig\Environment($loader, ['debug' => false]);
 
 $oProdutos = new Produtos();
 
-$produtos = $oProdutos->listarProdutosTodos();
+$produtos = $oProdutos->listarProdutosTodos("nome", true);
 
 echo $twig->render('editar_produtos.html', [
     "titulo"            => "LivresBS - Editar Produtos",

@@ -62,7 +62,7 @@ if (isset($_POST["act"])) {
 if (isset($_GET["lista_selecionada"]) && !isset($idLista)) {
     $idLista = $_GET["lista_selecionada"];
     $nomeLista = $oListas->getNomeLista($idLista);
-    $produtos = $oListas->produtosListaTodos($idLista);
+    $produtos = $oListas->produtosListaTodos($idLista, "nome", "", true);
 } else {
     $idLista = 0;
     $nomeLista = "";

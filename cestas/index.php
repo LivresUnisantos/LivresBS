@@ -266,6 +266,7 @@ if (!isset($_GET["cpf"])) {
 								<?php if ($row["pedido_variavel"] > 0) { echo '<br>+ Variável R$'.number_format($row["pedido_variavel"],2,",","."); } ?>
 								<?php if ($row["pedido_avulso"] > 0) { echo '<br>+ Compra Extra: R$'.number_format($row["pedido_avulso"],2,",","."); } ?>
 								<?php if ($row["pedido_mensal"] > 0) { echo '<br>+ Cesta Mensal: '.number_format($row["pedido_mensal"],2,",","."); } ?>
+								<?php if ($row["pedido_entrega_valor"] > 0) { echo '<br>+ Entrega: '.number_format($row["pedido_entrega_valor"],2,",","."); } ?>
                             </div>
 					    </div>
 					</div>
