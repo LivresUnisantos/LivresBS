@@ -119,7 +119,7 @@ endif;
 
                 echo "</article>";
             endforeach;
-            $Read->FullRead("SELECT id, nome, unidade, produtor FROM " . DB_PRODUTO . " ORDER BY nome");
+            $Read->FullRead("SELECT id, nome, unidade, produtor FROM " . DB_PRODUTO . " WHERE soft_delete = 0 ORDER BY nome");
             $optPdt = "<option value=''>Selecione</option>";
             foreach ($Read->getResult() as $Pd):
                 $optPdt .= "<option value='{$Pd['id']}'>{$Pd['nome']} [{$Pd['unidade']}] - {$Pd['produtor']}</option>";

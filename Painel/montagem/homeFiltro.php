@@ -41,6 +41,7 @@ if ($itensPD):
                         . "LEFT JOIN " . DB_PD_CONS . " AS c "
                         . "ON b.pedido_id = c.pedido_id "
                         . "WHERE c.{$wData[0]} AND a.previsao <= :p "
+                        . "AND soft_delete = 0 "
                         . "GROUP BY b.produto_id "
                         . "ORDER BY nome", "$wData[1]&p={$dataPrevisao[0]}");
                 if ($Read->getResult()):
