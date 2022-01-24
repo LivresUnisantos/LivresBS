@@ -45,17 +45,11 @@ class Caixa extends Livres {
     
     public function abrirCaixa($idAdmin, $valor) {
         $dataAbertura = date("Y-m-d H:i:s");
-        $valorAbertura = $valor;
-        $valorAbertura = str_replace("R","",$valorAbertura);
-        $valorAbertura = str_replace("$","",$valorAbertura);
-        $valorAbertura = str_replace(" ","",$valorAbertura);
-        $valorAbertura = str_replace(".","",$valorAbertura);
-        $valorAbertura = str_replace(",",".",$valorAbertura);
         $sql = "INSERT INTO Caixa (id_admin, dataAbertura) VALUES (".$idAdmin.",'".$dataAbertura."')";
         $st = $this->conn()->prepare($sql);
         if ($st->execute()) {
             $id = $this->getCaixaAberto();
-            $this->cadastraTransacao($id, "Saldo Abertura de Caixa", $valorAbertura, $this->idAbertura);
+            $this->cadastraTransacao($id, "Saldo Abertura de Caixa", $valor, $this->idAbertura);
             return true;
         } else {
             return false;
@@ -127,16 +121,9 @@ class Caixa extends Livres {
     }
     
     public function fecharCaixa($idCaixa, $valor) {
-        $valor = str_replace("R", "", $valor);
-        $valor = str_replace("$", "", $valor);
-        $valor = str_replace(" ", "", $valor);
-        $valor = str_replace(".", "", $valor);
-        $valor = str_replace(",", ".", $valor);
-        
         $sql = "UPDATE Caixa SET dataFechamento = '".date("Y-m-d H:m:i")."' WHERE id = ".$idCaixa;
         $st = $this->conn()->prepare($sql);
         if ($st->execute()) {
-            echo 2222;
             return $this->cadastraTransacao($idCaixa, "Saldo Fechamento de Caixa", -1*$valor, $this->idFechamento);
         } else {
             return false;
