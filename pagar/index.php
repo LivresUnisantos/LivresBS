@@ -16,12 +16,14 @@ $pedido = $pedidos->pedidoPeloPix($uuid);
 if ($pixCopiaCola && $pedido) {
     echo "Olá ".$pedido["consumidor"]."<br>";
     echo "Este é o código para pagamento da cesta do dia ".date("d/m/Y",strtotime($pedido["pedido_data"]))."<br>";
-    echo "Valor total: R$".number_format($pedido["pgt_valor_linkpix"],2,",",".")."<br>";
+    echo "<b>Valor total: R$".number_format($pedido["pgt_valor_linkpix"],2,",",".")."</b><br>";
     echo $pix->PrintQRCode($pixCopiaCola);
     echo '<br>';
     echo "Você também pode copiar o código abaixo e colar no aplicativo de seu banco<br>";
     echo "<p>";
+    echo '<textarea rows="4" cols="60">';
     echo $pixCopiaCola;
+    echo '</textarea>';
     echo "</p>";
 } else {
     echo "Link de pagamento/pedido não encontrado";
