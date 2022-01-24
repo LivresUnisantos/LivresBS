@@ -13,7 +13,7 @@ endif;
 //DEFINE O CALLBACK E RECUPERA O POST
 $jSON = null;
 $CallBack = 'Pedidos';
-$PostData = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+$PostData = filter_input_array(INPUT_POST);
 
 //VALIDA AÇÃO
 if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallBack):
@@ -413,14 +413,12 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
                         . "ON a.consumidor_id = b.id "
                         . "LEFT JOIN " . DB_ENTREGA . " AS d "
                         . "ON a.pedido_retirada = d.id "
-                        . "LEFT JOIN " . DB_PRODUTORES ." AS e "
-                        . " ON c.item_produtor = e.id "
                         . "WHERE $wData[0] "
-                        . "AND b.consumidor = :co "
+                        . "AND b.id = :co "
                         . "GROUP BY a.pedido_id "
                         . "ORDER BY b.consumidor ASC ", "{$wData[1]}&co={$PostData["consumidor"]}");
                 $itensPD = $Read->getResult();
-
+                
                 if (!$itensPD):
                     $jSON['trigger'] = AjaxErro("<span class='icon-notification'>Olá, não existe nenhum pedido!</span>", E_USER_NOTICE);
                     $jSON['clear'] = true;
@@ -462,13 +460,12 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
                         . "ON a.consumidor_id = b.id "
                         . "LEFT JOIN " . DB_ENTREGA . " AS d "
                         . "ON a.pedido_retirada = d.id "
-                        . "LEFT JOIN " . DB_PRODUTORES ." AS e "
-                        . " ON c.item_produtor = e.id "
                         . "WHERE a.$wData[0] AND c.item_tipo_cesta != 'pre' "
-                        . "AND c.item_produto = :ip "
+                        . "AND c.produto_id = :ip "
                         . "GROUP BY a.consumidor_id "
                         . "ORDER BY b.consumidor ASC ", "{$wData[1]}&ip={$PostData["produto"]}");
                 $itensPD = $Read->getResult();
+
                 if (!$itensPD):
                     $jSON['trigger'] = AjaxErro("<span class='icon-notification'>Olá, não existe nenhum pedido!</span>", E_USER_NOTICE);
                     $jSON['clear'] = true;
@@ -481,12 +478,12 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
                             . "ON b.pedido_id = a.pedido_id "
                             . "WHERE $wData[0] "
                             . "AND b.item_tipo_cesta != 'pre' "
-                            . "AND b.item_produto = :ip", "{$wData[1]}&ip={$PostData["produto"]}");
+                            . "AND b.produto_id = :ip", "{$wData[1]}&ip={$PostData["produto"]}");
                     if ($Read->getResult()):
                         $PedidosTotal = $Read->getResult()[0]['cestas'];
                         $PedidosItens = $Read->getResult()[0]['itens'];
 
-                        $total = "<div style='font-size:.8rem; text-align:center; color:#555;'>Pesquisa por <b>{$PostData["produto"]}</b> tem como resultado {$PedidosTotal} cestas  num total de {$PedidosItens} itens</div>";
+                        $total = "<div style='font-size:.8rem; text-align:center; color:#555;'>Pesquisa por <b>{$itensPD[0]['item_produto']}</b> tem como resultado {$PedidosTotal} cestas  num total de {$PedidosItens} itens</div>";
                     endif;
                     $i = 0;
                     foreach ($itensPD as $Itens):
@@ -504,9 +501,9 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
                                 . "LEFT JOIN " . DB_UNIDADE . " AS e "
                                 . "ON a.item_tipo = e.id "
                                 . "LEFT JOIN " . DB_PRODUTORES . " AS f "
-                                . "ON a.item_produtor = f.id "
+                                . "ON a.item_produtor = f.id "                                
                                 . "WHERE a.pedido_id = :pi "
-                                . "AND a.item_produto = :ip "
+                                . "AND a.produto_id = :ip "
                                 . "GROUP BY a.item_id "
                                 . "ORDER BY d.nome, a.item_id", "pi={$pedido_id}&ip={$PostData["produto"]}");
                         $ReadPrincipal = $Read->getResult();
@@ -563,8 +560,6 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
                                 . "ON a.produto_id = d.id "
                                 . "LEFT JOIN " . DB_UNIDADE . " AS e "
                                 . "ON a.item_tipo = e.id "
-                                . "LEFT JOIN " . DB_PRODUTORES ." AS f "
-                                . " ON a.item_produtor = f.id "
                                 . "WHERE a.pedido_id = :pi "
                                 . "GROUP BY a.item_id "
                                 . "ORDER BY d.nome, a.item_id", "pi={$pedido_id}");
@@ -629,8 +624,6 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
                                 . "ON a.produto_id = d.id "
                                 . "LEFT JOIN " . DB_UNIDADE . " AS e "
                                 . "ON a.item_tipo = e.id "
-                                . "LEFT JOIN " . DB_PRODUTORES ." AS f "
-                                . " ON a.item_produtor = f.id "
                                 . "WHERE a.pedido_id = :pi "
                                 . "GROUP BY a.item_id "
                                 . "ORDER BY d.nome, a.item_id", "pi={$pedido_id}");

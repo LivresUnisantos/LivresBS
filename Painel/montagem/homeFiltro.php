@@ -20,22 +20,35 @@ if ($itensPD):
                         . "WHERE $wData[0] AND a.pedido_pre = 0 "
                         . "ORDER BY b.consumidor ASC ", "{$wData[1]}");
                 $Read->getResult();
-
-                if ($Read->getResult()):
-                    echo '<datalist id="Consumidores">';
-                    foreach ($Read->getResult() as $Pdt):
-                        echo "<option value='{$Pdt['consumidor']}'></option>";
-                    endforeach;
-                    echo '</datalist>';
-                endif;
                 ?>
-                <input style="padding: 8px;" list="Consumidores" type="text" name="consumidor" placeholder="Filtrar por consumidor" />
+                <select class="js-example-basic-single" name="consumidor">
+                    <option value="">Filtrar por consumidor</option>
+                    <?php
+                    if ($Read->getResult()):
+                        foreach ($Read->getResult() as $Pdt):
+                            ?>
+                            <option value="<?= $Pdt['id'] ?>"><?= $Pdt['consumidor'] ?></option>
+                            <?php
+                        endforeach;
+                    endif;
+                    ?>
+                </select>
+
+                <!--                if ($Read->getResult()):
+                                    echo '<datalist id="Consumidores">';
+                                    foreach ($Read->getResult() as $Pdt):
+                                        echo "<option value='{$Pdt['consumidor']}'></option>";
+                                    endforeach;
+                                    echo '</datalist>';
+                                endif;
+                                ?>
+                                <input style="padding: 8px;" list="Consumidores" type="text" name="consumidor" placeholder="Filtrar por consumidor" />-->
             </label>
 
             <label class="box box25">
                 <?php
                 $dataPrevisao = explode(' ', $wData[1]);
-                $Read->FullRead("SELECT a.nome FROM " . DB_PRODUTO . " AS a "
+                $Read->FullRead("SELECT a.id, a.nome FROM " . DB_PRODUTO . " AS a "
                         . "RIGHT JOIN " . DB_PD_CONS_ITENS . " AS b "
                         . "ON a.id = b.produto_id "
                         . "LEFT JOIN " . DB_PD_CONS . " AS c "
@@ -44,15 +57,19 @@ if ($itensPD):
                         . "AND soft_delete = 0 "
                         . "GROUP BY b.produto_id "
                         . "ORDER BY nome", "$wData[1]&p={$dataPrevisao[0]}");
-                if ($Read->getResult()):
-                    echo '<datalist id="Produtos">';
-                    foreach ($Read->getResult() as $Pdt):
-                        echo "<option value='{$Pdt['nome']}'></option>";
-                    endforeach;
-                    echo '</datalist>';
-                endif;
                 ?>
-                <input style="padding: 8px;" list="Produtos" type="text" name="produto" placeholder="Filtrar por produto" />
+                <select class="js-example-basic-single" name="produto">
+                    <option value="">Filtrar por produto</option>
+                    <?php
+                    if ($Read->getResult()):
+                        foreach ($Read->getResult() as $Pdt):
+                            ?>
+                            <option value="<?= $Pdt['id'] ?>"><?= $Pdt['nome'] ?></option>
+                            <?php
+                        endforeach;
+                    endif;
+                    ?>
+                </select>
             </label>
             <label class="box box25">
                 <select name="retirada">
@@ -78,3 +95,10 @@ if ($itensPD):
         </form>
     </header>
 <?php endif; ?>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+                $(document).ready(function () {
+                    $('.js-example-basic-single').select2();
+                });
+</script>

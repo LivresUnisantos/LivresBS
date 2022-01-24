@@ -50,8 +50,10 @@ $(function () {
         e.preventDefault();
         e.stopPropagation();
         var form = $(this);
+        
         var callback = form.find('input[name="callback"]').val();
         var callback_action = form.find('input[name="callback_action"]').val();
+        
         if (typeof tinyMCE !== 'undefined') {
             tinyMCE.triggerSave();
         }
@@ -160,6 +162,7 @@ $(function () {
                         if (form.find('.label_publish')) {
                             form.find('.label_publish').removeClass('active');
                         }
+                        $('.js-example-basic-single').select2("val", "");
                     }
 
                     //CLEAR INPUT FILE

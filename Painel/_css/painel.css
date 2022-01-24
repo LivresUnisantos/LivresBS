@@ -4120,3 +4120,20 @@ div.mce-fullscreen{z-index: 97;}
     text-align: center;
     box-shadow: 0 -2px 4px #ccc;
 }
+
+.select2-container{width:100% !important;}
+.select2-container--default .select2-selection--single{
+    width: 100%;
+    font-size: 0.875em;
+    font-weight: 300;
+    border:0 !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered{
+    padding: 9px;
+    width: 100%;
+    font-size: 0.875em;
+    font-weight: 300;
+    border: 1px solid #ccc;
+    line-height: 18px !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow{height:35px}
