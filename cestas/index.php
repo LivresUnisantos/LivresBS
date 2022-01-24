@@ -227,6 +227,15 @@ if (!isset($_GET["cpf"])) {
 			?>
             <?php
             if (isset($_GET["cesta_entrega"]) && $_GET["cesta_entrega"] != "") {
+                /*$sqlParam = "SELECT * FROM Parametros WHERE parametro = 'url_pix_pagamento'";
+                $st = $conn->prepare($sqlParam);
+                $st->execute();
+                if ($st->rowCount() > 0) {
+                    $rs = $st->fetch();
+                    $url = $rs["valor"];
+                }*/
+                $url = $livres->getParametro("url_pix_pagamento");
+                
                 $sqlEntregue = "SELECT * FROM pedidos_consolidados ped
                                 LEFT JOIN pedidos_consolidados_itens it ON it.pedido_id = ped.pedido_id
                                 LEFT JOIN unidades un ON it.item_tipo = un.id
@@ -266,7 +275,34 @@ if (!isset($_GET["cpf"])) {
 								<?php if ($row["pedido_variavel"] > 0) { echo '<br>+ Variável R$'.number_format($row["pedido_variavel"],2,",","."); } ?>
 								<?php if ($row["pedido_avulso"] > 0) { echo '<br>+ Compra Extra: R$'.number_format($row["pedido_avulso"],2,",","."); } ?>
 								<?php if ($row["pedido_mensal"] > 0) { echo '<br>+ Cesta Mensal: '.number_format($row["pedido_mensal"],2,",","."); } ?>
-								<?php if ($row["pedido_entrega_valor"] > 0) { echo '<br>+ Entrega: '.number_format($row["pedido_entrega_valor"],2,",","."); } ?>
+								<?php
+								/*echo '<br>---<br>';
+								echo '1)'.isset($url);
+								echo '<br>';
+								echo '2)'.$url;
+								echo '<br>';
+								echo '3)'.$row["pgt_pix_uuid"];
+								echo '<br>';
+								echo '4)'.$row["pgt_status"];
+								echo '<br>';*/
+								if (isset($url) && $url != "" && $row["pgt_pix_uuid"] != "" && $row["pgt_status"] == 0) {
+								    $pix = new Pix;
+								    $pedidos = new Pedidos;
+								    $uuid = $row["pgt_pix_uuid"];
+								    $pixCopiaCola = $pix->showCopiaCola($uuid);
+								    $pedido = $pedidos->pedidoPeloPix($uuid);
+								    $url .= $uuid;
+								    echo '<p>';
+								    echo 'Utilize o QR Code abaixo para pagamento via PIX. Clique no QR Code para mais detalhes.';
+								    echo 'Você também pode copiar o código "Copia e Cola" e colar no aplicativo do seu banco para realizar o pagamento.';
+							        echo '<a href="'.$url.'" target="_blank" title="Clique aqui para efetuar pagamento via PIX">';
+							        echo '<p>';
+							        echo $pix->PrintQRCode($pixCopiaCola);
+							        echo '</p>';
+							        echo '</a>';
+							        echo '</p>';
+								}
+								?>
                             </div>
 					    </div>
 					</div>
