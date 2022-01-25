@@ -290,7 +290,7 @@ if (!isset($_GET["cpf"])) {
                 if (($opcao1 != "NULL" && $qt1 == "NULL") || ($opcao2 != "NULL" && $qt2 == "NULL")) {
                     $msg = "&nbsp;Você precisa selecionar a quantidade de produtos nas opções de variável preenchidas.";
                 } else {
-                    if ($endereco_entrega == "" && ($delivery=="Sim" || $delivery="Não sei ainda")) {
+                    if ($endereco_entrega == "" && ($delivery == "Sim" || $delivery == "Não sei ainda")) {
                         $msg = "&nbsp;Você precisa preencher o seu endereço de entrega.";
                     } else {
                         if (!isset($_POST["adicional"])) {
