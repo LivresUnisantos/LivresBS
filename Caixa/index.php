@@ -119,7 +119,7 @@ if (isset($_GET["selecionarCaixa"])) {
         if (is_null($rs["dataFechamento"])) {
             //$_SESSION["idCaixa"] = $idCaixa;
         } else {
-            echo "<p>O caixa selecionado já está fechado;</p>";
+            echo "<p><b>O caixa selecionado já foi fechado</b></p>";
         }
     }
 }
@@ -159,6 +159,7 @@ if (!isset($_GET["selecionarCaixa"])) {
 if (isset($_GET["selecionarCaixa"])) {
     $idCaixa = $_GET["selecionarCaixa"];
     $formas = $oCaixa->getFormas();
+    $caixaAberto = $oCaixa->caixaAberto($idCaixa);
 }   
 ?>
 	<?php if (isset($_GET["selecionarCaixa"])) { ?>
@@ -166,11 +167,15 @@ if (isset($_GET["selecionarCaixa"])) {
     	    <div class="col-md-12 .table-responsive" id="container_transacoes">
                 <?php
                 echo '<b>Caixa aberto em '.date('d/m/Y H:i:s', strtotime($oCaixa->getCaixa($idCaixa)["dataAbertura"])).'</b>';
-                echo $oCaixa->listaTransacoes($idCaixa);
+                if (!$caixaAberto) {
+                    echo '<b><p>Caixa fechado em '.date("d/m/Y H:i:s",strtotime($rs["dataFechamento"])).'</b><br>';
+                }
+                echo $oCaixa->listaTransacoes($idCaixa, $caixaAberto);
                 ?>
     	    </div>
     	</div>
     	
+    	<?php if ($caixaAberto) { ?>
     	<div class="row">
     		<div class="col-md-12">
                 <form role="form" method="POST" class="form-inline">
@@ -207,6 +212,7 @@ if (isset($_GET["selecionarCaixa"])) {
                 </form>
             </div>
     	</div>
+    	<?php } ?>
 	<?php } ?>
 	<div id="container_rodape" class="row">
     	<div id="container_relatorio" class="col-3">
@@ -215,7 +221,8 @@ if (isset($_GET["selecionarCaixa"])) {
             	if ($caixas = $oCaixa->listarCaixasFechados()) {
             	    echo "<h5>Relatório de Caixas Fechados</h5>";
                 	foreach ($caixas as $row) {
-                	    echo date("d/m/Y H:i",strtotime($row["dataAbertura"])).' - <a href="?verRelatorio=1&id_caixa_rel='.$row["id"].'">Ver Relatório</a><br>';
+                	    echo date("d/m/Y H:i",strtotime($row["dataAbertura"])).' - <a href="?verRelatorio=1&id_caixa_rel='.$row["id"].'">Ver Relatório</a> | ';
+                	    echo '<a href="?selecionarCaixa='.$row["id"].'">Ver Detalhes</a><br>';
                 	}
             	}
             	
@@ -232,7 +239,7 @@ if (isset($_GET["selecionarCaixa"])) {
     	?>
         	<div id="container_comentario" class="col-9">
         	    <h5>Comentários</h5>
-        	    <p><textarea rows="10" cols="100" id="comentario" name="comentario"><?php echo $oCaixa->getComentario($idCaixa);?></textarea></p>
+        	    <p><textarea rows="10" cols="100" id="comentario" name="comentario" <?php if (!$caixaAberto) echo 'disabled="disabled"'; ?>><?php echo $oCaixa->getComentario($idCaixa);?></textarea></p>
         	    <p><button id="salvar_comentario" name="salvar_comentario" class="btn btn-danger" style="display: none;">Salvar Comentário</button></p>
         	</div>
         <?php
