@@ -239,7 +239,7 @@ if (isset($_GET["selecionarCaixa"])) {
     	?>
         	<div id="container_comentario" class="col-9">
         	    <h5>Comentários</h5>
-        	    <p><textarea rows="10" cols="100" id="comentario" name="comentario" <?php if (!$caixaAberto) echo 'disabled="disabled"'; ?>><?php echo $oCaixa->getComentario($idCaixa);?></textarea></p>
+        	    <p><textarea rows="10" cols="100" id="comentario" name="comentario">><?php echo $oCaixa->getComentario($idCaixa);?></textarea></p>
         	    <p><button id="salvar_comentario" name="salvar_comentario" class="btn btn-danger" style="display: none;">Salvar Comentário</button></p>
         	</div>
         <?php
