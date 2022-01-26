@@ -208,24 +208,37 @@ if (isset($_GET["selecionarCaixa"])) {
             </div>
     	</div>
 	<?php } ?>
-	<div id="container_relatorio">
-    	<?php
-    	if (!isset($_GET["selecionarCaixa"])) {
-        	if ($caixas = $oCaixa->listarCaixasFechados()) {
-        	    echo "<h5>Relatório de Caixas Fechados</h5>";
-            	foreach ($caixas as $row) {
-            	    echo date("d/m/Y H:i",strtotime($row["dataAbertura"])).' - <a href="?verRelatorio=1&id_caixa_rel='.$row["id"].'">Ver Relatório</a><br>';
+	<div id="container_rodape" class="row">
+    	<div id="container_relatorio" class="col-3">
+        	<?php
+        	if (!isset($_GET["selecionarCaixa"])) {
+            	if ($caixas = $oCaixa->listarCaixasFechados()) {
+            	    echo "<h5>Relatório de Caixas Fechados</h5>";
+                	foreach ($caixas as $row) {
+                	    echo date("d/m/Y H:i",strtotime($row["dataAbertura"])).' - <a href="?verRelatorio=1&id_caixa_rel='.$row["id"].'">Ver Relatório</a><br>';
+                	}
             	}
+            	
+            	if (isset($_GET["verRelatorio"]) && isset($_GET["id_caixa_rel"])) {
+            	    echo $oCaixa->relatorioCaixa($_GET["id_caixa_rel"]);
+            	}
+        	} else {
+        	    echo $oCaixa->relatorioCaixa($_GET["selecionarCaixa"]);
         	}
-        	
-        	if (isset($_GET["verRelatorio"]) && isset($_GET["id_caixa_rel"])) {
-        	    echo $oCaixa->relatorioCaixa($_GET["id_caixa_rel"]);
-        	}
-    	} else {
-    	    echo $oCaixa->relatorioCaixa($_GET["selecionarCaixa"]);
+        	?>
+    	</div>
+    	<?php
+        if (isset($_GET["selecionarCaixa"])) {
+    	?>
+        	<div id="container_comentario" class="col-9">
+        	    <h5>Comentários</h5>
+        	    <p><textarea rows="10" cols="100" id="comentario" name="comentario"><?php echo $oCaixa->getComentario($idCaixa);?></textarea></p>
+        	    <p><button id="salvar_comentario" name="salvar_comentario" class="btn btn-danger" style="display: none;">Salvar Comentário</button></p>
+        	</div>
+        <?php
     	}
     	?>
-	</div>
+    </div>
 </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -238,8 +251,10 @@ if (isset($_GET["selecionarCaixa"])) {
 <script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>  
 <script>
     $(document).ready(function() {
+        //adicionar eventos ao carregar página
         $('.dinheiro').mask('#.##0,00', {reverse: true});
-
+        eventoCaixaComentario();
+        /* */ 
         function atualizaTransacoes() {
             idCaixa = $('#id_caixa').val();
             
@@ -347,6 +362,44 @@ if (isset($_GET["selecionarCaixa"])) {
                 atualizaTransacoes();
                 atualizaRelatorio();
                 limparFormTransacoes();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+            });
+        });
+
+        function eventoCaixaComentario() {
+            $("#comentario").one('change keyup paste', function (e) {
+                $("#comentario").addClass('alert-danger');
+                $("#salvar_comentario").show();
+            });
+        }
+        
+        $("#salvar_comentario").on("click", function() {
+            event.preventDefault();
+            idCaixa = $('#id_caixa').val();
+            comentario = $("#comentario").val();
+            
+            if (idCaixa == "") {
+                alert("Falha ao identificar o caixa aberto");
+                return false;
+            }
+            
+            $.ajax({
+                method: "POST",
+                url: "ajax.php",
+                data: {
+                    "act": 'salvarComentario',
+                    "id_caixa": idCaixa,
+                    "comentario": comentario
+                }
+            })
+            .done(function(msg) {
+                //remover classe "vermelho" do comentário e botão
+                $("#comentario").removeClass('alert-danger');
+                eventoCaixaComentario();
+                $("#salvar_comentario").hide();
+                
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
                 alert(jqXHR.responseText);

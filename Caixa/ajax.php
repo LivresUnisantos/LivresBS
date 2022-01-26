@@ -43,17 +43,24 @@ if (isset($_POST["act"])) {
                 echo "Transacao Apagada";
             } else {
                 http_response_code(400);
-                echo "Falha ao apagar transacao";
+                echo "Falha ao apagar transação";
             }
         break;
         case "relatorioCaixa":
-            
             if ($rel = $caixa->relatorioCaixa($_POST["id_caixa"])) {
                 http_response_code(200);
                 echo $rel;
             } else {
                 http_response_code(400);
                 echo "Falha ao gerar relatório";
+            }
+        break;
+        case "salvarComentario":
+            if ($msg = $caixa->salvaComentario($_POST["id_caixa"], $_POST["comentario"])) {
+                http_response_code(200);
+            } else {
+                http_response_code(400);
+                echo "Falha ao salvar comentário";
             }
         break;
     }
