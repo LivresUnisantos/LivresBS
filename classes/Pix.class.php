@@ -25,7 +25,8 @@ class Pix extends Livres {
         
         $this->pixChave = $this->getParametro('pixChave');
         $dt = $this->dataParaTime($this->dataEntrega);
-        $this->pixDescricao = "Cesta dia ".Date('d/m/Y', $dt);
+        //$this->pixDescricao = "Cesta dia ".Date('d/m/Y', $dt);
+        $this->pixDescricao = "CestaLivres";
         $this->pixNomeConta = $this->getParametro('pixNomeConta');
         $this->pixCidadeConta = $this->getParametro('pixCidadeConta');
     }
