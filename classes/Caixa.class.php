@@ -144,7 +144,8 @@ class Caixa extends Livres {
             $dinheiro = 0;
             $sangria = 0;
             $rs = $st->fetchAll();
-            $html = '<div class="col-3">';
+            $html = "";
+            //$html = '<div class="col-3">';
             $html .= '<b>Caixa de ' . date('d/m/Y H:i:s', strtotime($rs[0]["dataAbertura"])).'</b>';
             $html .= '<table class="table table-hover table-bordered table-striped table-sm">';
             $html .= '<thead>';
@@ -225,7 +226,7 @@ class Caixa extends Livres {
 
             $html .= '</tbody>';
             $html .= "</table>";
-            $html .= "</div>";
+            //$html .= "</div>";
             return $html;
         }
         return false;
@@ -266,5 +267,55 @@ class Caixa extends Livres {
         }
         return $formas;
     }
+    
+    //Atualizar comentário do caixa
+    public function salvaComentario($idCaixa, $comentario) {
+        if ($idCaixa == 0 || $idCaixa == "") return false;
+        if (!$this->getCaixa($idCaixa)) return false;
+        
+        $sql = "UPDATE Caixa SET comentario = ? WHERE id = ?";
+        $st = $this->conn()->prepare($sql);
+        if ($st->execute([$comentario, $idCaixa])) {
+            echo $st->debugDumpParams();
+            return true;
+        }
+        echo 'def';
+        return false;
+    }
+    
+    public function getComentario($idCaixa) {
+        if ($idCaixa == 0 || $idCaixa == "") return false;
+        if (!$this->getCaixa($idCaixa)) return false;
+        
+        $sql = "SELECT * FROM  Caixa WHERE id = ?";
+        $st = $this->conn()->prepare($sql);
+        if ($st->execute([$idCaixa])) {
+            if ($st->rowCount() == 0) return false;
+            $rs = $st->fetch();
+            return $rs["comentario"];
+        }
+        return false;
+        
+    }
 }
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
