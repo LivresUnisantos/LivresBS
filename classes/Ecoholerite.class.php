@@ -2,6 +2,11 @@
 class Ecoholerite extends Livres {
 
     public $idAdmin;
+    
+    //ID de atividades com tratamento específico no relatório
+    public $idEntregas = 1;
+    public $idReembolso = 29;
+    public $idTracarRotas = 11;
 
     function __construct($idAdmin = "") {
         $this->idAdmin = $idAdmin;
@@ -103,13 +108,13 @@ class Ecoholerite extends Livres {
     }
 
     /*
-    regra para reembolso/entrega
-    reembolso = 0 / desconsidera reembolsos
-    reembolso = 1 / considera também reembolsos
-    reembolso = 2 / considera apenas reembolsos
+    regra para reembolso/entrega/traçar rotas
+    = 0 / desconsidera reembolso/entrega/traçar rotas
+    = 1 / considera também reembolso/entrega/traçar rotas
+    = 2 / considera apenas reembolso/entrega/traçar rotas
     */
-    public function relatorioPagamento($dataI = "", $dataF = "", $reembolso = 0, $entrega = 0) {
-
+    public function relatorioPagamento($dataI = "", $dataF = "", $reembolso = 0, $entrega = 0, $tracarRotas = 0) {
+        
         $sql = "";
         $sql .= "SELECT ad.nome, SUM(eh.valor) AS valor_total, eh.*, ea.*, ad.* FROM Ecoholerites eh";
         $sql .= " LEFT JOIN Ecoatividades ea";
@@ -118,16 +123,16 @@ class Ecoholerite extends Livres {
         $sql .= " ON eh.id_admin = ad.id";
         $where = " WHERE eh.status = 2";
         if ($reembolso == 0) {
-            $where .= " AND ea.descricao <> 'Reembolso'";
+            $where .= " AND ea.id <> ".$this->idReembolso;
         }
         if ($reembolso == 2) {
-            $where .= " AND ea.descricao = 'Reembolso'";
+            $where .= " AND ea.id = ".$this->idReembolso;
         }
         if ($entrega == 0) {
-            $where .= " AND ea.descricao <> 'Entregas'";
+            $where .= " AND ea.id <> ".$this->idEntregas;
         }
         if ($entrega == 2) {
-            $where .= " AND ea.descricao = 'Entregas'";
+            $where .= " AND ea.id = ".$this->idEntregas;
         }
         if ($dataI != "") {
             $where .= " AND eh.data >= '".$dataI."'";
@@ -135,15 +140,30 @@ class Ecoholerite extends Livres {
         if ($dataF != "") {
             $where .= " AND eh.data <= '".$dataF."'";
         }
+        if ($tracarRotas == 0) {
+            $where .= " AND ea.id <> ".$this->idTracarRotas;
+        }
+        if ($tracarRotas == 2) {
+            $where .= " AND ea.id = ".$this->idTracarRotas;
+        }
+        
         $sql .= $where;
         $sql .= " GROUP BY eh.id_admin";
-        //echo $sql."<br><br>";
+        $sql .= " ORDER BY ad.nome";
         $st = $this->conn()->prepare($sql);
         $st->execute();
 
         if ($st->rowCount() == 0) return false;
+        
+        $colunas = array("nome", "valor_total");
+        $rs = $st->fetchAll();
+        foreach ($rs as $row) {
+            foreach ($colunas as $coluna) {
+                $arr[$row["id"]][$coluna] = $row[$coluna];
+            }
+        }
 
-        return $st->fetchAll();
+        return $arr;
     }
 }
 ?>
