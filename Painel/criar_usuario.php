@@ -16,7 +16,7 @@ $twig = new \Twig\Environment($loader, ['debug' => false]);
     <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="https://livresbs.com.br/Painel/_js/datepicker/datepicker.min.css"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-<link rel="stylesheet" href="painel.css">
+    <!--<link rel="stylesheet" href="painel.css">-->
     </head>
     <body>
 <?php
@@ -27,35 +27,79 @@ echo $twig->render('menu.html', [
     "frequencia_semana" => $calendario->montaDisplayFrequenciaSemana(),
 ]);
 
-if (!isset($_POST["login"]) || !isset($_POST["senha1"]) || !isset($_POST["senha2"])) {
+if (!isset($_POST["login"]) || !isset($_POST["nome"]) || !isset($_POST["cpf"]) || !isset($_POST["nascimento"]) || !isset($_POST["senha1"]) || !isset($_POST["senha2"])) {
     if (isset($_POST["login"])) {
         $login=$_POST["login"];
     } else {
         $login="";
     }
+    if (isset($_POST["nome"])) {
+        $nome=$_POST["nome"];
+    } else {
+        $nome="";
+    }
+    $campos = ["login", "nome", "cpf", "nascimento"];
+    foreach ($campos as $campo) {
+        if (isset($_POST[$campo])) {
+            $$campo = $_POST[$campo];
+        } else {
+            $$campo = "";
+        }
+    }
 ?>
 <form action="" method="POST">
-    <label for="login">Email</label>
-    <input type="text" name="login" id="senha" value="<?php echo $login; ?>" />
-    <label for="senha1">Senha</label>
-    <input type="password" name="senha1" id="senha1" />
-    <label for="senha2">Confirmação Senha</label>
-    <input type="password" name="senha2" id="senha2" />
-    <input type="submit" name="Cadastrar" id="Cadastrar" />
+    <div class="col-3">
+        <div class="form-group">
+            <label for="login">Email</label>
+            <input class="form-control" type="text" name="login" id="senha" value="<?php echo $login; ?>" />
+        </div>
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <input class="form-control" type="text" name="nome" id="senha" value="<?php echo $nome; ?>" />
+        </div>
+        <div class="form-group">
+            <label for="cpf">CPF</label>
+            <input class="form-control" type="text" name="cpf" id="cpf" value="<?php echo $cpf; ?>" />
+        </div>
+        <div class="form-group">
+            <label for="nascimento">Nascimento</label>
+            <input class="form-control" type="date" name="nascimento" id="nascimento" value="<?php echo $nascimento; ?>" />
+        </div>
+        <div class="form-group">
+            <label for="senha1">Senha</label>
+            <input class="form-control" type="password" name="senha1" id="senha1" />
+        </div>
+        <div class="form-group">
+            <label for="senha2">Confirmação Senha</label>
+            <input class="form-control" type="password" name="senha2" id="senha2" />
+        </div>
+        <input class="btn btn-primary" type="submit" name="Cadastrar" id="Cadastrar" value="Cadastrar" />
+    </div>
 </form>
 <?php
 } else {
     $login = $_POST["login"];
+    $nome = $_POST["nome"];
+    $cpf = $_POST["cpf"];
+    $nascimento = $_POST["nascimento"];
     $senha1 = $_POST["senha1"];
     $senha2 = $_POST["senha2"];
-    if (strlen($login) == 0 || strlen($senha1) == 0 || strlen($senha2) == 0) {
+    
+    $cpf = str_replace(".","",$cpf);
+    $cpf = str_replace(",","",$cpf);
+    $cpf = str_replace("-","",$cpf);
+    $cpf = str_replace("","",$cpf);
+    
+    if (strlen($login) == 0 || strlen($nome) == 0 || strlen($cpf) == 0 || strlen($nascimento) == 0 || strlen($senha1) == 0 || strlen($senha2) == 0) {
         echo "Preencha todos os campos.";
     } else {
         if ($senha1 != $senha2) {
             echo "Confirmação de senha não é igual a senha.";
         } else {
             //Verificar se email já existe no banco
-            $conn = new PDO("mysql:host=".$c_db["host"].";dbname=".$c_db["name"].";charset=utf8",$c_db["user"],$c_db["password"]);
+            //$conn = new PDO("mysql:host=".$c_db["host"].";dbname=".$c_db["name"].";charset=utf8",$c_db["user"],$c_db["password"]);
+            $livres = new Livres();
+            $conn = $livres->conn();
             $sql = "SELECT * FROM Admins WHERE login = '".$login."'";
             $st = $conn->prepare($sql);
             $st->execute();
@@ -64,10 +108,14 @@ if (!isset($_POST["login"]) || !isset($_POST["senha1"]) || !isset($_POST["senha2
             } else {
                 //Liberado para cadastrar
                 $senha = password_hash ($senha1,PASSWORD_DEFAULT);
-                $sql = "INSERT INTO Admins (login, password) VALUES ('".$login."','".$senha."')";
+                $sql = "INSERT INTO Admins (login, nome, cpf, nascimento, password, level) VALUES (?, ?, ?, ?, ?, ?)";
                 $st = $conn->prepare($sql);
-                $st->execute();
-                echo "Usuário cadastrado";
+                if ($st->execute([$login, $nome, $cpf, $nascimento, $senha, 1000])) {
+                    echo "Usuário cadastrado";
+                } else {
+                    echo "Falha ao cadastrar usuário<br>";
+                    $st->debugDumpParams();
+                }
             }
         }
     }
