@@ -18,12 +18,20 @@
             </div>
             <input type="text" class="form-control" id="filtro" name="Filtro" placeholder="Procure por nome, data ou atividade">
             {% if permissao_aprovador %}
+            <button class="btn btn-success" type="button" id="aprovar_selecionados" name="aprovar_selecionados">Aprovar Selecionados</button>&nbsp;
             <button class="btn btn-success" type="button" id="aprovar_pendentes" name="aprovar_pendentes">Aprovar Pendentes</button>
             {% endif %}
+        </div>
+        <div class="input-group mb-2 mr-sm-2">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="filtro_pendentes" name="filtro_pendentes">
+                <label class="custom-control-label" for="filtro_pendentes">Só pendentes</label>
+            </div>
         </div>
         <table class="table">
             <thead class="thead-light">
                 <tr>
+                    <th><input type="checkbox" id="selecionar_tudo" name="selecionar_tudo" /></th>
                     <th>Código</th>
                     <th>Nome</th>
                     <th>Data</th>
@@ -38,6 +46,7 @@
             <tbody id="tabela_atividades">
             {% for a in conteudo %}
                 <tr>
+                    <td><input type="checkbox" id="selecionar_{{ a.id_ecoholerite }}" name="selecionar_individual" id_ecoholerite="{{ a.id_ecoholerite }}" /></td>
                     <td>{{ a.id_ecoholerite }}</td>
                     <td>{{ a.nome }}</td>
                     <td>{{ a.data|date('d/m/Y') }}</td>
@@ -129,6 +138,21 @@
     </form>
     <script>
         $(document).ready(function(){
+            $("#selecionar_tudo").on("click", function() {
+                status = $(this).is(':checked');
+                $("[name='selecionar_individual']").each(function(){
+                    if ($(this).parent().parent().is(":visible")) {
+                        if (status == 'true') {
+                            $(this).prop('checked', true);
+                        } else {
+                            $(this).prop('checked', false);
+                        }
+                    } else {
+                        $(this).prop('checked', false);
+                    }
+                });
+            });
+            
             $("#add_nome").val($("#add_nome2").find('option:selected').val());
             $("#add_atividade").on('change', function() {
                 atividade = $(this).find("option:selected");
@@ -180,6 +204,29 @@
                 }
             });
             
+            $("#aprovar_selecionados").on('click', function() {
+                //alert('Funcionalidade ainda não implementada');
+                //return;
+                arr = [];
+                $("[name='selecionar_individual']").each(function(){
+                    if ($(this).is(':checked')) {
+                        arr.push($(this).attr('id_ecoholerite'));
+                    }
+                });
+                $.ajax({
+                    method: "GET",
+                    data: {
+                        act: 'aprovar_selecionados',
+                        ids: arr
+                    },
+                    url: "ecoholerites.php",
+                    })
+                .done(function(msg) {
+                    window.location.href = "ecoholerites.php";
+                });
+                
+            });
+            
             $("#form_add_atividade").on("submit", function() {
                 error=false;
                 console.log($(this));
@@ -188,12 +235,6 @@
                         error=true;
                     }
                 });
-                /*$(this).filter(':select').each(function(){
-                    if ($(this).val() == "") {
-                        error=true;
-                    }
-                });*/
-                
                 if (error) {
                     alert('Preencha todos os campos');
                     event.preventDefault();
@@ -210,9 +251,16 @@
                 status_pago = $("#check-status-pago").filter(':checked').val();
                 //logica = $("[name='radio-logica']").filter(':checked').val();*/
                 
+                pendente = $("#filtro_pendentes").is(':checked');
+                
                 $("#tabela_atividades tr").filter(function() {
                     //pedido_id = $(this).attr('pedido_id');
                     ftexto = $(this).text().toLowerCase().indexOf(texto) > -1;
+                    if (!pendente) {
+                        fpendente = true;
+                    } else {
+                        fpendente = $(this).text().toLowerCase().indexOf("pendente") > -1;
+                    }
                     /*if (!inco_pix) {
                         finco_pix = true;
                     } else {
@@ -235,7 +283,7 @@
                         fstatus=true;
                     }
                     flag = ftexto && finco_pix && finco_pag && fstatus;*/
-                    flag = ftexto;
+                    flag = ftexto && fpendente;
                     /*if (logica == '0') {
                         //todos (AND)
                         flag = ftexto && finco_pix && finco_pag && fstatus;
@@ -248,6 +296,7 @@
             }
             
             $("#filtro").on("keyup", filtrar);
+            $("#filtro_pendentes").on("click", filtrar);
             /*$("#check-status-nao-pago").on("click",filtrar);
             $("#check-status-em-aprovacao").on("click",filtrar);
             $("#check-status-pago").on("click",filtrar);

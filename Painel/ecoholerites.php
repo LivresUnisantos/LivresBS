@@ -53,40 +53,60 @@ if (isset($_GET["act"])) {
             $_SESSION["alerta"] = $alerta;
         }
     } else {
-        $id_atividade = $_GET["id_atividade"];
-        $atividade = $oEcoholerite->atividadesExecutadas($id_atividade);
-        if (!$atividade) {
-            $alerta = "A atividade que você tentou ".$act." não existe";
-            $_SESSION["alerta"] = $alerta;
+        if ($act == 'aprovar_selecionados') {
+            if (isset($_GET["ids"])) {
+                foreach ($_GET["ids"] as $id) {
+                    if (!$oEcoholerite->aprovaAtividadeExecutada($id)) {
+                        $err[] = $id;
+                    }
+                }
+                if (!isset($err)) {
+                    $sucesso = "Tarefas selecionadas foram aprovadas.";
+                    $_SESSION["sucesso"] = $sucesso;
+                } else {
+                    $alerta = "Falha ao aprovar as seguintes tarefas:<br>";
+                    foreach ($err as $e) {
+                        $alerta .= $e."<br>";
+                    }
+                    $alerta["sucesso"] = $alerta;
+                }
+            }
         } else {
-            switch($act) {
-                case "aprovar":
-                    if ($oEcoholerite->aprovaAtividadeExecutada($id_atividade)) {
-                        $sucesso = "Atividade código ".$id_atividade." aprovada";
-                        $_SESSION["sucesso"] = $sucesso;
-                    } else {
-                        $alerta = "Erro ao aprovar atividade";
-                        $_SESSION["alerta"] = $alerta;
-                    }
-                break;
-                case "reprovar":
-                    if ($oEcoholerite->reprovaAtividadeExecutada($id_atividade)) {
-                        $sucesso = "Atividade código ".$id_atividade." reprovada";
-                        $_SESSION["sucesso"] = $sucesso;
-                    } else {
-                        $alerta = "Erro ao reprovar atividade";
-                        $_SESSION["alerta"] = $alerta;
-                    }
-                break;
-                case "remover":
-                    if ($oEcoholerite->removeAtividadeExecutada($id_atividade)) {
-                        $sucesso = "Atividade código ".$id_atividade." ('".$atividade["descricao"]."' de '".$atividade["nome"]."' de '".date('d/m/Y',strtotime($atividade["data"]))."') removida";
-                        $_SESSION["sucesso"] = $sucesso;
-                    } else {
-                        $alerta = "Erro ao remover atividade";
-                        $_SESSION["alerta"] = $alerta;
-                    }
-                break;
+            $id_atividade = $_GET["id_atividade"];
+            $atividade = $oEcoholerite->atividadesExecutadas($id_atividade);
+            if (!$atividade) {
+                $alerta = "A atividade que você tentou ".$act." não existe";
+                $_SESSION["alerta"] = $alerta;
+            } else {
+                switch($act) {
+                    case "aprovar":
+                        if ($oEcoholerite->aprovaAtividadeExecutada($id_atividade)) {
+                            $sucesso = "Atividade código ".$id_atividade." aprovada";
+                            $_SESSION["sucesso"] = $sucesso;
+                        } else {
+                            $alerta = "Erro ao aprovar atividade";
+                            $_SESSION["alerta"] = $alerta;
+                        }
+                    break;
+                    case "reprovar":
+                        if ($oEcoholerite->reprovaAtividadeExecutada($id_atividade)) {
+                            $sucesso = "Atividade código ".$id_atividade." reprovada";
+                            $_SESSION["sucesso"] = $sucesso;
+                        } else {
+                            $alerta = "Erro ao reprovar atividade";
+                            $_SESSION["alerta"] = $alerta;
+                        }
+                    break;
+                    case "remover":
+                        if ($oEcoholerite->removeAtividadeExecutada($id_atividade)) {
+                            $sucesso = "Atividade código ".$id_atividade." ('".$atividade["descricao"]."' de '".$atividade["nome"]."' de '".date('d/m/Y',strtotime($atividade["data"]))."') removida";
+                            $_SESSION["sucesso"] = $sucesso;
+                        } else {
+                            $alerta = "Erro ao remover atividade";
+                            $_SESSION["alerta"] = $alerta;
+                        }
+                    break;
+                }
             }
         }
     }
