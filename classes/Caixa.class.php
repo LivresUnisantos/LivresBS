@@ -8,13 +8,10 @@ class Caixa extends Livres {
     public $idDinheiro = 1;
     
     public function caixaExiste($idCaixa) {
-        $sql = "SELECT * FROM Caixa WHERE id = ".$idCaixa;
-        $st = $this->conn()->prepare($sql);
-        $st->execute();
-        if ($st->rowCount() > 0)  {
-            return true;
+        if (!$this->getCaixa($idCaixa)) {
+            return false;
         }
-        return false;
+        return true;
     }
     
     public function getCaixaAberto() {
@@ -43,6 +40,16 @@ class Caixa extends Livres {
         return $arr;
     }
     
+    public function caixaAberto($idCaixa) {
+        if ($idCaixa == "") return false;
+        $caixa = $this->getCaixa($idCaixa);
+        if (!$caixa) return false;
+        
+        if ($caixa["dataFechamento"] == "" || is_null($caixa["dataFechamento"]) || strtolower($caixa["dataFechamento"]) == "null") return true;
+        
+        return false;
+    }
+    
     public function abrirCaixa($idAdmin, $valor) {
         $dataAbertura = date("Y-m-d H:i:s");
         $sql = "INSERT INTO Caixa (id_admin, dataAbertura) VALUES (".$idAdmin.",'".$dataAbertura."')";
@@ -56,7 +63,7 @@ class Caixa extends Livres {
         }
     }
 
-    public function listaTransacoes($idCaixa) {
+    public function listaTransacoes($idCaixa, $caixaAberto = true) {
         $html = '<input type="hidden" id="id_caixa" name="id_caixa" value="'.$idCaixa.'" />';
         $sql = "SELECT cx.*, fr.forma_pagamento FROM CaixaTransacoes cx LEFT JOIN CaixaFormas fr ON cx.id_forma_pagamento = fr.id WHERE id_caixa = ".$idCaixa." ORDER BY id ASC";
         $st = $this->conn()->prepare($sql);
@@ -83,7 +90,7 @@ class Caixa extends Livres {
     		    $html .= '<td>'.$row["descricao"].'</td>';
     		    $html .= '<td>R$'.number_format($row["valor"],2,",",".").'</td>';
     		    $html .= '<td>'.$row["forma_pagamento"].'</td>';
-    		    if ($row["id_forma_pagamento"] != $this->idAbertura) {
+    		    if ($row["id_forma_pagamento"] != $this->idAbertura && $caixaAberto) {
     		        $html .= '<td><button type="button" class="btn btn-danger" id_transacao="'.$row["id"].'" name="apagar_transacao">Apagar</button></td>';
     		    } else {
     		        $html .= '<td></td>';
