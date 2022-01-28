@@ -62,6 +62,9 @@
             <!--<div class="row">
             <div class="col-md-12">-->
                 <!-- card produto -->
+                {% if not produtos %}
+                Nenhum produto disponível
+                {% endif %}
                 {% for p in produtos %}
                     {% if p.preco_mercado > 0 %}
                         <!--<div class="col-sm-4 col-md-3 hidden-xs box-product-outer">-->
