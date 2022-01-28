@@ -129,7 +129,10 @@ if (strlen($alerta) == 0) {
     		    <h5>Confirme seus dados e faça seu pedido</h5>
     		    <?php
     		    //Obter o link
-    		    $sqlLink = "SELECT * FROM listas_produtos WHERE nome_lista = '".$rs["grupo"]."'";
+    		    //$sqlLink = "SELECT * FROM listas_produtos WHERE nome_lista = '".$rs["grupo"]."'";
+    		    $sqlLink = "SELECT * FROM listas_grupos a";
+    		    $sqlLink .= " LEFT JOIN listas_produtos b ON b.id = a.id_lista";
+    		    $sqlLink .= " WHERE a.nome_grupo = '".$rs["grupo"]."'";
                 $st = $conn->prepare($sqlLink);
                 $st->execute();
                 if ($st->rowCount() == 0) {
