@@ -234,7 +234,12 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
 
                     $item_produto = $Read->getResult()[0]['nome'];
                     $item_produtor = $Read->getResult()[0]['idProdutor'];
-                    $item_valor_produtor = $Read->getResult()[0]['preco_produtor'];
+
+                    if ($PostData['item_valor_produtor'] == 'cortesia'):
+                        $item_valor_produtor = "0";
+                    else:
+                        $item_valor_produtor = $Read->getResult()[0]['preco_produtor'];
+                    endif;
 
                     //DEFINE O VALOR DO ITEM CONFORME A FAIXA DE PREÇO
                     $multiplicador = $Read->getResult()[0]['multiplicador_unidade2'];
@@ -245,7 +250,7 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
                     elseif ($PostData['item_valor'] == 'lojinha'):
                         $item_valor = $Read->getResult()[0]['preco_lojinha'];
                     elseif ($PostData['item_valor'] == 'cortesia'):
-                        $item_valor = 0;
+                        $item_valor = "0";
                     endif;
 
                     //DEFINE O TIPO DE CESTA CONFORME A FREQUENCIA
@@ -390,12 +395,22 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
 
         //CONSULTAR O VALOR DO PRODUTO
         case 'ProdutoValor':
+            $options = '';
+            $optionsProdutor = '';
             $Read->FullRead("SELECT preco, preco_mercado, preco_lojinha FROM " . DB_PRODUTO . " WHERE id = :id", "id={$PostData['id']}");
             if ($Read->getResult()):
                 $PrecoPdt = $Read->getResult()[0];
-                $options = "<option value=''>Selecione</option><option value='comunidade'>(R$ " . number_format($PrecoPdt['preco'], 2, ",", ".") . ") Preço de comunidade</option><option value='mercado'>(R$ " . number_format($PrecoPdt['preco_mercado'], 2, ",", ".") . ") Preço de mercado</option><option value='lojinha'>(R$ " . number_format($PrecoPdt['preco_lojinha'], 2, ",", ".") . ") Preço da lojinha</option><option value='cortesia'>(R$ " . number_format($PrecoPdt['cortesia'], 2, ",", ".") . ") Preço cortesia</option>";
+                $options = "<option value=''>Selecione</option><option value='comunidade'>(R$ " . number_format($PrecoPdt['preco'], 2, ",", ".") . ") Preço de comunidade</option><option value='mercado'>(R$ " . number_format($PrecoPdt['preco_mercado'], 2, ",", ".") . ") Preço de mercado</option><option value='lojinha'>(R$ " . number_format($PrecoPdt['preco_lojinha'], 2, ",", ".") . ") Preço da lojinha</option><option value='cortesia'>(R$ 0,00) Preço cortesia</option>";
             endif;
+
+            $Read->FullRead("SELECT preco_produtor, produtor FROM " . DB_PRODUTO . " WHERE id = :id", "id={$PostData['id']}");
+            if ($Read->getResult()):
+                $PrecoProdutor = $Read->getResult()[0];
+                $optionsProdutor = "<option value=''>Selecione</option><option value='{$PrecoProdutor['preco_produtor']}'>(R$ " . number_format($PrecoProdutor['preco_produtor'], 2, ",", ".") . ") Preço {$PrecoProdutor['produtor']}</option><option value='cortesia'>(R$ 0,00) Preço cortesia</option>";
+            endif;
+
             $jSON['options'] = $options;
+            $jSON['optionsProdutor'] = $optionsProdutor;
             break;
 
         //FILTROS DA MONTAGEM
@@ -418,7 +433,7 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
                         . "GROUP BY a.pedido_id "
                         . "ORDER BY b.consumidor ASC ", "{$wData[1]}&co={$PostData["consumidor"]}");
                 $itensPD = $Read->getResult();
-                
+
                 if (!$itensPD):
                     $jSON['trigger'] = AjaxErro("<span class='icon-notification'>Olá, não existe nenhum pedido!</span>", E_USER_NOTICE);
                     $jSON['clear'] = true;
@@ -501,7 +516,7 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
                                 . "LEFT JOIN " . DB_UNIDADE . " AS e "
                                 . "ON a.item_tipo = e.id "
                                 . "LEFT JOIN " . DB_PRODUTORES . " AS f "
-                                . "ON a.item_produtor = f.id "                                
+                                . "ON a.item_produtor = f.id "
                                 . "WHERE a.pedido_id = :pi "
                                 . "AND a.produto_id = :ip "
                                 . "GROUP BY a.item_id "

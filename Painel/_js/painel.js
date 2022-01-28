@@ -533,12 +533,18 @@ $(function () {
     $('html, body').on('change', '.j_produto', function (e) {
         var ProdutoVal = $(this).val();
         var Valor = $(this).parents(':eq(1)').find("select[name='item_valor']");
+        var ValorProdutor = $(this).parents(':eq(1)').find("select[name='item_valor_produtor']");
         var Callback = "Pedidos";
         var Callback_action = "ProdutoValor";
         $.post(BASE + '/_ajax/Pedidos.ajax.php', {callback: Callback, callback_action: Callback_action, id: ProdutoVal}, function (data) {
             if (data.options) {
                 Valor.children('option').remove();
                 Valor.append(data.options);
+            }
+            
+            if (data.optionsProdutor) {
+                ValorProdutor.children('option').remove();
+                ValorProdutor.append(data.optionsProdutor);
             }
         }, 'json');
         e.preventDefault();
