@@ -110,7 +110,7 @@ class Caixa extends Livres {
         $valor = str_replace(".", "", $valor);
         $valor = str_replace(",", ".", $valor);
         
-        if ($forma_pagamento == 6) {
+        if ($forma_pagamento == $this->idFechamento || $forma_pagamento == $this->idSangria) {
             $valor = -1 * $valor;
         }
         
@@ -131,7 +131,7 @@ class Caixa extends Livres {
         $sql = "UPDATE Caixa SET dataFechamento = '".date("Y-m-d H:m:i")."' WHERE id = ".$idCaixa;
         $st = $this->conn()->prepare($sql);
         if ($st->execute()) {
-            return $this->cadastraTransacao($idCaixa, "Saldo Fechamento de Caixa", -1*$valor, $this->idFechamento);
+            return $this->cadastraTransacao($idCaixa, "Saldo Fechamento de Caixa", $valor, $this->idFechamento);
         } else {
             return false;
         }
