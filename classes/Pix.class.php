@@ -1,4 +1,12 @@
 <?php
+/*
+
+--> github gerador PIX - https://github.com/william-costa/wdev-qrcode-pix-php
+--> ferramentas auxiliares para testar PIX
+--> https://pix.nascent.com.br/tools/pix-qr-decoder/
+--> https://pix.ae/
+
+*/
 
 require __DIR__.'/pix/vendor/autoload.php';
 require __DIR__.'/pix/config-pix.php';
