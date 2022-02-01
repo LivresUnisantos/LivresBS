@@ -61,7 +61,10 @@ class Pix extends Livres {
     }
     
     public function GerarCopiaColaPendentes() {
-        $sql = "SELECT * FROM pedidos_consolidados WHERE (pgt_pix_copiacola = '' OR pgt_pix_copiacola IS NULL) AND consumidor_id IS NOT NULL AND pedido_data = '".$this->dataEntrega."'";
+        //$sql = "SELECT * FROM pedidos_consolidados WHERE (pgt_pix_copiacola = '' OR pgt_pix_copiacola IS NULL) AND consumidor_id IS NOT NULL AND pedido_data = '".$this->dataEntrega."'";
+        $sql = "SELECT * FROM pedidos_consolidados ped LEFT JOIN Consumidores cons";
+        $sql .= " ON ped.consumidor_id = cons.id";
+        $sql .= " WHERE (ped.pgt_pix_copiacola = '' OR ped.pgt_pix_copiacola IS NULL) AND cons.cpf <> '11111111111' AND ped.consumidor_id IS NOT NULL AND ped.pedido_data = '".$this->dataEntrega."'";
         $st = $this->conn()->prepare($sql);
         $st->execute();
         $error = "";
@@ -72,13 +75,15 @@ class Pix extends Livres {
                 $uuid = $row["uuid"];
                 $pixid = $this->encode($uuid);
                 $copiaColaPix = $this->GetCopiaCola($valor, $pixid);
-                $sqlPix = "UPDATE pedidos_consolidados SET pgt_pix_copiacola = '".$copiaColaPix."', pgt_pix_uuid = '".$pixid."' WHERE pedido_id = ".$row["pedido_id"];
+                $sqlPix = "UPDATE pedidos_consolidados SET pgt_pix_copiacola = '".$copiaColaPix."', pgt_pix_uuid = '".$pixid."', pgt_valor_linkpix = ".$valor."  WHERE pedido_id = ".$row["pedido_id"];
                 $st = $this->conn()->prepare($sqlPix);
                 if (!$st->execute()) {
                     if (strlen($error) > 0) { $error .= "<br>"; }
                     $error .= "Erro criando link do pedido ".$row["pedido_id"];
                 }
             }
+        } else {
+            $error = "Nenhum link encontrado";
         }
         
         return $error;
