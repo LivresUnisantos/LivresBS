@@ -24,7 +24,9 @@ class ConsolidarPedidos extends Livres {
 
     public function consolidarAgoraVariavel() {
         $this->populaItensCestaVariavel();
-
+        $this->atualizaValores();
+        $this->apagaPedidosSemItens();
+        
         return true;
     }
 
