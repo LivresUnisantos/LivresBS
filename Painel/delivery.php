@@ -69,8 +69,13 @@ if ($alerta != "") {
 		}
 	}
 	echo '</p>';
+	$sqlListaPedidosDia = "SELECT * FROM pedidos_consolidados ped LEFT JOIN Consumidores cons on ped.consumidor_id = cons.id  ";
+	$sqlListaPedidosDia .= "WHERE pedido_data = '".$dataStr."' AND cons.comunidade <> 0 AND ped.consumidor_id IS NOT NULL ";
+	$sqlListaPedidosDia .= "ORDER BY cons.comunidade, cons.consumidor";
+	
 	if (!empty($_POST)) {
-		$sql = "SELECT * FROM pedidos_consolidados WHERE pedido_data = '".$dataStr."'";
+		$sql = $sqlListaPedidosDia;
+		
 		$st = $conn->prepare($sql);
 		$st->execute();
 		
