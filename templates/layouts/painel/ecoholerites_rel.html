@@ -18,10 +18,10 @@
         -->
         <div class="row justify-content">
             <div class="col-4">
-                <h5>Relatório para o dia {{ periodo_dia }} / Mês {{ periodo_mes }}</h5>
-                <table class="table">
+                <!--<h5>Relatório para o dia {{ periodo_dia }} / Mês {{ periodo_mes }}</h5>-->
+                <table class="table" style="width:1000px%">
                     <colgroup>
-                        <col>
+                        <col width="500px">
                         <col>
                         <col>
                         <col>
@@ -31,20 +31,37 @@
                         <col>
                         <col>
                         <col>
+                        <col>
+                        <col style="border-left: 1px solid #dee2e6;">
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
                     </colgroup>
                     <thead class="thead-light" style="text-align:center;vertical-align:top">
                         <tr>
                             <th rowspan="2">Nome</th>
-                            <th colspan="4">Dia</th>
-                            <th colspan="4" style="border-left: 1px; b">Mês</th>
+                            <th colspan="5">Dia {{ periodo_dia }}</th>
+                            <th colspan="5">Semana {{ inicio_semana|date('d/m/y') }} - {{ fim_semana|date('d/m/y') }}</th>
+                            <th colspan="5">Mês {{ periodo_mes }}</th>
                         </tr>
                         <tr>
                             <th>Ecohoras</th>
                             <th>Ecopedaladas</th>
+                            <th>Descontos</th>
                             <th>Reembolsos</th>
                             <th>Total</th>
+                            
                             <th>Ecohoras</th>
                             <th>Ecopedaladas</th>
+                            <th>Descontos</th>
+                            <th>Reembolsos</th>
+                            <th>Total</th>
+                            
+                            <th>Ecohoras</th>
+                            <th>Ecopedaladas</th>
+                            <th>Descontos</th>
                             <th>Reembolsos</th>
                             <th>Total</th>
                         </tr>
@@ -52,76 +69,85 @@
                     <tbody id="tabela_atividades">
                         {% set total_ecohoras_dia = 0 %}
                         {% set total_ecopedaladas_dia = 0 %}
+                        {% set total_descontos_dia = 0 %}
                         {% set total_reembolsos_dia = 0 %}
+                        
+                        {% set total_ecohoras_semana = 0 %}
+                        {% set total_ecopedaladas_semana = 0 %}
+                        {% set total_descontos_semana = 0 %}
+                        {% set total_reembolsos_semana = 0 %}
                         
                         {% set total_ecohoras_mes = 0 %}
                         {% set total_ecopedaladas_mes = 0 %}
+                        {% set total_descontos_mes = 0 %}
                         {% set total_reembolsos_mes = 0 %}
                         
                         {% set total_dia = 0 %}
+                        {% set total_semana = 0 %}
                         {% set total_mes = 0 %}
-                        {% for id, val in conteudo['total_mes'] %}
+                        {% for id, val in conteudo["total_#{total_maior}"] %}
                             {% set total_ecohoras_dia = total_ecohoras_dia + conteudo['ecohoras_dia'][id]['valor_total'] %}
                             {% set total_ecopedaladas_dia = total_ecopedaladas_dia + conteudo['ecopedaladas_dia'][id]['valor_total'] %}
+                            {% set total_descontos_dia = total_descontos_dia + conteudo['ecohoras_dia'][id]['desconto_total'] %}
                             {% set total_reembolsos_dia = total_reembolsos_dia + conteudo['reembolsos_dia'][id]['valor_total'] %}
+                            
+                            {% set total_ecohoras_semana = total_ecohoras_semana + conteudo['ecohoras_semana'][id]['valor_total'] %}
+                            {% set total_ecopedaladas_semana = total_ecopedaladas_semana + conteudo['ecopedaladas_semana'][id]['valor_total'] %}
+                            {% set total_descontos_semana = total_descontos_semana + conteudo['ecohoras_semana'][id]['desconto_total'] %}
+                            {% set total_reembolsos_semana = total_reembolsos_semana + conteudo['reembolsos_semana'][id]['valor_total'] %}
                             
                             {% set total_ecohoras_mes = total_ecohoras_mes + conteudo['ecohoras_mes'][id]['valor_total'] %}
                             {% set total_ecopedaladas_mes = total_ecopedaladas_mes + conteudo['ecopedaladas_mes'][id]['valor_total'] %}
+                            {% set total_descontos_mes = total_descontos_mes + conteudo['ecohoras_mes'][id]['desconto_total'] %}
                             {% set total_reembolsos_mes = total_reembolsos_mes + conteudo['reembolsos_mes'][id]['valor_total'] %}
                             
                             {% set total_dia = total_dia + conteudo['total_dia'][id]['valor_total'] %}
+                            {% set total_semana = total_semana + conteudo['total_semana'][id]['valor_total'] %}
                             {% set total_mes = total_mes + conteudo['total_mes'][id]['valor_total'] %}
                             <tr>
-                                <td>{{ conteudo['total_mes'][id]['nome'] }}</td>
+                                <td >{{ conteudo["total_#{total_maior}"][id]['nome'] }}</td>
                                 
                                 <td>{{ conteudo['ecohoras_dia'][id]['valor_total']|number_format(2,",",".") }}</td>
                                 <td>{{ conteudo['ecopedaladas_dia'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                <td>{{ conteudo['ecohoras_dia'][id]['desconto_total']|number_format(2,",",".") }}</td>
                                 <td>{{ conteudo['reembolsos_dia'][id]['valor_total']|number_format(2,",",".") }}</td>
-                                <td>{{ conteudo['total_dia'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                <td>{{ (conteudo['total_dia'][id]['valor_total']-conteudo['ecohoras_dia'][id]['desconto_total'])|number_format(2,",",".") }}</td>
+                                
+                                <td>{{ conteudo['ecohoras_semana'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                <td>{{ conteudo['ecopedaladas_semana'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                <td>{{ conteudo['ecohoras_semana'][id]['desconto_total']|number_format(2,",",".") }}</td>
+                                <td>{{ conteudo['reembolsos_semana'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                <td>{{ (conteudo['total_semana'][id]['valor_total']-conteudo['ecohoras_semana'][id]['desconto_total'])|number_format(2,",",".") }}</td>
                                 
                                 <td>{{ conteudo['ecohoras_mes'][id]['valor_total']|number_format(2,",",".") }}</td>
                                 <td>{{ conteudo['ecopedaladas_mes'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                <td>{{ conteudo['ecohoras_mes'][id]['desconto_total']|number_format(2,",",".") }}</td>
                                 <td>{{ conteudo['reembolsos_mes'][id]['valor_total']|number_format(2,",",".") }}</td>
-                                <td>{{ conteudo['total_mes'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                <td>{{ (conteudo['total_mes'][id]['valor_total']-conteudo['ecohoras_mes'][id]['desconto_total'])|number_format(2,",",".") }}</td>
                             </tr>
                         {% endfor %}
                         <tr>
                             <td>Totais</td>
                             <td>{{ total_ecohoras_dia|number_format(2,",",".") }}</td>
                             <td>{{ total_ecopedaladas_dia|number_format(2,",",".") }}</td>
+                            <td>{{ total_descontos_dia|number_format(2,",",".") }}</td>
                             <td>{{ total_reembolsos_dia|number_format(2,",",".") }}</td>
-                            <td>{{ total_dia|number_format(2,",",".") }}</td>
+                            <td>{{ (total_dia-total_descontos_dia)|number_format(2,",",".") }}</td>
+                            
+                            <td>{{ total_ecohoras_semana|number_format(2,",",".") }}</td>
+                            <td>{{ total_ecopedaladas_semana|number_format(2,",",".") }}</td>
+                            <td>{{ total_descontos_semana|number_format(2,",",".") }}</td>
+                            <td>{{ total_reembolsos_semana|number_format(2,",",".") }}</td>
+                            <td>{{ (total_semana-total_descontos_semana)|number_format(2,",",".") }}</td>
                             
                             <td>{{ total_ecohoras_mes|number_format(2,",",".") }}</td>
                             <td>{{ total_ecopedaladas_mes|number_format(2,",",".") }}</td>
+                            <td>{{ total_descontos_mes|number_format(2,",",".") }}</td>
                             <td>{{ total_reembolsos_mes|number_format(2,",",".") }}</td>
-                            <td>{{ total_mes|number_format(2,",",".") }}</td>
+                            <td>{{ (total_mes-total_descontos_mes)|number_format(2,",",".") }}</td>
                         </tr>
                     </tbody>
                     </table>
-                <!--
-                {% for desc, c in conteudo %}
-                    {% if c %}
-                        <h5>{{ desc }}</h5>
-                        <table class="table">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabela_atividades">
-                            {% for a in c %}
-                                <tr>
-                                    <td>{{ a.nome }}</td>
-                                    <td>R${{ a.valor_total|number_format(2,",",".") }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    {% endif %}
-                {% endfor %}
-                -->
             </div>
         </div>
     {% else %}

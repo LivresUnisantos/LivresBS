@@ -41,17 +41,30 @@ class Ecoholerite extends Livres {
     }
     
     public function listaAtividades($id = "") {
-        if ($id == "") {
-            $sql = "SELECT * FROM Ecoatividades ORDER BY descricao";
-        } else {
-            $sql = "SELECT * FROM Ecoatividades WHERE id = ".$id." ORDER BY descricao";
+        $sql = "SELECT a.*, sum(c.aliquota) as descontos FROM Ecoatividades a";
+        $sql .= " LEFT JOIN descontos_atividades b on (a.id = b.id_atividade and b.ativo = 1)";
+        $sql .= " LEFT JOIN descontos_em_folha c on c.id = b.id_desconto";
+
+        if ($id != "") {
+            $sql .= " WHERE a.id = ".$id."";
         }
+        
+        $sql .= " GROUP BY a.id";
+        $sql .= " ORDER BY descricao";
+        
         $st = $this->conn()->prepare($sql);
         $st->execute();
 
         if ($st->rowCount() == 0) return false;
 
         $rs = $st->fetchAll();
+        // foreach ($rs as $num=>$row) {
+        //     $descontos = 0;
+        //     foreach ($this->descontos($row["id"]) as $desconto) {
+        //         $descontos += $desconto;
+        //     }
+        //     $rs[$num]["descontos"] = $descontos;
+        // }
         return $rs;
     }
     
@@ -70,6 +83,33 @@ class Ecoholerite extends Livres {
         return $rs;
     }
     
+    /*
+    ativo = 0 --> apenas atividades inativas
+    ativo = 1 --> apenas atividades ativas
+    ativo = 2 --> atividades ativas e inativas
+    */
+    public function descontos($id_atividade, $ativo = 1) {
+        $sql = "SELECT * FROM descontos_atividades a";
+        $sql .= " LEFT JOIN descontos_em_folha b ON b.id = a.id_desconto";
+        $sql .= " WHERE id_atividade = ".$id_atividade;
+        if ($ativo <= 1) {
+            $sql .= " AND a.ativo = ".$ativo;
+        }
+        
+        $st = $this->conn()->prepare($sql);
+        
+        if (!$st->execute()) return false;
+        if ($st->rowCount() == 0) return false;
+        
+        foreach ($st->fetchAll() as $row) {
+            $arr[] = $row["aliquota"];
+        }
+        
+        if (!isset($arr)) return false;
+        
+        return $arr;
+    }
+    
     public function addAtividadeExecutada($add_nome, $add_atividade, $add_data, $add_ecohoras, $add_valor, $add_comentario) {
         
         $data = DateTime::createFromFormat('d/m/Y H:i', $add_data);
@@ -78,8 +118,15 @@ class Ecoholerite extends Livres {
         $add_valor = str_replace(",",".",$add_valor);
         $add_comentario = $this->conn()->quote($add_comentario);
         
-        $sql = "INSERT INTO Ecoholerites(id_admin, id_atividade, data, ecohoras, valor, comentario) VALUES";
-        $sql .= " (".$add_nome.",".$add_atividade.",'".$data."',".$add_ecohoras.",".$add_valor.",".$add_comentario.")";
+        $valor_desconto = 0;
+        if ($descontos = $this->descontos($add_atividade)) {
+            foreach ($descontos as $desconto) {
+                $valor_desconto += $desconto*$add_valor;
+            }
+        }
+        
+        $sql = "INSERT INTO Ecoholerites(id_admin, id_atividade, data, ecohoras, valor, desconto, comentario) VALUES";
+        $sql .= " (".$add_nome.",".$add_atividade.",'".$data."',".$add_ecohoras.",".$add_valor.",".$valor_desconto.",".$add_comentario.")";
         $st = $this->conn()->prepare($sql);
         
         return $st->execute();
@@ -116,7 +163,7 @@ class Ecoholerite extends Livres {
     public function relatorioPagamento($dataI = "", $dataF = "", $reembolso = 0, $entrega = 0, $tracarRotas = 0) {
         
         $sql = "";
-        $sql .= "SELECT ad.nome, SUM(eh.valor) AS valor_total, eh.*, ea.*, ad.* FROM Ecoholerites eh";
+        $sql .= "SELECT ad.nome, SUM(eh.valor) AS valor_total, SUM(eh.desconto) as desconto_total, eh.*, ea.*, ad.* FROM Ecoholerites eh";
         $sql .= " LEFT JOIN Ecoatividades ea";
         $sql .= " ON eh.id_atividade = ea.id";
         $sql .= " LEFT JOIN Admins ad";
@@ -155,7 +202,7 @@ class Ecoholerite extends Livres {
 
         if ($st->rowCount() == 0) return false;
         
-        $colunas = array("nome", "valor_total");
+        $colunas = array("nome", "valor_total", "desconto_total");
         $rs = $st->fetchAll();
         foreach ($rs as $row) {
             foreach ($colunas as $coluna) {

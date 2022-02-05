@@ -7,10 +7,62 @@
         </div>
     {% endif %}
     {% if conteudo %}
+        <h5>Adicionar atividade</h5>
+        <form class="form-row" id="form_add_atividade" method="POST" action="">
+            <div class="form-group col-md-2">
+                <input type="hidden" name="add_nome" id="add_nome" value="" >
+                <label for="add_nome2" class="control-label">Nome</label>
+                <select id="add_nome2" name="add_nome2" class="form-control" {{ disabled }} validation="mandatory">
+                    {% for p in pessoas %}
+                        {% if (p.id == admin_logado) %}
+                            <option value="{{p.id}}" selected=selected>{{p.nome}}</option>
+                        {% else %}
+                            <option value="{{p.id}}">{{p.nome}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-1">
+                <label for="add_data" class="control-label">Data</label>
+                <input readonly="readonly" value="{{ data_selecionada }}" id="add_data" name="add_data" type="text" data-language="pt-BR" data-timepicker="true" class="jwc_datepicker_start form-control" style="width: 190px;" validation="mandatory"/>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="add_atividade" class="control-label">Atividade</label>
+                <select id="add_atividade" name="add_atividade" class="form-control" validation="mandatory">
+                    <option value=""></option>
+                    {% for at in atividades %}
+                        <option value="{{at.id}}" ecohoras="{{at.ecohoras}}" valor="{{at.valor}}" desconto="{{ at.descontos }}">
+                            {{at.descricao}}{% if at.ecohoras == 0 %}*{% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-1">
+                <label for="add_ecohoras" class="control-label">Ecohoras</label>
+                <input type="text" id="add_ecohoras" name="add_ecohoras" value="" readonly="readonly" class="form-control" validation="mandatory">
+            </div>
+            <div class="form-group col-md-1">
+                <label for="add_valor" class="control-label">Valor</label>
+                <input type="text" id="add_valor" name="add_valor" value="" readonly="readonly" class="form-control" validation="mandatory">
+            </div>
+            <div class="form-group col-md-1">
+                <label for="add_desconto" class="control-label">Desconto</label>
+                <input type="text" id="add_desconto" name="add_desconto" value="" readonly="readonly" class="form-control" validation="mandatory">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="add_comentario" class="control-label">Comentário</label>
+                <input type="text" id="add_comentario"  name="add_comentario" value="" class="form-control">
+            </div>
+            <div class="form-group col-md-1">
+                <label for="add_salvar" class="control-label">&nbsp;</label>
+                <input type="submit" id="add_salvar" name="add_salvar" class="form-control" value="Adicionar">
+            </div>
+        </form>
+        <hr>
         {% if permissao_aprovador %}
-            <h3>Ecoholerite de Todos</h3>
+            <h5>Ecoholerite de Todos</h5>
         {% else %}
-            <h3>Ecoholerite de {{ conteudo[0].nome }}</h3>
+            <h5>Ecoholerite de {{ conteudo[0].nome }}</h5>
         {% endif %}
         <div class="input-group mb-2 mr-sm-2">
             <div class="input-group-prepend">
@@ -89,53 +141,6 @@
     {% else %}
     <h5>Não há atividades cadastradas</h5>
     {% endif %}
-    <h5>Adicionar atividade</h5>
-    <form class="form-row" id="form_add_atividade" method="POST" action="">
-        <div class="form-group col-md-2">
-            <input type="hidden" name="add_nome" id="add_nome" value="" >
-            <label for="add_nome2" class="control-label">Nome</label>
-            <select id="add_nome2" name="add_nome2" class="form-control" {{ disabled }} validation="mandatory">
-                {% for p in pessoas %}
-                    {% if (p.id == admin_logado) %}
-                        <option value="{{p.id}}" selected=selected>{{p.nome}}</option>
-                    {% else %}
-                        <option value="{{p.id}}">{{p.nome}}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group col-md-1">
-            <label for="add_data" class="control-label">Data</label>
-            <input readonly="readonly" value="{{ data_selecionada }}" id="add_data" name="add_data" type="text" data-language="pt-BR" data-timepicker="true" class="jwc_datepicker_start form-control" style="width: 190px;" validation="mandatory"/>
-        </div>
-        <div class="form-group col-md-2">
-            <label for="add_atividade" class="control-label">Atividade</label>
-            <select id="add_atividade" name="add_atividade" class="form-control" validation="mandatory">
-                <option value=""></option>
-                {% for at in atividades %}
-                    <option value="{{at.id}}" ecohoras="{{at.ecohoras}}" valor="{{at.valor}}">
-                        {{at.descricao}}{% if at.ecohoras == 0 %}*{% endif %}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group col-md-1">
-            <label for="add_ecohoras" class="control-label">Ecohoras</label>
-            <input type="text" id="add_ecohoras" name="add_ecohoras" value="" readonly="readonly" class="form-control" validation="mandatory">
-        </div>
-        <div class="form-group col-md-1">
-            <label for="add_valor" class="control-label">Valor</label>
-            <input type="text" id="add_valor" name="add_valor" value="" readonly="readonly" class="form-control" validation="mandatory">
-        </div>
-        <div class="form-group col-md-4">
-            <label for="add_comentario" class="control-label">Comentário</label>
-            <input type="text" id="add_comentario"  name="add_comentario" value="" class="form-control">
-        </div>
-        <div class="form-group col-md-1">
-            <label for="add_salvar" class="control-label">&nbsp;</label>
-            <input type="submit" id="add_salvar" name="add_salvar" class="form-control" value="Adicionar">
-        </div>
-    </form>
     <script>
         $(document).ready(function(){
             $("#selecionar_tudo").on("click", function() {
@@ -158,6 +163,9 @@
                 atividade = $(this).find("option:selected");
                 ecohoras = atividade.attr('ecohoras');
                 valor = atividade.attr('valor');
+                desconto = atividade.attr('desconto');
+                desconto = Math.round(desconto*1000)/10 + "%";
+                console.log(desconto);
                 if (ecohoras != 0) {
                     $("#add_ecohoras").prop('readonly', true);
                     $("#add_valor").prop('readonly', true);
@@ -169,6 +177,7 @@
                     $("#add_ecohoras").prop('readonly', false);
                     $("#add_valor").prop('readonly', false);
                 }
+                $("#add_desconto").val(desconto);
             });
             $("#add_nome2").on('change', function() {
                 $("#add_nome").val($(this).find('option:selected').val());
