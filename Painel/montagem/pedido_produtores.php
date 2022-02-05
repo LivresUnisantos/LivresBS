@@ -67,7 +67,8 @@ $wData[1] = "start={$StartDate}";
         $precoPreProdutorTotal = 0;
 
         //PRODUTORES QUE VÃO ENTREGAR NESTA DATA
-        $Read->FullRead("SELECT a.Produtor, a.id AS idProdutor FROM " . DB_PRODUTORES . " AS a "
+        $Read->FullRead("SELECT a.Produtor, a.id AS idProdutor "
+                . "FROM " . DB_PRODUTORES . " AS a "
                 . "INNER JOIN " . DB_PD_CONS_ITENS . " AS b "
                 . "ON a.id = b.item_produtor "
                 . "LEFT JOIN " . DB_PD_CONS . " AS c "
@@ -81,13 +82,11 @@ $wData[1] = "start={$StartDate}";
             $tbPdProd = "<table class='tableProdutores' cellspacing='0'>";
 
             foreach ($Read->getResult() as $Itens):
-                extract($Itens);
 
                 $SomaProdutor = 0;
-
                 $tbPdProd .= "<tr>";
                 $tbPdProd .= "<th class='thProdutores' colspan='{$colunas}' style='background-color: #1aa4db; color: #fff;'>";
-                $tbPdProd .= "" . strtoupper($Produtor) . "";
+                $tbPdProd .= "" . strtoupper($Itens['Produtor']) . "";
                 $tbPdProd .= "</th>";
                 $tbPdProd .= "</tr>";
 
@@ -113,8 +112,18 @@ $wData[1] = "start={$StartDate}";
                 $tbPdProd .= "</th>";
                 $tbPdProd .= "</tr>";
 
-                //PRODUTOS POR PRODUTOR E DATA
-                $Read->FullRead("SELECT a.item_produto, p.id AS idProduto, p.unidade2, p.multiplicador_unidade2 "
+                $precoFixaProdutor = 0;
+                $precoVariavelProdutor = 0;
+                $precoAvulsoProdutor = 0;
+                $precoPreProdutor = 0;
+
+                $Read->FullRead("SELECT "
+                        . "a.item_valor_produtor, "
+                        . "a.item_produto, "
+                        . "a.item_produtor, "
+                        . "a.produto_id, "
+                        . "p.unidade2 as unidade, "
+                        . "p.multiplicador_unidade2 as multiplicador "
                         . "FROM " . DB_PD_CONS_ITENS . " AS a "
                         . "LEFT JOIN " . DB_PD_CONS . " AS b "
                         . "ON a.pedido_id = b.pedido_id "
@@ -122,111 +131,124 @@ $wData[1] = "start={$StartDate}";
                         . "ON a.produto_id = p.id "
                         . "WHERE b.{$wData[0]} "
                         . "AND a.item_produtor = :ip "
-                        . "GROUP BY a.produto_id "
-                        . "ORDER BY a.item_produto", "{$wData[1]}&ip={$idProdutor}");
-                $Produtos = $Read->getResult();
+                        . "GROUP BY a.item_valor_produtor,a.produto_id "
+                        . "ORDER BY a.item_produto "
+                        , "{$wData[1]}&ip={$Itens['idProdutor']}");
+                if ($Read->getResult()):
 
-                $precoFixaProdutor = 0;
-                $precoVariavelProdutor = 0;
-                $precoAvulsoProdutor = 0;
-                $precoPreProdutor = 0;
+                    foreach ($Read->getResult() as $PdtDia):
 
-                foreach ($Produtos as $Pdt):
-                    $itensPdtProdutor = 0;
-                    $precoPdtProdutor = 0;
-                    $Fixa = null;
-                    $Variavel = null;
-                    $Avulso = null;
-                    $Pre = null;
+                        $itensPdtProdutor = 0;
+                        $precoPdtProdutor = 0;
 
-                    //CESTA FIXA
-                    $Read->FullRead("SELECT sum(a.item_qtde) as Qtde, c.unidade as Unidade, a.item_produto, a.item_valor_produtor "
-                            . "FROM " . DB_PD_CONS_ITENS . " AS a "
-                            . "LEFT JOIN " . DB_PD_CONS . " AS b "
-                            . "ON a.pedido_id = b.pedido_id "
-                            . "LEFT JOIN " . DB_UNIDADE . " AS c "
-                            . "ON a.item_tipo = c.id "
-                            . "WHERE b.{$wData[0]} "
-                            . "AND a.item_produtor = :ip "
-                            . "AND a.produto_id = :pd "
-                            . "AND a.item_tipo_cesta = :fi "
-                            . "GROUP BY a.produto_id "
-                            . "ORDER BY a.item_produto", "{$wData[1]}&ip={$idProdutor}&pd={$Pdt['idProduto']}&fi=fixa");
-                    if ($Read->getResult()):
-                        $Fixa = $Read->getResult()[0];
-                    endif;
+                        $tbPdProd .= "<tr class='trProdutores'>";
+                        $tbPdProd .= "<td class='tdProdutores'>{$PdtDia['item_produto']} [ R$ " . number_format($PdtDia['item_valor_produtor'], 2, ',', '.') . " ]</td>";
 
-                    //CESTA VARIÁVEL
-                    $Read->setPlaces("{$wData[1]}&ip={$idProdutor}&pd={$Pdt['idProduto']}&fi=variavel");
-                    if ($Read->getResult()):
-                        $Variavel = $Read->getResult()[0];
-                    endif;
+                        //FIXA
+                        $Read->FullRead("SELECT sum(a.item_qtde) as quantidade, a.item_valor_produtor as valor_produtor "
+                                . "FROM " . DB_PD_CONS_ITENS . " AS a "
+                                . "LEFT JOIN " . DB_PD_CONS . " AS b "
+                                . "ON a.pedido_id = b.pedido_id "
+                                . "WHERE b.{$wData[0]} "
+                                . "AND a.item_produtor = :ip "
+                                . "AND a.produto_id = :p "
+                                . "AND a.item_tipo_cesta = :fi group by a.item_valor_produtor", "{$wData[1]}&ip={$PdtDia['item_produtor']}&p={$PdtDia['produto_id']}&fi=fixa");
 
-                    //AVULSO
-                    $Read->setPlaces("{$wData[1]}&ip={$idProdutor}&pd={$Pdt['idProduto']}&fi=avulso");
-                    if ($Read->getResult()):
-                        $Avulso = $Read->getResult()[0];
-                    endif;
+                        if ($Read->getResult()):
+                            $fi = false;
+                            foreach ($Read->getResult() as $produtoFixa):
+                                if ($produtoFixa['valor_produtor'] == $PdtDia['item_valor_produtor']):
+                                    $fi = true;
+                                    $multiF = $produtoFixa['quantidade'] * $produtoFixa['valor_produtor'];
+                                    $itensPdtProdutor += $produtoFixa['quantidade'];
+                                    $precoPdtProdutor += $multiF;
+                                    $valorFixaPdt = number_format($multiF, 2, ',', '.');
+                                    $precoFixaProdutor += $multiF;
+                                    $tbPdProd .= "<td class='tdProdutores al_right'>" . str_replace(',00', '', number_format($produtoFixa['quantidade'] / $PdtDia['multiplicador'], 2, ',', '.')) . " {$PdtDia['unidade']} x R$ " . number_format($produtoFixa['valor_produtor'] * $PdtDia['multiplicador'], 2, ',', '.') . " = R$ {$valorFixaPdt}</td>";
+                                endif;
+                            endforeach;
+                            if ($fi == false):
+                                $tbPdProd .= "<td class='tdProdutores'>&nbsp;</td>";
+                            endif;
+                        else:
+                            $tbPdProd .= "<td class='tdProdutores'>&nbsp;</td>";
+                        endif;
 
-                    //PRÉ COMUNIDADE
-                    $Read->setPlaces("{$wData[1]}&ip={$idProdutor}&pd={$Pdt['idProduto']}&fi=pre");
-                    if ($Read->getResult()):
-                        $Pre = $Read->getResult()[0];
-                    endif;
+                        //CESTA VARIÁVEL
+                        $Read->setPlaces("{$wData[1]}&ip={$Itens['idProdutor']}&p={$PdtDia['produto_id']}&fi=variavel");
+                        if ($Read->getResult()):
+                            $va = false;
+                            foreach ($Read->getResult() as $produtoVariavel):
+                                if ($produtoVariavel['valor_produtor'] == $PdtDia['item_valor_produtor']):
+                                    $va = true;
+                                    $multiV = $produtoVariavel['quantidade'] * $produtoVariavel['valor_produtor'];
+                                    $itensPdtProdutor += $produtoVariavel['quantidade'];
+                                    $precoPdtProdutor += $multiV;
+                                    $valorVariavelPdt = number_format($multiV, 2, ',', '.');
+                                    $precoVariavelProdutor += $multiV;
+                                    $tbPdProd .= "<td class='tdProdutores al_right'>" . str_replace(',00', '', number_format($produtoVariavel['quantidade'] / $PdtDia['multiplicador'], 2, ',', '.')) . " {$PdtDia['unidade']} x R$ " . number_format($produtoVariavel['valor_produtor'] * $PdtDia['multiplicador'], 2, ',', '.') . " = R$ {$valorVariavelPdt}</td>";
+                                endif;
+                            endforeach;
+                            if ($va == false):
+                                $tbPdProd .= "<td class='tdProdutores'>&nbsp;</td>";
+                            endif;
+                        else:
+                            $tbPdProd .= "<td class='tdProdutores'>&nbsp;</td>";
+                        endif;
 
-                    $tbPdProd .= "<tr class='trProdutores'>";
-                    $tbPdProd .= "<td class='tdProdutores'>{$Pdt['item_produto']}</td>";
+                        //AVULSO
+                        $Read->setPlaces("{$wData[1]}&ip={$Itens['idProdutor']}&p={$PdtDia['produto_id']}&fi=avulso");
+                        if ($Read->getResult()):
+                            $av = false;
+                            foreach ($Read->getResult() as $produtoAvulso):
+                                if ($produtoAvulso['valor_produtor'] == $PdtDia['item_valor_produtor']):
+                                    $av = true;
+                                    $multiF = $produtoAvulso['quantidade'] * $produtoAvulso['valor_produtor'];
+                                    $itensPdtProdutor += $produtoAvulso['quantidade'];
+                                    $precoPdtProdutor += $multiF;
+                                    $valorAvulsoPdt = number_format($multiF, 2, ',', '.');
+                                    $precoAvulsoProdutor += $multiF;
+                                    $tbPdProd .= "<td class='tdProdutores al_right'>" . str_replace(',00', '', number_format($produtoAvulso['quantidade'] / $PdtDia['multiplicador'], 2, ',', '.')) . " {$PdtDia['unidade']} x R$ " . number_format($produtoAvulso['valor_produtor'] * $PdtDia['multiplicador'], 2, ',', '.') . " = R$ {$valorAvulsoPdt}</td>";
+                                endif;
+                            endforeach;
+                            if ($av == false):
+                                $tbPdProd .= "<td class='tdProdutores'>&nbsp;</td>";
+                            endif;
+                        else:
+                            $tbPdProd .= "<td class='tdProdutores'>&nbsp;</td>";
+                        endif;
 
-                    if (isset($Fixa) && !empty($Fixa)):
-                        $multiF = $Fixa['Qtde'] * $Fixa['item_valor_produtor'];
-                        $itensPdtProdutor += $Fixa['Qtde'];
-                        $precoPdtProdutor += $multiF;
-                        $valorFixaPdt = number_format($multiF, 2, ',', '.');
-                        $precoFixaProdutor += $multiF;
-                        $tbPdProd .= "<td class='tdProdutores al_right'>" . str_replace(',00', '', number_format($Fixa['Qtde'] / $Pdt['multiplicador_unidade2'], 2, ',', '.')) . " {$Pdt['unidade2']} x R$ " . number_format($Fixa['item_valor_produtor'] * $Pdt['multiplicador_unidade2'], 2, ',', '.') . " = R$ {$valorFixaPdt}</td>";
-                    else:
-                        $tbPdProd .= "<td class='tdProdutores'>&nbsp;</td>";
-                    endif;
+                        //PRÉ COMUNIDADE
+                        $Read->setPlaces("{$wData[1]}&ip={$Itens['idProdutor']}&p={$PdtDia['produto_id']}&fi=pre");
+                        if ($Read->getResult()):
+                            $pr = false;
+                            foreach ($Read->getResult() as $produtoPre):
+                                if ($produtoPre['valor_produtor'] == $PdtDia['item_valor_produtor']):
+                                    $pr = true;
+                                    $multiF = $produtoPre['quantidade'] * $produtoPre['valor_produtor'];
+                                    $itensPdtProdutor += $produtoPre['quantidade'];
+                                    $precoPdtProdutor += $multiF;
+                                    $valorPrePdt = number_format($multiF, 2, ',', '.');
+                                    $precoPreProdutor += $multiF;
+                                    $tbPdProd .= "<td class='tdProdutores al_right'>" . str_replace(',00', '', number_format($produtoPre['quantidade'] / $PdtDia['multiplicador'], 2, ',', '.')) . " {$PdtDia['unidade']} x R$ " . number_format($produtoPre['valor_produtor'] * $PdtDia['multiplicador'], 2, ',', '.') . " = R$ {$valorPrePdt}</td>";
+                                endif;
+                            endforeach;
+                            if ($pr == false):
+                                $tbPdProd .= "<td class='tdProdutores'>&nbsp;</td>";
+                            endif;
+                        else:
+                            $tbPdProd .= "<td class='tdProdutores'>&nbsp;</td>";
+                        endif;
 
-                    if (isset($Variavel) && !empty($Variavel)):
-                        $multiV = $Variavel['Qtde'] * $Variavel['item_valor_produtor'];
-                        $itensPdtProdutor += $Variavel['Qtde'];
-                        $precoPdtProdutor += $multiV;
-                        $valorVariavelPdt = number_format($multiV, 2, ',', '.');
-                        $precoVariavelProdutor += $multiV;
-                        $tbPdProd .= "<td class='tdProdutores al_right'>" . str_replace(',00', '', number_format($Variavel['Qtde'] / $Pdt['multiplicador_unidade2'], 2, ',', '.')) . " {$Pdt['unidade2']} x R$ " . number_format($Variavel['item_valor_produtor'] * $Pdt['multiplicador_unidade2'], 2, ',', '.') . " = R$ {$valorVariavelPdt}</td>";
-                    else:
-                        $tbPdProd .= "<td class='tdProdutores'>&nbsp;</td>";
-                    endif;
+                        //total item
+                        $tbPdProd .= "<td class='tdProdutores al_right'>" . round($itensPdtProdutor / $PdtDia['multiplicador'], 2) . " {$PdtDia['unidade']} = R$ " . number_format($precoPdtProdutor, 2, ',', '.') . "</td>";
+                        $SomaProdutor += $precoPdtProdutor;
 
-                    if (isset($Avulso) && !empty($Avulso)):
-                        $multiA = $Avulso['Qtde'] * $Avulso['item_valor_produtor'];
-                        $itensPdtProdutor += $Avulso['Qtde'];
-                        $precoPdtProdutor += $multiA;
-                        $valorAvulsoPdt = number_format($multiA, 2, ',', '.');
-                        $precoAvulsoProdutor += $multiA;
-                        $tbPdProd .= "<td class='tdProdutores al_right'>" . str_replace(',00', '', number_format($Avulso['Qtde'] / $Pdt['multiplicador_unidade2'], 2, ',', '.')) . " {$Pdt['unidade2']} x R$ " . number_format($Avulso['item_valor_produtor'] * $Pdt['multiplicador_unidade2'], 2, '.', ',') . " = R$ {$valorAvulsoPdt}</td>";
-                    else:
-                        $tbPdProd .= "<td class='tdProdutores'>&nbsp;</td>";
-                    endif;
+                    endforeach;
+                endif;
 
-                    if (isset($Pre) && !empty($Pre)):
-                        $multiP = $Pre['Qtde'] * $Pre['item_valor_produtor'];
-                        $itensPdtProdutor += $Pre['Qtde'];
-                        $precoPdtProdutor += $multiP;
-                        $valorPrePdt = number_format($multiP, 2, ',', '.');
-                        $precoPreProdutor += $multiP;
-                        $tbPdProd .= "<td class='tdProdutores al_right'>" . str_replace(',00', '', number_format($Pre['Qtde'] / $Pdt['multiplicador_unidade2'], 2, ',', '.')) . " {$Pdt['unidade2']} x R$ " . number_format($Pre['item_valor_produtor'] * $Pdt['multiplicador_unidade2'], 2, '.', ',') . " = R$ {$valorPrePdt}</td>";
-                    else:
-                        $tbPdProd .= "<td class='tdProdutores'>&nbsp;</td>";
-                    endif;
-
-                    //total item
-                    $tbPdProd .= "<td class='tdProdutores al_right'>" . round($itensPdtProdutor / $Pdt['multiplicador_unidade2'], 2) . " {$Pdt['unidade2']} = R$ " . number_format($precoPdtProdutor, 2, ',', '.') . "</td>";
-                    $SomaProdutor += $precoPdtProdutor;
-                endforeach;
                 $tbPdProd .= "<tr  class='trProdutores' style='font-weight:650; background:#f69b86'>";
-                $tbPdProd .= "<td class='tdProdutores'>Soma {$Produtor}</td>";
+                $tbPdProd .= "<td class='tdProdutores'>Soma {$Itens['Produtor']}</td>";
                 $tbPdProd .= "<td class='tdProdutores'>Subtotal Fixa R$ " . number_format($precoFixaProdutor, 2, ',', '.') . "</td>";
                 $tbPdProd .= "<td class='tdProdutores'>Subtotal Váriavel R$ " . number_format($precoVariavelProdutor, 2, ',', '.') . "</td>";
                 $tbPdProd .= "<td class='tdProdutores'>Subtotal Avulso R$ " . number_format($precoAvulsoProdutor, 2, ',', '.') . "</td>";
@@ -241,6 +263,7 @@ $wData[1] = "start={$StartDate}";
                 $precoVariavelProdutorTotal += $precoVariavelProdutor;
                 $precoAvulsoProdutorTotal += $precoAvulsoProdutor;
                 $precoPreProdutorTotal += $precoPreProdutor;
+
             endforeach;
 
             $SomaProdutorTotal = $precoFixaProdutorTotal + $precoVariavelProdutorTotal + $precoAvulsoProdutorTotal + $precoPreProdutorTotal;
@@ -256,6 +279,7 @@ $wData[1] = "start={$StartDate}";
 
             $tbPdProd .= "</table>";
             echo $tbPdProd;
+
         endif;
         ?>
         <div class="clear"></div>
