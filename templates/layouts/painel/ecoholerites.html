@@ -32,7 +32,7 @@
                     <option value=""></option>
                     {% for at in atividades %}
                         <option value="{{at.id}}" ecohoras="{{at.ecohoras}}" valor="{{at.valor}}" desconto="{{ at.descontos }}">
-                            {{at.descricao}}{% if at.ecohoras == 0 %}*{% endif %}
+                            {{at.descricao}}{% if (at.ecohoras == 0 and at.valor == 0) %}*{% endif %}
                         </option>
                     {% endfor %}
                 </select>
@@ -90,6 +90,7 @@
                     <th>Atividade</th>
                     <th>Ecohoras</th>
                     <th>Valor</th>
+                    <th>Desconto</th>
                     <th>Comentário</th>
                     <th>Status</th>
                     <th>Ações</th>
@@ -105,6 +106,7 @@
                     <td>{{ a.descricao }}</td>
                     <td>{{ a.ecohoras }}</td>
                     <td>R${{ a.valor_receber|number_format(2,",",".") }}</td>
+                    <td>R${{ a.valor_desconto|number_format(2,",",".") }}</td>
                     <td>{{ a.comentario }}</td>
                     {% if a.status == 0 %}
                         <td>Pendente</td>
@@ -166,7 +168,7 @@
                 desconto = atividade.attr('desconto');
                 desconto = Math.round(desconto*1000)/10 + "%";
                 console.log(desconto);
-                if (ecohoras != 0) {
+                if (ecohoras != 0 || valor != 0) {
                     $("#add_ecohoras").prop('readonly', true);
                     $("#add_valor").prop('readonly', true);
                     $("#add_ecohoras").val(ecohoras);

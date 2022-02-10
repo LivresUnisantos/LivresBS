@@ -13,7 +13,7 @@ class Ecoholerite extends Livres {
     }
 
     public function atividadesExecutadas($id_ecoholerite = "") {
-        $sql = "SELECT eh.id as id_ecoholerite, eh.valor as valor_receber, eh.*, ea.*, ad.* FROM Ecoholerites eh LEFT JOIN Ecoatividades ea";
+        $sql = "SELECT eh.id as id_ecoholerite, eh.valor as valor_receber, eh.desconto as valor_desconto, eh.*, ea.*, ad.* FROM Ecoholerites eh LEFT JOIN Ecoatividades ea";
         $sql .= " ON eh.id_atividade = ea.id ";
         $sql .= " LEFT JOIN Admins ad ON eh.id_admin = ad.id";
         if ($id_ecoholerite != "") {
@@ -26,7 +26,7 @@ class Ecoholerite extends Livres {
                 $sql .= " WHERE ad.id = ".$this->idAdmin;
             }
         }
-        $sql .= " ORDER BY data, status";
+        $sql .= " ORDER BY data DESC, status";
         $st = $this->conn()->prepare($sql);
         $st->execute();
 
