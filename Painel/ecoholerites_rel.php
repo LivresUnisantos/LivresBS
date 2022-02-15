@@ -56,18 +56,22 @@ if (!isset($_SESSION["data_consulta"]) || $_SESSION["data_consulta"] == "") {
     $ecohorasDia = $oEcoholerite->relatorioPagamento($data->format('Y-m-d'), $data->format('Y-m-d'), 0, 0, 0);
     $ecopedaladasDia = $oEcoholerite->relatorioPagamento($data->format('Y-m-d'), $data->format('Y-m-d'), 0, 2, 0);
     $reembolsoDia = $oEcoholerite->relatorioPagamento($data->format('Y-m-d'), $data->format('Y-m-d'), 2, 0, 0);
+    $bikersDia = $oEcoholerite->relatorioPagamento($data->format('Y-m-d'), $data->format('Y-m-d'), 0, 0, 2);
+    
     
     $ecohorasSemana = $oEcoholerite->relatorioPagamento($iniSemana, $fimSemana, 0, 0, 0);
     $ecopedaladasSemana = $oEcoholerite->relatorioPagamento($iniSemana, $fimSemana, 0, 2, 0);
     $reembolsoSemana = $oEcoholerite->relatorioPagamento($iniSemana, $fimSemana, 2, 0, 0);
+    $bikersSemana = $oEcoholerite->relatorioPagamento($iniSemana, $fimSemana, 0, 0, 2);
     
     $ecohorasMes = $oEcoholerite->relatorioPagamento($data->format('Y-m-1'), $data->format('Y-m-t'), 0, 0, 0);
     $ecopedaladasMes = $oEcoholerite->relatorioPagamento($data->format('Y-m-1'), $data->format('Y-m-t'), 0, 2, 0);
     $reembolsoMes = $oEcoholerite->relatorioPagamento($data->format('Y-m-1'), $data->format('Y-m-t'), 2, 0, 0);
+    $bikersMes = $oEcoholerite->relatorioPagamento($data->format('Y-m-1'), $data->format('Y-m-t'), 0, 0, 2);
     
-    $totalDia = $oEcoholerite->relatorioPagamento($data->format('Y-m-d'), $data->format('Y-m-d'), 1, 1, 0);
-    $totalSemana = $oEcoholerite->relatorioPagamento($iniSemana, $fimSemana, 1, 1, 0);
-    $totalMes = $oEcoholerite->relatorioPagamento($data->format('Y-m-1'), $data->format('Y-m-t'), 1, 1, 0);
+    $totalDia = $oEcoholerite->relatorioPagamento($data->format('Y-m-d'), $data->format('Y-m-d'), 1, 1, 1);
+    $totalSemana = $oEcoholerite->relatorioPagamento($iniSemana, $fimSemana, 1, 1, 1);
+    $totalMes = $oEcoholerite->relatorioPagamento($data->format('Y-m-1'), $data->format('Y-m-t'), 1, 1, 1);
 
     /*if ($totalDia) $conteudo["Total do dia " . $data->format('d/m/Y')] = $totalDia;
     if ($totalTrabalho) $conteudo["Apenas ecohoras do dia " . $data->format('d/m/Y')] = $totalTrabalho;
@@ -79,14 +83,17 @@ if (!isset($_SESSION["data_consulta"]) || $_SESSION["data_consulta"] == "") {
     if ($ecohorasDia) $conteudo["ecohoras_dia"] = $ecohorasDia;
     if ($ecopedaladasDia) $conteudo["ecopedaladas_dia"] = $ecopedaladasDia;
     if ($reembolsoDia) $conteudo["reembolsos_dia"] = $reembolsoDia;
+    if ($bikersDia) $conteudo["bikers_dia"] = $bikersDia;
     
     if ($ecohorasSemana) $conteudo["ecohoras_semana"] = $ecohorasSemana;
     if ($ecopedaladasSemana) $conteudo["ecopedaladas_semana"] = $ecopedaladasSemana;
     if ($reembolsoSemana) $conteudo["reembolsos_semana"] = $reembolsoSemana;
+    if ($bikersSemana) $conteudo["bikers_semana"] = $bikersSemana;
     
     if ($ecohorasMes) $conteudo["ecohoras_mes"] = $ecohorasMes;
     if ($ecopedaladasMes) $conteudo["ecopedaladas_mes"] = $ecopedaladasMes;
     if ($reembolsoMes) $conteudo["reembolsos_mes"] = $reembolsoMes;
+    if ($bikersMes) $conteudo["bikers_mes"] = $bikersMes;
     
     if ($totalDia) {
         $conteudo["total_dia"] = $totalDia;
