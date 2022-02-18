@@ -33,7 +33,7 @@ id = 1 Henderson | id = 5 Milena
 Para isso a criação do objeto da classe é diferente
 ****/
 $permissao_aprovador = false;
-if ($_SESSION["id"] == 1 ||$_SESSION["id"] == 5) {
+if ($_SESSION["id"] == 1 ||$_SESSION["id"] == 3 ||$_SESSION["id"] == 5) {
     $permissao_aprovador = true;
     $oEcoholerite = new Ecoholerite();
 } else {
