@@ -24,11 +24,19 @@
 <link href="../../../produtos/catalogo-produtos.css" rel="stylesheet">
 <div id="popup" title="" style="display: none;">
     <p><img src="entenda-precos.png" width="1056" height="352" /></p>
+    <p>(*) Itens não certificados mas sem veneno<br>
+(**) itens de produção local e/ou da Economia Solidária mas contendo algum ingrediente não-orgânico</p>
 </div>
 <div class="container">
     <div class="row">
         <!--<div class="col-sm-3 hidden-xs">-->
         <div class="col-sm-3">
+            {% if lista == 1 %}
+            <form method="GET">
+            <p><button target_link="https://livresbs.com.br/Consumidor/login.php" type="button" class="form-control btn btn-success">Fazer pedido</button></p>
+            <p><button target_link="https://livresbs.com.br/Consumidor/instrucoes/" type="button" class="form-control btn btn-warning">Instruções</button></p>
+            </form>
+            {% endif %}
             <form method="GET">
                 <input type="text" value="{{ filtro }}" id="f" name="f" class="form-control" />
                 <input type="submit" value="Buscar" class="form-control" />
@@ -108,7 +116,7 @@
     $(document).ready(function(){
         dialog = $("#popup").dialog({
             autoOpen: false,
-            height: 420,
+            height: 480,
             width: 1090,
             modal: true,
             closeOnEscape: false,
@@ -137,6 +145,11 @@
     $("[produto-link]").click(function(event){
         event.preventDefault();
     });
+    $("button").on("click", function() {
+        if ($(this).attr('target_link') != "") {
+            window.open($(this).attr('target_link'));
+        }
+    })
 </script>
 </body>
 </html>
