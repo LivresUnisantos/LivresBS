@@ -78,11 +78,11 @@
     'normal' => $fontDir . '/DejaVuSerif',
   ),
   'open sans' => array(
-    '300' => $fontDir . '/open-sans-300_89cc7c620a0fc06c636a78901bc3d90c',
-    'normal' => $fontDir . '/open-sans-normal_d5c8574b9bdb2edd2b2d6153763d908a',
-    '600' => $fontDir . '/open-sans-600_50bb364a7fe911a2a48a6f505613df8b',
-    'bold' => $fontDir . '/open-sans-bold_2b29b70e8fdb444eafdbe10ae3ef325f',
-    '800' => $fontDir . '/open-sans-800_8d648359e5f3ba35434a219f01caa460',
+    '300' => $fontDir . '/open-sans-300_80f3b6f858e74e0b04104f631e2d77c4',
+    'normal' => $fontDir . '/open-sans-normal_f7da35cf72ee81e3360a5e75271a3d42',
+    '600' => $fontDir . '/open-sans-600_775c485089369e79b3cd05a88ea684d2',
+    'bold' => $fontDir . '/open-sans-bold_167b88d1277e85244891baef4ab736cf',
+    '800' => $fontDir . '/open-sans-800_85eeaab4b4e30750130908aa68a58fd2',
   ),
   'source code pro' => array(
     '300' => $fontDir . '/source-code-pro-300_a85c55308b1fd3cc0f1ae77e195a40e2',
