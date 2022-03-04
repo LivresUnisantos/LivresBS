@@ -317,7 +317,8 @@ if (!isset($_GET["cpf"])) {
     			<div class="grid-x grid-padding-x">
     			    Itens em negrito não estão sendo produzidos no momento, fazem parte de sua cesta de compromisso e serão entregues automaticamente quando disponíveis.
                     <?php
-                    $sql = "SELECT * FROM Pedidos LEFT JOIN produtos ON Pedidos.IDProduto = produtos.id WHERE Pedidos.IDConsumidor = ".$idConsumidor." AND Pedidos.Frequencia = 'Semanal' AND Pedidos.Quantidade > 0 ORDER BY produtos.nome";
+                    $sql = "SELECT * FROM Pedidos LEFT JOIN produtos ON Pedidos.IDProduto = produtos.id WHERE Pedidos.IDConsumidor = ".$idConsumidor." AND Pedidos.Frequencia = 'Semanal' AND Pedidos.Quantidade > 0";
+                    $sql .= " ORDER BY produtos.nome";
                     $st = $conn->prepare($sql);
                     $st->execute();
                     if ($st->rowCount() > 0) {
@@ -359,7 +360,8 @@ if (!isset($_GET["cpf"])) {
     				<div class="medium-1">&nbsp;</div>
 					<?php
 					//Loop de pedidos quinzenais+semanais
-					$sql = "SELECT * FROM Pedidos LEFT JOIN produtos ON Pedidos.IDProduto = produtos.id WHERE Pedidos.IDConsumidor = ".$idConsumidor." AND Pedidos.Quantidade > 0 AND (Pedidos.Frequencia = 'Semanal' OR Pedidos.Frequencia = 'Quinzenal') ORDER BY produtos.nome";
+					$sql = "SELECT * FROM Pedidos LEFT JOIN produtos ON Pedidos.IDProduto = produtos.id WHERE Pedidos.IDConsumidor = ".$idConsumidor." AND Pedidos.Quantidade > 0 AND (Pedidos.Frequencia = 'Semanal' OR Pedidos.Frequencia = 'Quinzenal')";
+					$sql .= " AND produtos.soft_delete = 0";
 					$st = $conn->prepare($sql);
 					$st->execute();
 
@@ -414,7 +416,9 @@ if (!isset($_GET["cpf"])) {
         				<div class="grid-x grid-padding-x">
         					<?php
         					//Loop de pedidos mensais
-        					$sql = "SELECT * FROM Pedidos LEFT JOIN produtos ON Pedidos.IDProduto = produtos.id WHERE Pedidos.IDConsumidor = ".$idConsumidor." AND Pedidos.Quantidade > 0 AND (Pedidos.Frequencia = 'Mensal') ORDER BY produtos.nome";
+        					$sql = "SELECT * FROM Pedidos LEFT JOIN produtos ON Pedidos.IDProduto = produtos.id WHERE Pedidos.IDConsumidor = ".$idConsumidor." AND Pedidos.Quantidade > 0 AND (Pedidos.Frequencia = 'Mensal')";
+        					$sql .= " AND produtos.soft_delete = 0";
+        					$sql .= " ORDER BY produtos.nome";
         					$st = $conn->prepare($sql);
         					$st->execute();
         					$rsMensal=$st->fetchAll();
