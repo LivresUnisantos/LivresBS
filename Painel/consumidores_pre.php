@@ -83,7 +83,20 @@ if (isset($_POST["id_consumidor"]) && isset($_GET["act"])) {
             echo "Telefone alterado<br>";
             echo $rsS["nome"]." alterado de ".$rsS["telefone"]." para ".$telefone."<br>";
         } else {
-            echo "Falha ao alterar grupo<br>";
+            echo "Falha ao alterar telefone<br>";
+        }
+    }
+    
+    if ($act == "endereco") {
+        $endereco = $_POST["endereco"];
+    
+        $sqlUpdate = "UPDATE Usuarios SET endereco = '$endereco' WHERE id = ".$id;
+        $st = $conn->prepare($sqlUpdate);
+        if ($st->execute()) {
+            echo "Endereço alterado<br>";
+            echo $rsS["nome"]." alterado de '".$rsS["endereco"]."' para ".$endereco."<br>";
+        } else {
+            echo "Falha ao alterar endereço<br>";
         }
     }
 }
@@ -118,17 +131,24 @@ if ($st->rowCount() > 0) {
         echo '<td>'.$row["nome"].'</td>';
         echo '<td>'.$row["email"].'</td>';
         echo '<td>'.$row["cpf"].'</td>';
-        echo '<td>'.$row["endereco"].'</td>';
+        //echo '<td>'.$row["endereco"].'</td>';
+        echo '<td>';
+        echo '<form method="post" action="?act=endereco">';
+        echo '<input type="hidden" id="id_consumidor_endereco_'.$row["id"].'" name="id_consumidor" value="'.$row["id"].'" />';
+        echo '<input type="text" id="endereco" name="endereco" value="'.$row["endereco"].'" />';
+        echo '<input type="submit" value="Alterar" />';
+        echo '</form>';
+        echo '</td>';
         echo '<td width="300px">';
         echo '<form method="post" action="?act=telefone">';
-        echo '<input type="hidden" id="id_consumidor_'.$row["id"].'" name="id_consumidor" value="'.$row["id"].'" />';
+        echo '<input type="hidden" id="id_consumidor_telefone_'.$row["id"].'" name="id_consumidor" value="'.$row["id"].'" />';
         echo '<input type="text" id="telefone" name="telefone" value="'.$row["telefone"].'" />';
         echo '<input type="submit" value="Alterar" />';
         echo '</form>';
         echo '</td>';
         echo '<td width="300px">';
         echo '<form method="post" action="?act=grupo">';
-        echo '<input type="hidden" id="id_consumidor_'.$row["id"].'" name="id_consumidor" value="'.$row["id"].'" />';
+        echo '<input type="hidden" id="id_consumidor_grupo_'.$row["id"].'" name="id_consumidor" value="'.$row["id"].'" />';
         echo '<select id="grupo_'.$row["id"].'" name="grupo">';
         foreach ($grupos as $grupo) {
             if ($grupo == $row["grupo"]) {
