@@ -215,20 +215,26 @@ if (isset($_GET["selecionarCaixa"])) {
     	<?php } ?>
 	<?php } ?>
 	<div id="container_rodape" class="row">
-    	<div id="container_relatorio" class="col-3">
+    	<div id="container_relatorio" class="col-6">
         	<?php
         	if (!isset($_GET["selecionarCaixa"])) {
+        	    echo '<div class="row">';
             	if ($caixas = $oCaixa->listarCaixasFechados()) {
+            	    echo '<div class="col-6">';
             	    echo "<h5>Relatório de Caixas Fechados</h5>";
                 	foreach ($caixas as $row) {
                 	    echo date("d/m/Y H:i",strtotime($row["dataAbertura"])).' - <a href="?verRelatorio=1&id_caixa_rel='.$row["id"].'">Ver Relatório</a> | ';
                 	    echo '<a href="?selecionarCaixa='.$row["id"].'">Ver Detalhes</a><br>';
                 	}
+                	echo '</div>';
             	}
             	
             	if (isset($_GET["verRelatorio"]) && isset($_GET["id_caixa_rel"])) {
+            	    echo '<div class="col-6">';
             	    echo $oCaixa->relatorioCaixa($_GET["id_caixa_rel"]);
+            	    echo '</div>';
             	}
+            	echo '</div>';
         	} else {
         	    echo $oCaixa->relatorioCaixa($_GET["selecionarCaixa"]);
         	}
