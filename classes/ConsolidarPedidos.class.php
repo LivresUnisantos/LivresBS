@@ -23,6 +23,8 @@ class ConsolidarPedidos extends Livres {
     }
 
     public function consolidarAgoraVariavel() {
+        $oProdutos = new Produtos;
+        $produtos = $oProdutos->realizarBackupProdutos($this->dataEntrega);
         $this->populaItensCestaVariavel();
         $this->atualizaValores();
         $this->apagaPedidosSemItens();
@@ -105,8 +107,8 @@ class ConsolidarPedidos extends Livres {
 
     private function cadastraPedido($consumidor) {
         $sql = "INSERT INTO pedidos_consolidados (consumidor_id, pedido_cota, pedido_fixa, pedido_variavel, pedido_mensal, pedido_endereco, 
-                                    pedido_retirada, pedido_entrega_valor, pedido_data, pedido_consolidado) ";
-        $sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";    
+                                    pedido_entrega_valor, pedido_data, pedido_consolidado) ";
+        $sql .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";    
         $dados = [
             $consumidor["id"],
             0,
@@ -114,7 +116,6 @@ class ConsolidarPedidos extends Livres {
             0,
             0,
             $consumidor["endereco"],
-            3,
             0,
             $this->dataTimeParaString($this->dataEntrega),
             0
@@ -124,15 +125,12 @@ class ConsolidarPedidos extends Livres {
     }
 
     private function recadastraPedido($consumidor) {
-        $sql = "UPDATE pedidos_consolidados SET pedido_cota = ?, pedido_fixa = ?, pedido_variavel = ?, pedido_mensal = ?, pedido_endereco = ?, 
-                pedido_retirada = ?, pedido_entrega_valor = ?, pedido_consolidado = ? WHERE consumidor_id = ? AND pedido_data = ?";
+        $sql = "UPDATE pedidos_consolidados SET pedido_cota = ?, pedido_fixa = ?, pedido_variavel = ?, pedido_mensal = ?, 
+                pedido_consolidado = ? WHERE consumidor_id = ? AND pedido_data = ?";
         $dados = [
             0,
             0,
             0,
-            0,
-            $consumidor["endereco"],
-            3,
             0,
             0,
             (int) $consumidor["id"],
@@ -413,8 +411,8 @@ class ConsolidarPedidos extends Livres {
                 if ($idPedido != "") {
                     $delivery = $this->dadosDelivery($delivery);
                     $sql = "UPDATE pedidos_consolidados SET pedido_retirada = ".$delivery["id"].",
-                            pedido_entrega_valor = ".$delivery["valor_entrega"].", pedido_endereco = '".$endereco."' 
-                            WHERE pedido_id = ".$idPedido;
+                            pedido_endereco = '".$endereco."' 
+                            WHERE pedido_retirada IS NULL AND pedido_id = ".$idPedido;
                     $st = $this->conn()->prepare($sql);
                     $st->execute();
                 }

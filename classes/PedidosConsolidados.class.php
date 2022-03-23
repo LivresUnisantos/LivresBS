@@ -138,10 +138,13 @@ class PedidosConsolidados extends Livres {
             $consumidores = $oConsumidores->consumidoresTodos();
 
             //varrer pedidos e alterar layout do array
+            //manter apenas para pedidos passados (data <= hoje)
+            //ignorar pedidos do consumidor "vendas loja livres" utilizado no caixa
             $index = 0;
             foreach ($pedidos as $pedido) {
-                if ($pedido["pgt_status"] < 2) {
-                    $conteudo[$index]["consumidor"] = $consumidores[$pedido["consumidor_id"]];
+                $consumidor = $consumidores[$pedido["consumidor_id"]];
+                if ($pedido["pgt_status"] < 2 && $pedido["pedido_data"] <= date("Y-m-d") && strpos($consumidor["consumidor"], "Vendas Loja") === false) {
+                    $conteudo[$index]["consumidor"] = $consumidor;
                     $conteudo[$index]["pedido"] = $pedido;
                     $index++;
                 }
