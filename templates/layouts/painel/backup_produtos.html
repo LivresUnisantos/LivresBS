@@ -38,7 +38,7 @@
                         {% else %}
                             <td id="data_{{ c.id }}">{{ c.pedido_data|date("d/m/Y") }}</td>
                         {% endif %}
-                        <td id="cons_em_{{ c.id }}">{{ c.consolidado_em|date("d/m/Y H:m:i") }}</td>
+                        <td id="cons_em_{{ c.id }}">{{ c.consolidado_em|date("d/m/Y H:i:s") }}</td>
                         <td id="cons_por_{{ c.id }}">{{ c.consolidado_por_nome }}</td>
                         <td id="restaurar_{{ c.id }}"><a href="?id={{ c.id }}" id="href_{{c.id}}" name="link_restaurar">Restaurar Backup</a></td>
                     </tr>
