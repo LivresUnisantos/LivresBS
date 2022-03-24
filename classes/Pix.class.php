@@ -8,7 +8,7 @@
 
 */
 
-require __DIR__.'/pix/vendor/autoload.php';
+//require __DIR__.'/pix/vendor/autoload.php';
 require __DIR__.'/pix/config-pix.php';
     
 use \App\Pix\Payload;

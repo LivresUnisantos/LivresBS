@@ -10,6 +10,7 @@ $calendario = new Calendario();
 $loader = new \Twig\Loader\FilesystemLoader('../templates/layouts/painel');
 $twig = new \Twig\Environment($loader, ['debug' => false]);//
 //unset($_SESSION["data_consulta"]);
+$dataStr = "";
 if (isset($_SESSION["data_consulta"])) {
     $getData = $livres->dataPelaString($_SESSION["data_consulta"]);
     if (!$dataStr = $livres->dataPeloID($getData,'string')) {
@@ -23,10 +24,11 @@ if (isset($_SESSION["data_consulta"])) {
     }
 }
 
-$oPedidos = new PedidosConsolidados($dataStr);
 if (isset($_SESSION["data_consulta"])) {
+    $oPedidos = new PedidosConsolidados($dataStr);
     $conteudo = $oPedidos->pedidoCompletoPorConsumidor();
 } else {
+    $oPedidos = new PedidosConsolidados();
     $conteudo = $oPedidos->pedidsoPagamentoPendente();
 }
 
