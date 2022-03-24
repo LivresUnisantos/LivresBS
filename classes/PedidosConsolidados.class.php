@@ -1,11 +1,13 @@
 <?php
 class PedidosConsolidados extends Livres {
 
-    function __construct($dataEntrega) {
-        if (!is_numeric($dataEntrega)) {
-            $this->dataEntrega = $this->dataParaTime($dataEntrega);
-        } else {
-            $this->dataEntrega = $dataEntrega;
+    function __construct($dataEntrega = "") {
+        if ($dataEntrega != "") {
+            if (!is_numeric($dataEntrega)) {
+                $this->dataEntrega = $this->dataParaTime($dataEntrega);
+            } else {
+                $this->dataEntrega = $dataEntrega;
+            }
         }
     }
 
