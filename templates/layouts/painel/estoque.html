@@ -41,13 +41,13 @@
             <tbody id="tabela_produtos">
                 {% for p in conteudo %}
                     <form name="salvarestoque" id="salvarestoque_{{ p.id }}" act="estoque_act.php" method="GET">
-                        {% if (p.estoque == 0) %}
-                            <input type="hidden" id="estoquezero_{{ p.id }}" name="estoquezero" value="1" />
-                        {% else %}
-                            <input type="hidden" id="estoquezero_{{ p.id }}" name="estoquezero" value="0" />
-                        {% endif %}
-                        <input type="hidden" name="id" id="id_estoque_{{ p.id }}" value="{{ p.id }}" />
                         <tr>
+                            {% if (p.estoque == 0) %}
+                                <input type="hidden" id="estoquezero_{{ p.id }}" name="estoquezero" value="1" />
+                            {% else %}
+                                <input type="hidden" id="estoquezero_{{ p.id }}" name="estoquezero" value="0" />
+                            {% endif %}
+                            <input type="hidden" name="id" id="id_estoque_{{ p.id }}" value="{{ p.id }}" />
                             <td id="codigo_{{p.id}}">{{p.id}}</td>
                             <td id="nome_{{ p.id }}">{{p.nome}}</td>
                             <td id="categoria_{{ p.id }}">{{p.categoria}}</td>
@@ -100,7 +100,7 @@
                     if (estoquezero || estoquenaozero) {
                         flagestoque=0;
                         if (estoquezero) { flagEstoqueZero = 1; } else { flagEstoqueZero = 0; }
-                        estoque = $(this).find('td input[name="estoquezero"]').val() == flagEstoqueZero;
+                        estoque = $(this).find('input[name="estoquezero"]').val() == flagEstoqueZero;
                         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1 && estoque);
                     } else {
                         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
