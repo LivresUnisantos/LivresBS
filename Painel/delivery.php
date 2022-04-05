@@ -70,8 +70,9 @@ if ($alerta != "") {
 	}
 	echo '</p>';
 	$sqlListaPedidosDia = "SELECT * FROM pedidos_consolidados ped LEFT JOIN Consumidores cons on ped.consumidor_id = cons.id  ";
-	$sqlListaPedidosDia .= "WHERE pedido_data = '".$dataStr."' AND cons.comunidade <> 0 AND ped.consumidor_id IS NOT NULL ";
-	$sqlListaPedidosDia .= "ORDER BY cons.comunidade, cons.consumidor";
+	//$sqlListaPedidosDia .= "WHERE pedido_data = '".$dataStr."' AND cons.comunidade <> 0 AND ped.consumidor_id IS NOT NULL ";
+	$sqlListaPedidosDia .= " WHERE pedido_data = '".$dataStr."' AND ped.consumidor_id IS NOT NULL AND cons.consumidor NOT LIKE '%Vendas loja não consumidores%'";
+	$sqlListaPedidosDia .= " ORDER BY cons.comunidade, cons.consumidor";
 	
 	if (!empty($_POST)) {
 		$sql = $sqlListaPedidosDia;
@@ -113,9 +114,10 @@ if ($alerta != "") {
 	} else {
 		if (strlen($getData) > 0) {
 
-			$sql = "SELECT * FROM pedidos_consolidados ped LEFT JOIN Consumidores cons on ped.consumidor_id = cons.id  ";
-			$sql .= "WHERE pedido_data = '".$dataStr."' AND cons.comunidade <> 0 AND ped.consumidor_id IS NOT NULL ";
-			$sql .= "ORDER BY cons.comunidade, cons.consumidor";
+			$sql = "SELECT * FROM pedidos_consolidados ped LEFT JOIN Consumidores cons on ped.consumidor_id = cons.id ";
+			//$sql .= "WHERE pedido_data = '".$dataStr."' AND cons.comunidade <> 0 AND ped.consumidor_id IS NOT NULL ";
+			$sql .= " WHERE pedido_data = '".$dataStr."' AND ped.consumidor_id IS NOT NULL AND cons.consumidor NOT LIKE '%Vendas loja não consumidores%'";
+			$sql .= " ORDER BY cons.comunidade, cons.consumidor";
 			$st = $conn->prepare($sql);
 			$st->execute();
 			if ($st->rowCount() > 0) {
