@@ -392,7 +392,13 @@ if (!isset($_GET["data"]) || !isset($_SESSION["data_id"])) {
     		        echo '<td><a href="../Variavel/?cpf='.$cpf.'" target="_blank">'.ucwords(mb_strtolower(abvNome($nome),'UTF-8')).' (G'.$comunidade.')</a></td>';
     		    }
     		    echo "<td>";
-    		    echo "R$".number_format(($cota-$valorCesta),2,",",".");
+    		    //em alguns casos, quando desconto é aplicado na cesta da pessoa, o valor da cesta fica negativo.
+    		    //as linhas abaixo servem para que o valor de variável exibido seja o valor necessário para zerar o preço da cesta
+    		    if ($valorCesta < 0) {
+        		    echo "R$".number_format((-1*$valorCesta),2,",",".");
+    		    } else {
+    		        echo "R$".number_format(($cota-$valorCesta),2,",",".");
+    		    }
     		    echo '<input type="hidden" name="cotavariavel_'.$idConsumidor.'" id="cotavariavel_'.$idConsumidor.'" value="R$'.number_format(($cota-$valorCesta),2,",",".").'" />';
     		    echo "</td>";
     	        //Opções consumidor
