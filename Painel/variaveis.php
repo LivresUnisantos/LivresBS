@@ -326,189 +326,194 @@ if (!isset($_GET["data"]) || !isset($_SESSION["data_id"])) {
         	    exit();
         	}*/
         	if ((getFreq($frequenciaCodigo[$comunidade],"q") && $contaQuinzenal>0) || (getFreq($frequenciaCodigo[$comunidade],"s") && $contaSemanal > 0) || (getFreq($frequenciaCodigo[$comunidade],"m") && $contaMensal > 0)) {
+        	    $mostrarCesta = true;
         	    if ($cota == 0 || $valorCesta == 0) {
-        	        echo "Erro. Consumidor ativo e sem pedido consolidado -> ".$cons["consumidor"]."(".$cons["id"].")";
-        	        exit();
+        	        echo '<h5 style="background-color: red;">';
+                    echo "Erro. Consumidor ativo e sem pedido consolidado -> ".$cons["consumidor"]."(".$cons["id"].")";
+                    echo '</h5>';
+        	        $mostrarCesta = false;
+        	        //exit();
         	    }
-        	//if (1) {
-        	//Fim cálculo cota variável
-            	//Obter pedido já feito
-            	$sql = "SELECT * FROM PedidosVar WHERE idConsumidor = ".$idConsumidor." AND idCalendario = ".$getData;
-            	$st = $conn->prepare($sql);
-            	$st->execute();
-            	$rsVar=$st->fetchAll();
-            	$opc1="";
-            	$opc2="";
-            	$cestaVariavel="";
-            	$diferenca="";
-            	$dataPedido="";
-            	$semResposta=true;
-            	$respostaLivres=0;
-            	$adicional=0;
-            	$quantidadeOpcao1="";
-            	$quantidadeOpcao2="";
-            	$escolhaOpcao1="";
-            	$escolhaOpcao2="";
-            	$unidade1="";
-            	$unidade2="";
-            	$delivery="";
-        		foreach ($rsVar as $row) {
-        		    if (!is_null($row["idOpcao1"])) {
-        		        $opc1=$listaVar[$row["idOpcao1"]]["nome"]." - R$".number_format($listaVar[$row["idOpcao1"]]["preco"],2,",",".");
+        	    if ($mostrarCesta) {
+            	    //Fim cálculo cota variável
+                	//Obter pedido já feito
+                	$sql = "SELECT * FROM PedidosVar WHERE idConsumidor = ".$idConsumidor." AND idCalendario = ".$getData;
+                	$st = $conn->prepare($sql);
+                	$st->execute();
+                	$rsVar=$st->fetchAll();
+                	$opc1="";
+                	$opc2="";
+                	$cestaVariavel="";
+                	$diferenca="";
+                	$dataPedido="";
+                	$semResposta=true;
+                	$respostaLivres=0;
+                	$adicional=0;
+                	$quantidadeOpcao1="";
+                	$quantidadeOpcao2="";
+                	$escolhaOpcao1="";
+                	$escolhaOpcao2="";
+                	$unidade1="";
+                	$unidade2="";
+                	$delivery="";
+            		foreach ($rsVar as $row) {
+            		    if (!is_null($row["idOpcao1"])) {
+            		        $opc1=$listaVar[$row["idOpcao1"]]["nome"]." - R$".number_format($listaVar[$row["idOpcao1"]]["preco"],2,",",".");
+            		    } else {
+            		        $opc1="";
+            		    }
+            		    if (!is_null($row["idOpcao2"])) {
+                            $opc2=$listaVar[$row["idOpcao2"]]["nome"]." - R$".number_format($listaVar[$row["idOpcao2"]]["preco"],2,",",".");   
+            		    } else {
+            		        $opc2="";
+            		    }
+            		    $cestaVariavel=$row["cesta_variavel"];
+            		    $diferenca=$row["diferenca"];
+            		    $dataPedido=$row["data_pedido"];
+            		    $semResposta=false;
+            		    $respostaLivres=$row["resposta_livres"];
+            		    $adicional = $row["adicional"];
+            		    $quantidadeOpcao1=$row["quantidadeOpcao1"];
+                    	$quantidadeOpcao2=$row["quantidadeOpcao2"];
+                    	$escolhaOpcao1=$row["escolhaOpcao1"];
+                    	$escolhaOpcao2=$row["escolhaOpcao2"];
+                    	$delivery=$row["delivery"];
+                    	if (!is_null($row["idOpcao1"])) {
+                    	    $unidade1=$listaVar[$row["idOpcao1"]]["unidade"];
+                    	}
+                    	if (!is_null($row["idOpcao2"])) {
+            		        $unidade2=$listaVar[$row["idOpcao2"]]["unidade"];
+                    	}
+            		}
+        		    if ($counter % 2 == 0) {
+        			    echo '<tr class="lineBlank">';
         		    } else {
-        		        $opc1="";
+        			    echo '<tr class="lineColor">';
         		    }
-        		    if (!is_null($row["idOpcao2"])) {
-                        $opc2=$listaVar[$row["idOpcao2"]]["nome"]." - R$".number_format($listaVar[$row["idOpcao2"]]["preco"],2,",",".");   
+        		    if (isset($_GET["imprimir"])) {
+        		        echo "<td>".ucwords(mb_strtolower(abvNome($nome),'UTF-8'))." (G".$comunidade.")</td>";
         		    } else {
-        		        $opc2="";
+        		        echo '<td><a href="../Variavel/?cpf='.$cpf.'" target="_blank">'.ucwords(mb_strtolower(abvNome($nome),'UTF-8')).' (G'.$comunidade.')</a></td>';
         		    }
-        		    $cestaVariavel=$row["cesta_variavel"];
-        		    $diferenca=$row["diferenca"];
-        		    $dataPedido=$row["data_pedido"];
-        		    $semResposta=false;
-        		    $respostaLivres=$row["resposta_livres"];
-        		    $adicional = $row["adicional"];
-        		    $quantidadeOpcao1=$row["quantidadeOpcao1"];
-                	$quantidadeOpcao2=$row["quantidadeOpcao2"];
-                	$escolhaOpcao1=$row["escolhaOpcao1"];
-                	$escolhaOpcao2=$row["escolhaOpcao2"];
-                	$delivery=$row["delivery"];
-                	if (!is_null($row["idOpcao1"])) {
-                	    $unidade1=$listaVar[$row["idOpcao1"]]["unidade"];
+        		    echo "<td>";
+        		    //em alguns casos, quando desconto é aplicado na cesta da pessoa, o valor da cesta fica negativo.
+        		    //as linhas abaixo servem para que o valor de variável exibido seja o valor necessário para zerar o preço da cesta
+        		    if ($valorCesta < 0) {
+            		    echo "R$".number_format((-1*$valorCesta),2,",",".");
+        		    } else {
+        		        echo "R$".number_format(($cota-$valorCesta),2,",",".");
+        		    }
+        		    echo '<input type="hidden" name="cotavariavel_'.$idConsumidor.'" id="cotavariavel_'.$idConsumidor.'" value="R$'.number_format(($cota-$valorCesta),2,",",".").'" />';
+        		    echo "</td>";
+        	        //Opções consumidor
+        	        if ($opc1 != "") {
+        	            echo "<td>".$opc1;
+        	            if ($opc2 != "") {
+        	                echo " | ".$opc2;
+        	            }
+                    } else {
+                        echo "<td>".$opc2;
+                    }
+                    echo "</td>";
+        		    /* TRATAMENTO DA ESCOLHA DOS PRODUTOS PELO LIVRES */
+    		        $nome1 = "";
+    		        $nome2 = "";
+    		        $unidade1 = "";
+    		        $unidade2 = "";
+    		        $variavelTotal=0;
+    		        $esc1 = '<select id="escolha1_'.$idConsumidor.'" name="escolha1_'.$idConsumidor.'">';
+    		        $esc1 .= '<option value=""></option>';
+    		        foreach ($rsLVar as $lVar) {
+    		            if ($escolhaOpcao1 == $lVar["id"]) {
+                	        $esc1 .= '<option selected="selected" value="'.$lVar["id"].'">'.ccase($lVar["nome"]).' - R$'.number_format($lVar["preco"],2,",",".").'</option>';
+                	        $nome1 = $lVar["nome"];
+                	        $unidade1 = $lVar["unidade"];
+                	        //if (strtolower($unidade1) == "dúzia") {
+                	        //    $variavelTotal+=$lVar["preco"]*$quantidadeOpcao1/12;
+                	        //} else {
+                	            $variavelTotal+=$lVar["preco"]*$quantidadeOpcao1;
+                	        //}
+    		            } else {
+    		                $esc1 .= '<option value="'.$lVar["id"].'">'.ccase($lVar["nome"]).' - R$'.number_format($lVar["preco"],2,",",".").'</option>';
+    		            }
                 	}
-                	if (!is_null($row["idOpcao2"])) {
-        		        $unidade2=$listaVar[$row["idOpcao2"]]["unidade"];
+    		        $esc1 .= '</select>';
+    		        $esc2 = '<select id="escolha2_'.$idConsumidor.'" name="escolha2_'.$idConsumidor.'">';
+    		        $esc2 .= '<option value=""></option>';
+    		        foreach ($rsLVar as $lVar) {
+    		            if ($escolhaOpcao2 == $lVar["id"]) {
+                	        $esc2 .= '<option selected="selected" value="'.$lVar["id"].'">'.ccase($lVar["nome"]).' - R$'.number_format($lVar["preco"],2,",",".").'</option>';
+                	        $nome2 = $lVar["nome"];
+                	        $unidade2 = $lVar["unidade"];
+                	        //if (strtolower($unidade2) == "dúzia") {
+                	        //    $variavelTotal+=$lVar["preco"]*$quantidadeOpcao2/12;
+                	        //} else {
+                	            $variavelTotal+=$lVar["preco"]*$quantidadeOpcao2;
+                	        //}
+    		            } else {
+    		                $esc2 .= '<option value="'.$lVar["id"].'">'.ccase($lVar["nome"]).' - R$'.number_format($lVar["preco"],2,",",".").'</option>';
+    		            }
                 	}
-        		}
-    		    if ($counter % 2 == 0) {
-    			    echo '<tr class="lineBlank">';
-    		    } else {
-    			    echo '<tr class="lineColor">';
-    		    }
-    		    if (isset($_GET["imprimir"])) {
-    		        echo "<td>".ucwords(mb_strtolower(abvNome($nome),'UTF-8'))." (G".$comunidade.")</td>";
-    		    } else {
-    		        echo '<td><a href="../Variavel/?cpf='.$cpf.'" target="_blank">'.ucwords(mb_strtolower(abvNome($nome),'UTF-8')).' (G'.$comunidade.')</a></td>';
-    		    }
-    		    echo "<td>";
-    		    //em alguns casos, quando desconto é aplicado na cesta da pessoa, o valor da cesta fica negativo.
-    		    //as linhas abaixo servem para que o valor de variável exibido seja o valor necessário para zerar o preço da cesta
-    		    if ($valorCesta < 0) {
-        		    echo "R$".number_format((-1*$valorCesta),2,",",".");
-    		    } else {
-    		        echo "R$".number_format(($cota-$valorCesta),2,",",".");
-    		    }
-    		    echo '<input type="hidden" name="cotavariavel_'.$idConsumidor.'" id="cotavariavel_'.$idConsumidor.'" value="R$'.number_format(($cota-$valorCesta),2,",",".").'" />';
-    		    echo "</td>";
-    	        //Opções consumidor
-    	        if ($opc1 != "") {
-    	            echo "<td>".$opc1;
-    	            if ($opc2 != "") {
-    	                echo " | ".$opc2;
-    	            }
-                } else {
-                    echo "<td>".$opc2;
+    		        $esc2 .= '</select>';
+    		        if (!isset($_GET["imprimir"])) {
+        		        echo '<td>';
+        		        echo '<input type="text" size="5" name="quantidade1_'.$idConsumidor.'" id="quantidade1_'.$idConsumidor.'" value="'.$quantidadeOpcao1.'" /> x ';
+        		        echo $esc1.'</td>';
+        		        echo '<td>';
+        		        echo '<input type="text" size="5" name="quantidade2_'.$idConsumidor.'" id="quantidade2_'.$idConsumidor.'" value="'.$quantidadeOpcao2.'" /> x ';
+        		        echo $esc2.'</td>';
+    		        } else {
+    		            if ($nome1 != "" && $quantidadeOpcao1 > 0) {
+    		                //if (strtolower($unidade1) == "dúzia") {
+    		                //  $unidade1 = "unidade";
+    		                //}
+        		            echo '<td>'.$quantidadeOpcao1.' '.$unidade1.' x '.$nome1.'</td>';
+    		            } else {
+    		                echo '<td></td>';
+    		            }
+        		        if ($nome2 != "" && $quantidadeOpcao2 > 0) {
+        		            //if (strtolower($unidade2) == "dúzia") {
+    		                //  $unidade2 = "unidade";
+    		                //}
+        		            echo '<td>'.$quantidadeOpcao2.' '.$unidade2.' x '.$nome2.'</td>';
+    		            } else {
+    		                echo '<td></td>';
+    		            }
+    		        }
+        		    /* FIM DA TRATAMENTO ESCOLHA DOS PRODUTOS PELO LIVRES */
+        		    
+        		    $diferenca=str_replace(".",",",$diferenca);
+        		    $diferenca=str_replace("R","",$diferenca);
+        		    $diferenca=str_replace("r","",$diferenca);
+        		    $diferenca=str_replace("$","",$diferenca);
+        		    $direrenca=trim($diferenca);
+        		    $variavelTotal=$variavelTotal-($cota-$valorCesta);
+        		    if (!isset($_GET["imprimir"])) {
+        		        echo '<td><input size="10" type="text" value="'.$diferenca.'" id="diferenca_'.$idConsumidor.'" name="diferenca_'.$idConsumidor.'" />';
+        		        if ($variavelTotal < 0) {
+        		            $variavelTotal="R$".number_format($variavelTotal,2,",",".");
+        		            echo '<span style="color:#00FF00;">'.$variavelTotal.'</span>';
+        		        } else {
+        		            $variavelTotal="R$".number_format($variavelTotal,2,",",".");
+        		            echo '<span style="color:#FF0000;">'.$variavelTotal.'</span>';
+        		        }
+        		        echo '</td>';
+        		    } else {
+        		        echo '<td>'.$diferenca.'</td>';
+        		    }
+        		    echo '<td>'.(($adicional == 1) ? "Sim" : "Não").'</td>';
+        		    if (array_key_exists($idConsumidor,$ordem)) {
+        	            echo "<td>".$ordem[$idConsumidor]." - ".date("d/m/Y H:i:s",strtotime($dataPedido))."</td>";
+        		    } else {
+        		        if (isset($respostaLivres) && $respostaLivres == 1) {
+        		            echo "<td>Resposta Livres</td>";
+        		        } else {
+        		            echo "<td>Sem resposta</td>";
+        		        }
+        		    }
+        		    echo '<td>'.$delivery.'</td>';
+        		    echo "</tr>";
                 }
-                echo "</td>";
-    		    /* TRATAMENTO DA ESCOLHA DOS PRODUTOS PELO LIVRES */
-		        $nome1 = "";
-		        $nome2 = "";
-		        $unidade1 = "";
-		        $unidade2 = "";
-		        $variavelTotal=0;
-		        $esc1 = '<select id="escolha1_'.$idConsumidor.'" name="escolha1_'.$idConsumidor.'">';
-		        $esc1 .= '<option value=""></option>';
-		        foreach ($rsLVar as $lVar) {
-		            if ($escolhaOpcao1 == $lVar["id"]) {
-            	        $esc1 .= '<option selected="selected" value="'.$lVar["id"].'">'.ccase($lVar["nome"]).' - R$'.number_format($lVar["preco"],2,",",".").'</option>';
-            	        $nome1 = $lVar["nome"];
-            	        $unidade1 = $lVar["unidade"];
-            	        //if (strtolower($unidade1) == "dúzia") {
-            	        //    $variavelTotal+=$lVar["preco"]*$quantidadeOpcao1/12;
-            	        //} else {
-            	            $variavelTotal+=$lVar["preco"]*$quantidadeOpcao1;
-            	        //}
-		            } else {
-		                $esc1 .= '<option value="'.$lVar["id"].'">'.ccase($lVar["nome"]).' - R$'.number_format($lVar["preco"],2,",",".").'</option>';
-		            }
-            	}
-		        $esc1 .= '</select>';
-		        $esc2 = '<select id="escolha2_'.$idConsumidor.'" name="escolha2_'.$idConsumidor.'">';
-		        $esc2 .= '<option value=""></option>';
-		        foreach ($rsLVar as $lVar) {
-		            if ($escolhaOpcao2 == $lVar["id"]) {
-            	        $esc2 .= '<option selected="selected" value="'.$lVar["id"].'">'.ccase($lVar["nome"]).' - R$'.number_format($lVar["preco"],2,",",".").'</option>';
-            	        $nome2 = $lVar["nome"];
-            	        $unidade2 = $lVar["unidade"];
-            	        //if (strtolower($unidade2) == "dúzia") {
-            	        //    $variavelTotal+=$lVar["preco"]*$quantidadeOpcao2/12;
-            	        //} else {
-            	            $variavelTotal+=$lVar["preco"]*$quantidadeOpcao2;
-            	        //}
-		            } else {
-		                $esc2 .= '<option value="'.$lVar["id"].'">'.ccase($lVar["nome"]).' - R$'.number_format($lVar["preco"],2,",",".").'</option>';
-		            }
-            	}
-		        $esc2 .= '</select>';
-		        if (!isset($_GET["imprimir"])) {
-    		        echo '<td>';
-    		        echo '<input type="text" size="5" name="quantidade1_'.$idConsumidor.'" id="quantidade1_'.$idConsumidor.'" value="'.$quantidadeOpcao1.'" /> x ';
-    		        echo $esc1.'</td>';
-    		        echo '<td>';
-    		        echo '<input type="text" size="5" name="quantidade2_'.$idConsumidor.'" id="quantidade2_'.$idConsumidor.'" value="'.$quantidadeOpcao2.'" /> x ';
-    		        echo $esc2.'</td>';
-		        } else {
-		            if ($nome1 != "" && $quantidadeOpcao1 > 0) {
-		                //if (strtolower($unidade1) == "dúzia") {
-		                //  $unidade1 = "unidade";
-		                //}
-    		            echo '<td>'.$quantidadeOpcao1.' '.$unidade1.' x '.$nome1.'</td>';
-		            } else {
-		                echo '<td></td>';
-		            }
-    		        if ($nome2 != "" && $quantidadeOpcao2 > 0) {
-    		            //if (strtolower($unidade2) == "dúzia") {
-		                //  $unidade2 = "unidade";
-		                //}
-    		            echo '<td>'.$quantidadeOpcao2.' '.$unidade2.' x '.$nome2.'</td>';
-		            } else {
-		                echo '<td></td>';
-		            }
-		        }
-    		    /* FIM DA TRATAMENTO ESCOLHA DOS PRODUTOS PELO LIVRES */
-    		    
-    		    $diferenca=str_replace(".",",",$diferenca);
-    		    $diferenca=str_replace("R","",$diferenca);
-    		    $diferenca=str_replace("r","",$diferenca);
-    		    $diferenca=str_replace("$","",$diferenca);
-    		    $direrenca=trim($diferenca);
-    		    $variavelTotal=$variavelTotal-($cota-$valorCesta);
-    		    if (!isset($_GET["imprimir"])) {
-    		        echo '<td><input size="10" type="text" value="'.$diferenca.'" id="diferenca_'.$idConsumidor.'" name="diferenca_'.$idConsumidor.'" />';
-    		        if ($variavelTotal < 0) {
-    		            $variavelTotal="R$".number_format($variavelTotal,2,",",".");
-    		            echo '<span style="color:#00FF00;">'.$variavelTotal.'</span>';
-    		        } else {
-    		            $variavelTotal="R$".number_format($variavelTotal,2,",",".");
-    		            echo '<span style="color:#FF0000;">'.$variavelTotal.'</span>';
-    		        }
-    		        echo '</td>';
-    		    } else {
-    		        echo '<td>'.$diferenca.'</td>';
-    		    }
-    		    echo '<td>'.(($adicional == 1) ? "Sim" : "Não").'</td>';
-    		    if (array_key_exists($idConsumidor,$ordem)) {
-    	            echo "<td>".$ordem[$idConsumidor]." - ".date("d/m/Y H:i:s",strtotime($dataPedido))."</td>";
-    		    } else {
-    		        if (isset($respostaLivres) && $respostaLivres == 1) {
-    		            echo "<td>Resposta Livres</td>";
-    		        } else {
-    		            echo "<td>Sem resposta</td>";
-    		        }
-    		    }
-    		    echo '<td>'.$delivery.'</td>';
-    		    echo "</tr>";
 		    }
 	    }
 	}
