@@ -78,10 +78,10 @@
                         <!--<div class="col-sm-4 col-md-3 hidden-xs box-product-outer">-->
                         <div class="col-sm-4 col-md-3 box-product-outer">
                         	<div class="box-product">
-                        		<div class="img-wrapper">
+                        		<div class="img-wrapper" style="width:181.88px; height:181.88px;">
                         			<a href="#" produto-link>
                     			    {% if (p.imagem != "") %}
-                    				    <img alt="Product" src="../{{ p.imagem }}" produto-link>
+                    				    <img alt="Product" style="max-height: 181.88px; max-width: 181.88px; " src="../{{ p.imagem }}" produto-link>
                     				{% else %}
                     				    <img alt="Product" src="../images/produtos/padrao.png" produto-link>
                     				{% endif %}
