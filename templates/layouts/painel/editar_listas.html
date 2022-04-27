@@ -44,7 +44,7 @@
                 </select>
                 <input type="submit" id="btn_editar_lista" class="btn btn-primary ml-1" value="Editar lista" />
                 <input type="button" name="btn_apagar_lista" id="btn_apagar_lista" value="Apagar lista" class="btn btn-danger ml-1" />
-                <button type="button" id="btn_abrir_lista" class="btn btn-primary ml-1" onclick="window.open('http://www.livresbs.com.br/produtos/{{ id_lista }}')">Abrir Página</button>
+                <button type="button" id="btn_abrir_lista" class="btn btn-primary ml-1">Abrir Página</button>
                 <input type="button" id="btn_nova_lista" class="btn btn-primary ml-1" value="Criar Nova Lista" />
             </form>
         </div>
@@ -267,6 +267,10 @@
                     });
                     
                 }
+            });
+            
+            $("#btn_abrir_lista").on("click", function() {
+                window.open('http://www.livresbs.com.br/produtos/'+$("#lista_selecionada").val());
             });
             
             /*$("#salvar_tudo").on("click", function() {
