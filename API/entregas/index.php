@@ -51,17 +51,18 @@ if ($st->rowCount() > 0) {
     	}
     	
     	$entrega_item = array(
-    	    'id_consumidor'         => $row["consumidor_id"],
+    	    'id_consumidor'         => intval($row["consumidor_id"]),
     	    'nome_consumidor'       => ucwords(mb_strtolower($row["consumidor"]),'UTF-8'),
-    	    'comunidade_consumidor' => $row["comunidade"],
-    	    'telefone_consumidor'   => $row["telefone"],
+    	    'comunidade_consumidor' => intval($row["comunidade"]),
+    	    'telefone_consumidor'   => strval($row["telefone"]),
     	    'endereco_entrega'      => $row["pedido_endereco"],
     	    'opcao_entrega'         => $delivery,
-	        'valor_entrega'         => number_format($row["pedido_entrega_valor"],2,".","")
+	        'valor_entrega'         => floatval(number_format($row["pedido_entrega_valor"],2,".",""))
         );
         array_push($entregas_arr['data'], $entrega_item);
 	}
-	echo json_encode($entregas_arr, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+	//echo json_encode($entregas_arr, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+	echo json_encode($entregas_arr, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 } else {
     echo json_encode(
         array('message' => 'Sem pedidos para esta data')
