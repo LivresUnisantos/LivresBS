@@ -91,9 +91,9 @@ class Listas extends Livres {
     }
     
     public function deleteLista($id) {
+        /*
         $nomeLista = $this->getNomeLista($id);
         if (!$nomeLista) {
-            echo 1;
             return false;
         }
         //Checar se existe grupo de consumidores avulsos associados à essa lista
@@ -101,18 +101,50 @@ class Listas extends Livres {
         $st = $this->conn()->prepare($sql);
         $st->execute();
         if ($st->rowCount() > 0) {
-            echo 2;
+            return false;
+        }*/
+        if ($this->listaGrupoExiste($id)) {
             return false;
         }
         $sql = "DELETE FROM listas_produtos WHERE id = ".$id;
         $st = $this->conn()->prepare($sql);
         $st->execute();
         if ($st->rowCount() > 0) {
-            echo 3;
             return true;
         }
-        echo 4;
         return false;
+    }
+    
+    public function listaGrupoExiste($id) {
+        /*$nomeLista = $this->getNomeLista($id);
+        if (!$nomeLista) {
+            return false;
+        }
+        $grupos = explode("+", $nomeLista);
+        foreach ($grupos as $grupo) {
+            $grupo = strtolower(trim($grupo));
+            if ($grupo == "pre") {
+                $grupo = "pre-comunidade";
+            }
+            //Checar se existe grupo de consumidores avulsos associados à essa lista
+            $sql = "SELECT grupo FROM Usuarios WHERE grupo = '".$grupo."'";
+            $st = $this->conn()->prepare($sql);
+            $st->execute();
+            if ($st->rowCount() > 0) {
+                return true;
+            }
+        }
+        
+        return false;*/
+        
+        $sql = "SELECT * FROM listas_grupos WHERE id_lista = ".$id;
+        $st = $this->conn()->prepare($sql);
+        $st->execute();
+        if ($st->rowCount() > 0) {
+            return true;
+        }
+        return false;
+
     }
     
     /*public function listarProdutosTodos($ordem = "nome") {
