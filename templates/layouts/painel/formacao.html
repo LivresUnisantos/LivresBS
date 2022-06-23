@@ -1,0 +1,94 @@
+{% extends "index.html" %}
+
+{% block content %}
+    {% if sucesso != '' %}
+        <div class="alert alert-success" role="alert">
+            {{ sucesso }}
+        </div>
+    {% endif %}
+    
+    {% if pessoas and formacoes %}
+    <table id="tbl_formacao" class="table hover">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                {% for f in formacoes %}
+                    <th>{{ f.descricao }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for id_admin, p in pessoas %}
+                <tr>
+                    <td>{{ p.nome }}</td>
+                    {% for id_formacao, f in p.formacoes %}
+                        <td>
+                            {% if f == 0 %}
+                                <span>
+                                <a href="#" class="btn-cadastrar">Cadastrar</a>
+                                <input input-cadastrar type="date" name="data_formacao" id="data_formacao_{{ id_admin }}_{{ id_formacao }}" id_admin="{{ id_admin }}" id_formacao="{{ id_formacao }}" value="" style="display: none;">
+                                </span>
+                            {% else %}
+                                <input input-cadastrar type="date" name="data_formacao" id="data_formacao_{{ id_admin }}_{{ id_formacao }}" id_admin="{{ id_admin }}" id_formacao="{{ id_formacao }}" value="{{ f|date('Y-m-d') }}">
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.12.1/b-2.2.3/b-colvis-2.2.3/b-html5-2.2.3/b-print-2.2.3/cr-1.5.6/date-1.1.2/fc-4.1.0/fh-3.2.3/datatables.min.js"></script>
+
+    <script>
+    $(document).ready(function() {
+        $('#tbl_formacao').DataTable({
+            language: {
+                url: '/templates/pt-br-datatable-produtos.json',
+            },
+            pageLength: 50,
+            lengthChange: false,
+            ordering: false,
+            searching: false,
+            'dom':'t',
+        });
+        
+        $(".btn-cadastrar").on("click", function() {
+            span = $(this).parent();
+            input = span.children("input");
+            link = $(this);
+            
+            link.hide();
+            input.show();
+        })
+        $("input[input-cadastrar]").on("change", function() {
+            id_admin = $(this).attr("id_admin");
+            id_formacao = $(this).attr("id_formacao");
+            data = $(this).val();
+            
+            console.log(id_admin, id_formacao, data);
+            
+             $.ajax({
+                type: "POST",
+                url: 'formacao_act.php',
+                data: {
+                    "id_admin": id_admin,
+                    "id_formacao": id_formacao,
+                    "data": data
+                },
+                success: function(data, txtStatus, xhr) {
+                    alert('Formação cadastrada');
+                },
+                complete: function(xhr, txtStatus) {
+                    if (xhr.status != 200) {
+                        alert("Erro ao cadastrar formação");
+                    }
+                }
+             });
+        });
+    });
+    </script>
+{% endblock content %}
