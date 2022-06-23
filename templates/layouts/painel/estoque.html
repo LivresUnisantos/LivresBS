@@ -61,6 +61,7 @@
                             </td>
                             <td id="proximovencimento_{{ p.id }}">
                                 <input type="date" name="data_proximovencimento" id="data_proximovencimento{{ p.id }}" value="{{ (p.data_proximovencimento == '') ? '' : p.data_proximovencimento|date('Y-m-d') }}" size="10" />
+                                <span style="font-color:#ffffff;display:none;">{{ (p.data_proximovencimento == '') ? '' : p.data_proximovencimento|date('d/m/Y') }}</span>
                             </td>
                             <td id="botao_{{ p.id }}">
                                 {% if level_user >= level_write %}
@@ -81,12 +82,12 @@
                 if ($(this).prop('name') == 'filtro_estoquezero') {
                     console.log(2);
                     if ($(this).prop('checked')) {
-                        console.log(3);
+                        //console.log(3);
                         $("#filtro_estoquenaozero").prop('checked', false);
                     }
                 } else {
                     if ($(this).prop('checked')) {
-                        console.log(5);
+                        //console.log(5);
                         $("#filtro_estoquezero").prop('checked', false);
                     }
                 }
