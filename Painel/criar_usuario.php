@@ -77,6 +77,63 @@ if (!isset($_POST["login"]) || !isset($_POST["nome"]) || !isset($_POST["cpf"]) |
     </div>
 </form>
 <?php
+$oAdmins = new Admins();
+$admins = $oAdmins->listarAdmins();
+
+if ($admins) {
+?>
+    <div class="row">
+    <div class="col-3">
+    <table class="table table-hover table-bordered table-striped table-sm">
+    <thead>
+    <tr>
+    <th>Nome</td>
+    <th>Nascimento</th>
+    <th>Dias até</th>
+    </tr>
+    </thead>
+    <tbody>
+<?php
+    foreach ($admins as $admin) {
+        $dias = "";
+        if ($admin["nascimento"]>0) {
+            $dn = date("d", strtotime($admin["nascimento"]));
+            $mn = date("m", strtotime($admin["nascimento"]));
+            $yn = date("Y", strtotime($admin["nascimento"]));
+            
+            $dh = date("d");
+            $mh = date("m");
+            $yh = date("Y");
+            
+            $nasc = strtotime($yh.'-'.$mn.'-'.$dn);
+            $hoje = strtotime($yh.'-'.$mh.'-'.$dh);
+            
+            if ($nasc < $hoje) {
+                $nasc = strtotime(($yh+1).'-'.$mn.'-'.$dn);
+            }
+        
+            $dias = $nasc - $hoje;
+            $dias = $dias / (60 * 60 * 24);
+        }
+        
+        echo '<tr>';
+        echo '<td>'.$admin["nome"].'</td>';
+        if ($admin["nascimento"]>0) {
+            echo '<td>'.date('d/m/Y',strtotime($admin["nascimento"])).'</td>';
+        } else {
+            echo '<td></td>';
+        }
+        echo '<td>'.$dias.'</td>';
+        echo '</tr>';
+    }
+    ?>
+    </tbody>
+    </table>
+    </div>
+    </div>
+<?php
+}
+
 } else {
     $login = $_POST["login"];
     $nome = $_POST["nome"];
