@@ -102,8 +102,8 @@
                             {% set total_semana = total_semana + conteudo['total_semana'][id]['valor_total'] %}
                             {% set total_mes = total_mes + conteudo['total_mes'][id]['valor_total'] %}
                             <tr>
-                                <td >{{ conteudo["total_#{total_maior}"][id]['nome'] }}</td>
-                                
+                                <td>{{ conteudo["total_#{total_maior}"][id]['nome'] }}</td>
+
                                 <td>{{ conteudo['ecohoras_semana'][id]['valor_total']|number_format(2,",",".") }}</td>
                                 <td>{{ conteudo['ecopedaladas_semana'][id]['valor_total']|number_format(2,",",".") }}</td>
                                 <td>{{ conteudo['bikers_semana'][id]['valor_total']|number_format(2,",",".") }}</td>
