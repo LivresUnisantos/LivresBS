@@ -302,7 +302,7 @@ for ($i = 1; $i <= $nGrupos; $i++) {
     echo '<table id="tblCons'.$i.'" border="1px" width="950">';
     echo '<tr>';
     echo '<td width="350">Consumidor</td>';
-    echo '<td width="100">Crédito/Débito</td>';
+    echo '<td width="100">Nascimento</td>';
     echo '<td width="100">Sacolas no Livres</td>';
     echo '<td width="150">Ver Cesta</td>';
     echo '<td width="150">Editar Cesta</td>';
@@ -320,7 +320,12 @@ for ($i = 1; $i <= $nGrupos; $i++) {
             }
         }
         echo '<td>'.ucwords(mb_strtolower($row["consumidor"],'UTF-8')).' ('.$row["id"].')</td>';
-        echo '<td style="text-align:right;"><span campo="saldo" class="'.$classeSaldo.'" idConsumidor="'.$row["id"].'">'.formatSaldo($credito).'</span> <img src="../images/edit.png" class="editar" width="16" height="16" alt="Editar" idConsumidor="'.$row["id"].'" /></td>';
+        //echo '<td style="text-align:right;"><span campo="saldo" class="'.$classeSaldo.'" idConsumidor="'.$row["id"].'">'.formatSaldo($credito).'</span> <img src="../images/edit.png" class="editar" width="16" height="16" alt="Editar" idConsumidor="'.$row["id"].'" /></td>';
+        if (strlen($row["nascimento"]) > 0) {
+            echo '<td>'.date('d/m/Y',strtotime($row["nascimento"])).'</td>';
+        } else {
+            echo '<td></td>';
+        }
         echo '<td style="text-align:center;">';
         echo '<span class="sacolas" idConsumidor="'.$row["id"].'" inc="-1"><img src="../images/less.png" width="16" height="16" /></span>';
         echo '<span style="margin-left:15px;margin-right:15px;" id="saldoSacola'.$row["id"].'">'.$row["sacolas"].'</span>';
