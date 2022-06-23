@@ -202,7 +202,7 @@ class Ecoholerite extends Livres {
 
         if ($st->rowCount() == 0) return false;
         
-        $colunas = array("nome", "valor_total", "desconto_total");
+        $colunas = array("nome", "valor_total", "desconto_total", "nascimento");
         $rs = $st->fetchAll();
         foreach ($rs as $row) {
             foreach ($colunas as $coluna) {
