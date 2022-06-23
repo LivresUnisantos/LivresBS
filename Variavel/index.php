@@ -474,19 +474,11 @@ if (!isset($_GET["cpf"])) {
                 						<div class="input-group">
                     						<select recalc="sim" opcao="1" class="pedido input-group-field" id="quantidade_1" name="quantidade_1">
             									<option></option>
-            									<option>0</option>
-            									<option>1</option>
-            									<option>2</option>
-            									<option>3</option>
-            									<option>4</option>
-            									<option>5</option>
-            									<option>6</option>
-            									<option>7</option>
-            									<option>8</option>
-            									<option>9</option>
-            									<option>10</option>
-            									<option>11</option>
-            									<option>12</option>
+            									<?php
+            									for ($i = 0; $i <= 30; $i++) {
+            									    echo '<option>'.$i.'</option>';
+            									}
+            									?>
             								</select>
         								    <!--<span class="input-group-label"><?php //echo $row["unidade"]; ?></span>-->
         								</div>
@@ -522,19 +514,11 @@ if (!isset($_GET["cpf"])) {
                 						<div class="input-group">
                     						<select recalc="sim" opcao="2" class="pedido input-group-field" id="quantidade_2" name="quantidade_2">
             									<option></option>
-            									<option>0</option>
-            									<option>1</option>
-            									<option>2</option>
-            									<option>3</option>
-            									<option>4</option>
-            									<option>5</option>
-            									<option>6</option>
-            									<option>7</option>
-            									<option>8</option>
-            									<option>9</option>
-            									<option>10</option>
-            									<option>11</option>
-            									<option>12</option>
+            									<?php
+            									for ($i = 0; $i <= 30; $i++) {
+            									    echo '<option>'.$i.'</option>';
+            									}
+            									?>
             								</select>
         								    <!--<span class="input-group-label"><?php //echo $row["unidade"]; ?></span>-->
         								</div>
