@@ -5,7 +5,7 @@ class Consumidores extends Livres {
     //protected $dataEntrega = "";
 
     public function encontrarPorId($id) {
-        $sql = "SELECT * FROM consumidores WHERE id = ".$id;
+        $sql = "SELECT * FROM Consumidores WHERE id = ".$id;
         $st = $this->conn()->prepare($sql);
         $st->execute();
     
@@ -18,7 +18,7 @@ class Consumidores extends Livres {
     }
 
     public function encontrarPorCPF($cpf) {
-        $sql = "SELECT * FROM consumidores WHERE cpf = ".$cpf;
+        $sql = "SELECT * FROM Consumidores WHERE cpf = ".$cpf;
         $st = $this->conn()->prepare($sql);
         $st->execute();
     
