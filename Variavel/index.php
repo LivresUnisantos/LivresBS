@@ -179,7 +179,8 @@ if (!isset($_GET["cpf"])) {
     $hoje = date("Y-m-d");
 
     //$sql = "SELECT * FROM Calendario WHERE data >= '".$hoje."' AND ".$comunidade."acomunidade <> '0' AND ".$comunidade."acomunidade <> '000' ORDER BY data ASC";
-    $sql = "SELECT * FROM Calendario WHERE data >= '".$hoje."' AND LENGTH(".$comunidade."acomunidade) = 3 AND ".$comunidade."acomunidade <> '000' ORDER BY data ASC";
+    //$sql = "SELECT * FROM Calendario WHERE data >= '".$hoje."' AND LENGTH(".$comunidade."acomunidade) = 3 AND ".$comunidade."acomunidade <> '000' ORDER BY data ASC";
+    $sql = "SELECT * FROM Calendario WHERE data > '".$hoje."' AND LENGTH(".$comunidade."acomunidade) = 3 AND ".$comunidade."acomunidade <> '000' ORDER BY data ASC";
     $st = $conn->prepare($sql);
     $st->execute();
     
