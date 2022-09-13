@@ -302,6 +302,13 @@ if (!isset($_GET["cpf"])) {
 							        echo '</p>';
 							        echo '</a>';
 							        echo '</p>';
+								} else {
+								    if ($row["pgt_status"] == 1) {
+								        echo "<p><b>A aprovação do seu pagamento está pendente.</b></p>";
+								    }
+								    if ($row["pgt_status"] == 2) {
+								        echo '<p style="color:#1a9c26;"><b>O pagamento dessa cesta já foi confirmado</b></p>';
+								    }
 								}
 								?>
                             </div>
