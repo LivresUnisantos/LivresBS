@@ -1,0 +1,396 @@
+{% extends "index.html" %}
+
+{% block style %}
+<style>
+    #tabela_produtos_promo_filter, #tabela_produtos_extra_filter {
+        width: 100%
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <h1>Olá {{ cons.consumidor }}</h1>
+    <h2>Seu Pedido</h2>
+    <div>
+        <div>Cota: <span id="preco_cota">R${{pedido.pedido_cota|number_format(2,",",".")}}</span></div>
+        <div>Pedido Fixo: <span id="preco_fixo">R${{pedido.pedido_fixa|number_format(2,",",".")}}</span></div>
+        <div>Pedido Mínimo: <span id="preco_minimo">R${{(pedido.pedido_cota-pedido.pedido_fixa)|number_format(2,",",".")}}</span></div>
+        
+        <div>Seu pedido extra: <span id="preco_extra">R$0,00</span></div>
+        <div>Pedido total: <span id="preco_total">- Pedido abaixo do mínimo, adicione produtos - </span></div>
+        <div><span id="preco_economia"></span></div>
+        <input type="submit" value="Enviar Pedido" />
+    </div>
+    <table id="tabela_seu_pedido" name="tabela_seu_pedido" class="table">
+        <thead>
+            <tr>
+                <td>Código</td>
+                <td>Produto</td>
+                <td>Quantidade</td>
+                <td>Livre Mercado</td>
+                <td>Seu Preço</td>
+                <td>Subtotal </td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><del><span id="total_livremercado">R$0,00</span></del></td>
+                <td><span id="total_seupreco">R$0,00</span></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    <h1>Produtos em Promoção - Preço de Comboio</h1>
+    <table id="tabela_produtos_promo" name="tabela_produtos_promo" class="table hover">
+        <thead>
+            <tr>
+                <th>rowId</th>
+                <th>Código</th>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Livre Mercado</th>
+                <th>Consumidor Consciente</th>
+                <th>Seu Preço</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in produtos_promo %}
+                <tr>
+                    <td>row-PC{{ p.id }}</td>
+                    <td>PC{{ p.id }}</td>
+                    <td>{{ p.nome }}</td>
+                    <td>{{ (p.estoque > 0) ? p.estoque : 'Temos bastante' }}</td>
+                    <td><del>R${{p.preco_mercado|number_format(2,",",".")}}</del></td>
+                    <td><del>R${{p.preco_lojinha|number_format(2,",",".")}}</del></td>
+                    <td>R${{p.preco|number_format(2,",",".")}}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-produto btn-menos btn-promo" id-produto="PC{{ p.id }}">-</button>
+                        <button type="button" class="btn btn-success btn-produto btn-mais btn-promo" id-produto="PC{{ p.id }}">+</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h1>Produtos - Consumidor Consciente</h1>
+    <table id="tabela_produtos_extra" name="tabela_produtos_extra" class="table hover">
+        <thead>
+            <tr>
+                <th>rowId</th>
+                <th>Código</th>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Livre Mercado</th>
+                <th>Comboio</th>
+                <th>Seu Preço</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in produtos_extra %}
+                <tr>
+                    <td>row-CC{{ p.id }}</td>
+                    <td>CC{{ p.id }}</td>
+                    <td>{{ p.nome }}</td>
+                    <td>{{ (p.estoque > 0) ? p.estoque : 'Temos bastante' }}</td>
+                    <td><del>R${{p.preco_mercado|number_format(2,",",".")}}</del></td>
+                    <td><del>R${{p.preco|number_format(2,",",".")}}</del></td>
+                    <td>R${{p.preco_lojinha|number_format(2,",",".")}}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-produto btn-menos btn-extra" id-produto="CC{{ p.id }}">-</button>
+                        <button type="button" class="btn btn-success btn-produto btn-mais btn-extra" id-produto="CC{{ p.id }}">+</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <input type="hidden" id="pedido_final" name="pedido_final" />
+    <p>
+        <label for="delivery">Você deseja delivery essa semana?</label>
+        <select id="delivery" name="delivery">
+            <option value=""></option>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+            <option value="Não sei ainda">Não sei ainda</option>
+        </select>
+    </p>
+    <p id="box_endereco_entrega" style="display: none;">
+        <label for="endereco_entrega">Qual endereço de entrega?</label>
+        <input type="text" id="endereco_entrega" size="75" name="endereco_entrega" value="{{ cons.endereco }}" />
+    </p>
+    <p>
+        <input type="submit" value="Enviar Pedido" id="salvar" name="salvar" />
+    </p>
+</form>
+{% endblock content %}
+{% block script %}
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.12.1/api/sum().js"></script>
+    <script>
+        $(document).ready(function() {
+            //table plugin
+            //referência: https://www.datatables.net/manual/options
+            var tbl_produtos_promo = $('#tabela_produtos_promo').DataTable({
+                language: {
+                    url: '/templates/pt-br-datatable-produtos.json',
+                },
+                pageLength: 10,
+                lengthChange: false,
+                "search": {
+                    "caseInsensitive": true
+                },
+                columnDefs: [
+                    {
+                        searchable: false,
+                        orderable: false,
+                        targets: 0,
+                        visible: false,
+                    },
+                ],
+                /*order: [[1, 'asc']],*/
+                rowId: 'rowId',
+                columns: [
+                    {"data": "rowId"},
+                    {"data": "Código"},
+                    {"data":"Produto"},
+                    {"data":"Quantidade"},
+                    {"data":"Livre Mercado"},
+                    {"data":"Consumidor Consciente"},
+                    {"data":"SeuPreco"},
+                    {"data":"Botões"},
+                ],
+            });
+            var tbl_produtos_extra = $('#tabela_produtos_extra').DataTable({
+                language: {
+                    url: '/templates/pt-br-datatable-produtos.json',
+                },
+                pageLength: 10,
+                lengthChange: false,
+                "search": {
+                    "caseInsensitive": true
+                },
+                columnDefs: [
+                    {
+                        searchable: false,
+                        orderable: false,
+                        targets: 0,
+                        visible: false,
+                    },
+                ],
+                /*order: [[1, 'asc']],*/
+                rowId: 'rowId',
+                columns: [
+                    {"data": "rowId"},
+                    {"data": "Código"},
+                    {"data":"Produto"},
+                    {"data":"Quantidade"},
+                    {"data":"Livre Mercado"},
+                    {"data":"Comboio"},
+                    {"data":"SeuPreco"},
+                    {"data":"Botões"},
+                ],
+            });
+            tbl_pedido = $('#tabela_seu_pedido').DataTable({
+                language: {
+                    url: '/templates/pt-br-datatable-produtos.json',
+                },
+                pageLength: 50,
+                lengthChange: false,
+                ordering: false,
+                searching: false,
+                'dom':'t',
+            });
+            
+            /*tbl_produtos.on('order.dt search.dt', function () {
+                let i = 1;
+         
+                tbl_produtos.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();*/
+            
+            $(window).on('load', function() {
+                $("#tabela_produtos_promo_filter label").addClass("input-group input-group-text");
+                $("#tabela_produtos_promo_filter label input").addClass("form-control");
+                
+                $("#tabela_produtos_extra_filter label").addClass("input-group input-group-text");
+                $("#tabela_produtos_extra_filter label input").addClass("form-control");
+            });
+            
+            //botões + e - na lista do pedido
+            $(document).on('click','.btn-pedido', function(event) {
+                if ($(event.target).hasClass('btn-mais')) {
+                    inc = 1;
+                } else {
+                    inc = -1;
+                }
+                id_produto = $(event.target).attr('id-produto')
+                index_pedido = tbl_pedido.column(0).data().indexOf(id_produto);
+                setQuantidade(tbl_pedido, index_pedido, inc);
+            });
+            
+            //botões + e - na lista de produtos
+            $(document).on('click','.btn-produto', function(event) {
+                if ($(event.target).hasClass('btn-mais')) {
+                    inc = 1;
+                } else {
+                    inc = -1;
+                }
+                if ($(event.target).hasClass('btn-promo')) {
+                    tbl = tbl_produtos_promo;
+                } else {
+                    tbl = tbl_produtos_extra;
+                }
+                id_produto = $(event.target).attr('id-produto')
+                linha_produto = tbl.row('#row-'+id_produto).data();
+                index_pedido = tbl_pedido.column(0).data().indexOf(id_produto);
+                if (index_pedido < 0) {
+                    if (inc == 1) {
+                        tbl_pedido.row.add([
+                            id_produto,
+                            linha_produto["Produto"],
+                            1,
+                            linha_produto["Livre Mercado"],
+                            linha_produto["SeuPreco"],
+                            linha_produto["SeuPreco"],
+                            '<button type="button" class="btn btn-danger btn-pedido btn-menos" id-produto="' + id_produto + '">-</button><button type="button" class="btn btn-success btn-pedido btn-mais" id-produto="' + id_produto + '">+</button>',
+                        ]).draw(false);
+                        ajusteTotal();
+                    }
+                } else {
+                    setQuantidade(tbl_pedido, index_pedido, inc)
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+        
+        function setQuantidade(tbl, index, inc) {
+            newQt = tbl.cell(index,2).data()*1 + inc;
+            if (newQt <= 0) {
+                tbl.row(index).remove().draw();
+                ajusteTotal();
+                return;
+            }
+            tbl.cell(index,2).data(newQt).draw();
+            preco = tbl.cell(index,4).data();
+            preco = numUnformat(preco);
+            preco = parseFloat(preco)*newQt;
+            preco = numFormat(preco);
+            tbl.cell(index,5).data(preco);
+            
+            ajusteTotal();
+        }
+        
+        function ajusteTotal() {
+            var total_seupreco=0;
+            var total_livremercado=0;
+            tbl_pedido.rows().iterator('row', function (context, index) {
+                qt = numUnformat(tbl_pedido.cell(index, 2).data());
+                seupreco = tbl_pedido.cell(index, 4).data();
+                seupreco = numUnformat(seupreco);
+                
+                livremercado=tbl_pedido.cell(index, 3).data();
+                livremercado = numUnformat(livremercado);
+                
+                total_seupreco=total_seupreco+seupreco*qt;
+                total_livremercado=total_livremercado+livremercado*qt;
+            });
+            total_seupreco=numFormat(total_seupreco);
+            total_livremercado=numFormat(total_livremercado);
+            
+            $("#total_seupreco").text(total_seupreco);
+            $("#total_livremercado").text(total_livremercado);
+            
+            ajustePedido();
+        }
+        
+        function ajustePedido() {
+            fixo = numUnformat($("#preco_fixo").text());
+            extra = numUnformat($("#preco_extra").text());
+            preco_minimo = numUnformat($("#preco_minimo").text());
+
+            livremercado = numUnformat($("#total_livremercado").text());
+            extra = numUnformat($("#total_seupreco").text());
+            pedido = fixo+extra;
+            //economia = 100*(1-pedido/(fixo + livremercado));
+            //economia = Math.round(economia*10)/10;
+            //economia = economia.toString().replace('.',',');
+            economia = livremercado - (pedido - fixo);
+            
+            $("#preco_extra").text($("#total_seupreco").text());
+            if (extra >= preco_minimo) {
+                $("#preco_total").text(numFormat(fixo+extra));
+                $("#preco_economia").text("Você está economizando " + numFormat(economia) + " por fazer parte da Comunidade!");
+            } else {
+                $("#preco_economia").text("");
+                $("#preco_total").text('- Pedido abaixo do mínimo, adicione produtos - ');
+            }
+            
+            ajusteJson();
+            
+        }
+        
+        function ajusteJson() {
+            index = 0;
+            //arr = {"a": "b"};
+            arr = { };
+            tbl_pedido.rows().iterator('row', function (context, index) {
+                cod = parseInt(tbl_pedido.cell(index, 0).data().substr(2));
+                qt = numUnformat(tbl_pedido.cell(index, 2).data());
+                seupreco = numUnformat(tbl_pedido.cell(index, 4).data());
+                
+                arr[index] = {
+                        "codigo": cod,
+                        "quantidade": qt,
+                        "preco": seupreco
+                    };
+                    index++;
+            });
+            //jsonAsString = JSON.stringify(obj);
+            //$("#pedido_final").text(jsonAsString);
+            $("#pedido_final").val(JSON.stringify(arr));
+        }
+        
+        function numUnformat(preco) {
+            preco = preco.toString();
+            preco = preco.replace('<del>','');
+            preco = preco.replace('</del>','');
+            preco = preco.replace('R$','');
+            preco = preco.replace(',','.');
+            preco = parseFloat(preco);
+            return preco;
+        }
+        
+        function numFormat(preco) {
+            preco = 'R$' + preco.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
+            preco = preco.replace('.',',');
+            return preco;
+        }
+    </script>
+    <script>
+        $("#delivery").change(function() {
+            if ($(this).val() == "Sim" || $(this).val() == "Não sei ainda") {
+                alert("Confirme seu endereço de entrega!");
+                $("#endereco_entrega").css({"background-color": "#ffff00"});
+                $("#box_endereco_entrega").show();
+                $("#endereco_entrega").focus();
+            } else {
+                $("#box_endereco_entrega").hide();
+            }
+        });
+        $("#endereco_entrega").focusout(function() {
+            $(this).css({"background-color": "#ffffff"});
+        });
+    </script>
+{% endblock script %}

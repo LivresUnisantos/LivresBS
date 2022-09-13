@@ -1,0 +1,150 @@
+{% extends "index.html" %}
+{% block content %}
+    <style>
+        dl {
+            width: 400px;
+            display:flow-root;
+        }
+        dt {
+            float: left;
+            width: 300px;
+            overflow: hidden;
+            white-space: nowrap;
+            font-weight: 400;
+        }
+        dd {
+            float: left;
+            width: 100px;
+            overflow: hidden;
+        }
+        
+        dt:after {
+            content: " ..................................................................................";
+        }
+
+        .container {
+            /*display: table;*/
+           -webkit-column-count: 2;
+              -moz-column-count: 2;
+                   column-count: 2;
+        
+           -webkit-column-gap: 0px;
+              -moz-column-gap: 0px;
+                   column-gap: 0px;
+        }
+        
+        .item {
+          display: inline-block;
+        }
+        
+        .unbreak {
+            text-align:center;
+            width: 400px;
+        }
+        
+        @media print {
+            .unbreak, .unbreak * {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+    {% if pedidos %}
+        {% set count = 0 %}
+        <div class="container">
+            {% for p in pedidos %}
+                {% if p.itens and p.consumidor.cpf != 11111111111 %}
+                    <div class="unbreak">
+                        
+                            {{ p.consumidor.consumidor }}<br>
+                            {{ p.consumidor.endereco }}<br>
+                            Telefone {{ p.consumidor.telefone }}<br>
+                            <br><u>Pedido</u><br>
+                            <dl>
+                                {% for i in p.itens %}
+                                    <dt>{{ i.produto.nome }}</dt>
+                                    <dd>{{ i.item.item_qtde }} {{ i.produto.unidade }} </dd>
+                                    <!-- R${{i.item.item_valor|number_format(2,",",".")}} -->
+                                {% endfor %}
+                            </dl>
+                            ____________________________________________
+                            <br>CPF: {{ p.consumidor.cpf }}
+                            <p>&nbsp;</p>
+                        
+                    </div>
+                    {% set count = count + 1 %}
+                    {#
+                    {% if count == 2 %}
+                        <div class="w-100"></div>
+                        {% set count = 0 %}
+                    {% endif %}
+                    #}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <span class="cabecalho_entregas">Não há produtos cadastrados</span>
+    {% endif %}
+    <script>
+        $(document).ready(function(){
+            $("#filtro").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#tabela_produtos tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            dialog = $("#popup").dialog({
+                autoOpen: false,
+                height: 600,
+                width: 600,
+                modal: true,
+            });
+          
+            $("[act=editProduto]").click(function() {
+                $("#popup").html("Aguarde, carregando...");
+                idProduto = $(this).attr("idProduto");
+                $.ajax({
+                    method: "GET",
+                    url: "editar_produtos_act.php",
+                    data: { id: idProduto }
+                    })
+                    .done(function( msg ) {
+                        //alert( "Data Saved: " + msg );
+                        $("#popup").html(msg);
+                    });
+                dialog.dialog("open");
+            });
+
+            $("#novo_produto").click(function() {
+                $("#popup").html("Aguarde, carregando...");
+                $.ajax({
+                    method: "GET",
+                    url: "editar_produtos_act.php",
+                    })
+                    .done(function( msg ) {
+                        //alert( "Data Saved: " + msg );
+                        $("#popup").html(msg);
+                    });
+                dialog.dialog("open");
+            });            
+
+            //form edição de produtos
+            // $("#formEditarProduto").submit(function(e) {
+            //     console.log("entrou");
+            //     e.preventDefault(); // avoid to execute the actual submit of the form.
+
+            //     var form = $(this);
+            //     var url = form.attr('action');
+
+            //     $.ajax({
+            //         type: "POST",
+            //         url: url,
+            //         data: form.serialize(), // serializes the form's elements.
+            //         success: function(data) {
+            //             alert(data); // show response from the php script.
+            //         }
+            //     });
+            // });
+        });
+    </script>
+{% endblock content %}

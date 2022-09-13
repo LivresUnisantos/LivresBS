@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="grid-container">
+	<div class="grid-x grid-padding-x">
+		<div class="large-4">
+			Preencha seu CPF cadastrado
+			<form action="" method="POST">
+				<label for="cpf" />CPF</label>
+				<input type="text" data-validation="cpf" placeholder="Preencha seu CPF" value="" name="cpf" id="cpf" />
+				<input type="submit" value="Enviar" />
+			</form>
+		</div>
+		
+	</div>
+</div>
+{% endblock content %}
