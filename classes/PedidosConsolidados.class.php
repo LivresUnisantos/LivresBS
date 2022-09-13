@@ -155,6 +155,42 @@ class PedidosConsolidados extends Livres {
         }
     }
     
+    public function pedidosConsumidor($id) {
+        $sql = "SELECT * FROM pedidos_consolidados ped LEFT JOIN pedidos_consolidados_itens it ";
+        $sql .= "ON ped.pedido_id = it.pedido_id WHERE ped.consumidor_id = ".$id." ORDER BY it.pedido_id";
+
+        $st = $this->conn()->prepare($sql);
+        $st->execute();
+
+        if ($st->rowCount() == 0) return false;
+
+        $rs = $st->fetchAll();        
+        $index = 0;
+        $ultimo_pedido = 0;
+        foreach ($rs as $row) {
+            if ($row["pedido_id"] != $ultimo_pedido) {
+                $pedidos[$row["pedido_id"]]["pedido"] = $row;
+                $ultimo_pedido = $row["pedido_id"];
+            }
+            $pedidos[$row["pedido_id"]]["itens"][$index] = $row;
+            $index++;
+        }
+        
+        return $pedidos;
+    }
+    
+    public function proximoPedidoConsumidor($id, $dataAtual) {
+        $sql = "SELECT * FROM pedidos_consolidados ped LEFT JOIN pedidos_consolidados_itens it ";
+        $sql .= "ON ped.pedido_id = it.pedido_id WHERE ped.consumidor_id = ".$id." AND pedido_data >= '".$dataAtual."' LIMIT 1";
+
+        $st = $this->conn()->prepare($sql);
+        $st->execute();
+
+        if ($st->rowCount() != 1) return false;
+
+        return $st->fetch();
+    }
+    
     //Essa função foi criada porque por algum motivo, o trigger do MySQL nã está funcionando corretamente e não está tualizando o valor total do pedido dos consumidores.
     //Sendo assim, ao consultar um pedido, checamos se algum consumidor está com total "null" e forçamos um update no pedido sem alterar nada para disparar o trigger
     private function pedidoCorrigirValorTotal() {
