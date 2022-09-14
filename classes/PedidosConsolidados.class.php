@@ -179,21 +179,19 @@ class PedidosConsolidados extends Livres {
         return $pedidos;
     }
     
-    public function proximoPedidoConsumidor($id, $dataAtual) {
-        $sql = "SELECT * FROM pedidos_consolidados ped LEFT JOIN pedidos_consolidados_itens it ";
-        $sql .= "ON ped.pedido_id = it.pedido_id WHERE ped.consumidor_id = ".$id." AND pedido_data >= '".$dataAtual."' LIMIT 1";
+    public function ItensPorPedido($id) {
+        $sql = "SELECT * FROM pedidos_consolidados_itens WHERE pedido_id = ?";
 
         $st = $this->conn()->prepare($sql);
-        $st->execute();
 
-        if ($st->rowCount() != 1) return false;
-
-        return $st->fetch();
+        if (!$st->execute([$id])) return false;
+        if ($st->rowCount() == 0) return false;
+        return $st->fetchAll();
     }
     
     //Essa função foi criada porque por algum motivo, o trigger do MySQL nã está funcionando corretamente e não está tualizando o valor total do pedido dos consumidores.
     //Sendo assim, ao consultar um pedido, checamos se algum consumidor está com total "null" e forçamos um update no pedido sem alterar nada para disparar o trigger
-    private function pedidoCorrigirValorTotal() {
+    private function pedidoCorrigirValorTotal() {        
         $sql = "UPDATE pedidos_consolidados SET pedido_mensal = pedido_mensal WHERE pedido_data = '".date('Y-m-d H:i:s',$this->dataEntrega)."'";
         $st = $this->conn()->prepare($sql);
         if ($st->execute()) {
@@ -202,6 +200,20 @@ class PedidosConsolidados extends Livres {
             return false;
         }
     }
+
+    /*
+    public function listaProdutosVariaveis() {
+        $idProximaEntrega = $this->dataPelaString(date('Y-m-d H:i', $this->dataEntrega));
+        $sql = "SELECT produtos.id AS id, produtos.nome AS nome FROM produtosVar ";
+        $sql .= "LEFT JOIN produtos ON produtosVar.idProduto = produtos.id WHERE produtosVar.idCalendario = ".$idProximaEntrega." ORDER BY nome ASC";
+        echo $sql;
+        $st = $this->conn()->prepare($sql);
+        if (!$st->execute()) return false;
+        if ($st->rowCount() == 0) return false;
+
+        $rs = $st->fetchAll();
+    }
+    */
     
 }
 ?>

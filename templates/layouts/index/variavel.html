@@ -5,22 +5,26 @@
     #tabela_produtos_promo_filter, #tabela_produtos_extra_filter {
         width: 100%
     }
+    .abaixo-minimo {
+        color: #ff0000;
+        font-weight: bold;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
+{% if (not sucesso and not alerta) %}
 <form method="POST">
-    <h1>Olá {{ cons.consumidor }}</h1>
+    <h1>Olá {{ cons.consumidor }} | <a href="logout.php">Trocar</a></h1>
     <h2>Seu Pedido</h2>
     <div>
-        <div>Cota: <span id="preco_cota">R${{pedido.pedido_cota|number_format(2,",",".")}}</span></div>
+        <!-- <div>Cota: <span id="preco_cota">R${{pedido.pedido_cota|number_format(2,",",".")}}</span></div> -->
         <div>Pedido Fixo: <span id="preco_fixo">R${{pedido.pedido_fixa|number_format(2,",",".")}}</span></div>
         <div>Pedido Mínimo: <span id="preco_minimo">R${{(pedido.pedido_cota-pedido.pedido_fixa)|number_format(2,",",".")}}</span></div>
         
         <div>Seu pedido extra: <span id="preco_extra">R$0,00</span></div>
-        <div>Pedido total: <span id="preco_total">- Pedido abaixo do mínimo, adicione produtos - </span></div>
+        <div id="div_preco_total" class="abaixo-minimo">Pedido total: <span id="preco_total">Pedido abaixo do mínimo, adicione produtos</span></div>
         <div><span id="preco_economia"></span></div>
-        <input type="submit" value="Enviar Pedido" />
     </div>
     <table id="tabela_seu_pedido" name="tabela_seu_pedido" class="table">
         <thead>
@@ -119,19 +123,23 @@
         <label for="delivery">Você deseja delivery essa semana?</label>
         <select id="delivery" name="delivery">
             <option value=""></option>
-            <option value="Sim">Sim</option>
-            <option value="Não">Não</option>
-            <option value="Não sei ainda">Não sei ainda</option>
+            <option value="2">Sim</option>
+            <option value="1">Não</option>
+            <option value="3">Não sei ainda</option>
         </select>
     </p>
     <p id="box_endereco_entrega" style="display: none;">
         <label for="endereco_entrega">Qual endereço de entrega?</label>
+        <input type="hidden" id="endereco_entrega_backup" size="75" name="endereco_entrega_backup" value="{{ cons.endereco }}" />
         <input type="text" id="endereco_entrega" size="75" name="endereco_entrega" value="{{ cons.endereco }}" />
+        <input type="checkbox" id="atualizar_endereco" name="atualizar_endereco" value="" style="display: none;" />
+        <label for="atualizar_endereco" id="atualizar_endereco_label" style="display: none;">Atualizar endereço no cadastro para próximos pedidos?</label>
     </p>
     <p>
         <input type="submit" value="Enviar Pedido" id="salvar" name="salvar" />
     </p>
 </form>
+{% endif %}
 {% endblock content %}
 {% block script %}
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.js"></script>
@@ -158,7 +166,7 @@
                         visible: false,
                     },
                 ],
-                /*order: [[1, 'asc']],*/
+                order: [[2, 'asc']],
                 rowId: 'rowId',
                 columns: [
                     {"data": "rowId"},
@@ -188,7 +196,7 @@
                         visible: false,
                     },
                 ],
-                /*order: [[1, 'asc']],*/
+                order: [[2, 'asc']],
                 rowId: 'rowId',
                 columns: [
                     {"data": "rowId"},
@@ -210,15 +218,7 @@
                 ordering: false,
                 searching: false,
                 'dom':'t',
-            });
-            
-            /*tbl_produtos.on('order.dt search.dt', function () {
-                let i = 1;
-         
-                tbl_produtos.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
-                    this.data(i++);
-                });
-            }).draw();*/
+            }); 
             
             $(window).on('load', function() {
                 $("#tabela_produtos_promo_filter label").addClass("input-group input-group-text");
@@ -228,6 +228,7 @@
                 $("#tabela_produtos_extra_filter label input").addClass("form-control");
             });
             
+
             //botões + e - na lista do pedido
             $(document).on('click','.btn-pedido', function(event) {
                 if ($(event.target).hasClass('btn-mais')) {
@@ -332,9 +333,11 @@
             if (extra >= preco_minimo) {
                 $("#preco_total").text(numFormat(fixo+extra));
                 $("#preco_economia").text("Você está economizando " + numFormat(economia) + " por fazer parte da Comunidade!");
+                $("#div_preco_total").removeClass("abaixo-minimo");
             } else {
                 $("#preco_economia").text("");
-                $("#preco_total").text('- Pedido abaixo do mínimo, adicione produtos - ');
+                $("#preco_total").text('Pedido abaixo do mínimo, adicione produtos');
+                $("#div_preco_total").addClass("abaixo-minimo");
             }
             
             ajusteJson();
@@ -350,10 +353,18 @@
                 qt = numUnformat(tbl_pedido.cell(index, 2).data());
                 seupreco = numUnformat(tbl_pedido.cell(index, 4).data());
                 
+                categoria = tbl_pedido.cell(index, 0).data().substr(0,2);
+                if (categoria == "PC") {
+                    categoria = "variavel";
+                } else {
+                    categoria = "avulso";
+                }
+                
                 arr[index] = {
                         "codigo": cod,
                         "quantidade": qt,
-                        "preco": seupreco
+                        "preco": seupreco,
+                        "categoria": categoria
                     };
                     index++;
             });
@@ -377,10 +388,9 @@
             preco = preco.replace('.',',');
             return preco;
         }
-    </script>
-    <script>
+        
         $("#delivery").change(function() {
-            if ($(this).val() == "Sim" || $(this).val() == "Não sei ainda") {
+            if ($(this).val() == 2 || $(this).val() == 3) {
                 alert("Confirme seu endereço de entrega!");
                 $("#endereco_entrega").css({"background-color": "#ffff00"});
                 $("#box_endereco_entrega").show();
@@ -392,5 +402,18 @@
         $("#endereco_entrega").focusout(function() {
             $(this).css({"background-color": "#ffffff"});
         });
+
+        //gerenciar atualização de endereço no cadastro
+        $("#endereco_entrega").on("keyup", function() {
+                if ($("#endereco_entrega").val() == $("#endereco_entrega_backup").val()) {
+                    $("#atualizar_endereco").hide();
+                    $("#atualizar_endereco_label").hide();
+                    $("#atualizar_endereco_label").attr('checked', false);
+                } else {
+                    $("#atualizar_endereco").show();
+                    $("#atualizar_endereco_label").show();
+                    $("#atualizar_endereco_label").attr('checked', false);
+                }
+            });
     </script>
 {% endblock script %}

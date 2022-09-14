@@ -77,5 +77,50 @@ class Consumidores extends Livres {
             return false;
         }
     }
+
+    public function atualizarCadastro($id, $dados) {
+        if (!is_array($dados)) return false;
+
+        if (!$this->encontrarPorId($id)) return false;
+
+        $campos = "";
+        foreach ($dados as $campo => $valor) {
+            if ($campos != "") $campos .= ", ";
+            $campos .= $campo." = ?";
+            $valores[] = $valor;
+        }
+
+        $sql = "UPDATE Consumidores SET " . $campos;
+        $sql .= " WHERE id = ".$id;
+
+        $st = $this->conn()->prepare($sql);
+        if (!$st->execute($valores)) return false;
+        return 4;
+    }
+
+    public function proximoPedidoConsumidor($id, $dataAtual) {
+        $sql = "SELECT * FROM pedidos_consolidados ped LEFT JOIN pedidos_consolidados_itens it ";
+        $sql .= "ON ped.pedido_id = it.pedido_id WHERE ped.consumidor_id = ".$id." AND pedido_data > '".$dataAtual."'";
+
+        $st = $this->conn()->prepare($sql);
+        $st->execute();
+
+        if ($st->rowCount() < 1) return false;
+
+        return $st->fetchAll();
+    }
+
+    public function proximoPedidoVariavelConsumidor($id, $dataAtual) {
+        $sql = "SELECT * FROM pedidos_consolidados ped LEFT JOIN pedidos_consolidados_itens it ";
+        $sql .= "ON ped.pedido_id = it.pedido_id WHERE ped.consumidor_id = ".$id." AND pedido_data > '".$dataAtual."'";
+        $sql .= " AND item_tipo_cesta = 'variavel'";
+
+        $st = $this->conn()->prepare($sql);
+        $st->execute();
+
+        if ($st->rowCount() < 1) return false;
+
+        return $st->fetchAll();
+    }
 }
 ?>

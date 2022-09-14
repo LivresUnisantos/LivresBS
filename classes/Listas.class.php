@@ -165,6 +165,15 @@ class Listas extends Livres {
         return $this->listarProdutos($sql);
     }*/
 
+    public function listarVariaveis($dataEntrega) {
+        $sql = "SELECT *, l.id as id_item, 1 as item_ativo, 1 as id_lista, p.id as id_produto, p.imagem as imagem FROM produtosVar l LEFT JOIN produtos p";
+        $sql .= " ON p.id = l.idProduto";
+        $sql .= " WHERE l.data_entrega = '".$dataEntrega."'";
+        $sql .= " ORDER BY p.nome";
+
+        return $this->listarProdutos($sql);
+    }
+
     private function listarProdutos($sql) {
         $st = $this->conn()->prepare($sql);
         $st->execute();

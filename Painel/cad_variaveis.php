@@ -100,25 +100,30 @@ if (!isset($_SESSION["data_id"])) {
 	    //Cadastrar produto enviado
 	    if (isset($_POST["data"])) {
 			$data = $_POST["data"];
+            $data_id = $livres->dataPelaString($data);
 	        $produto = $_POST["produto"];
 	        $estoque = $_POST["estoque"];
 	        $estoque = str_replace(",",".",$estoque);
 	        if (strlen($produto) > 0 && strlen($estoque) > 0) {
-				$sql = "SELECT * FROM produtosVar WHERE idCalendario = ".$data." AND idProduto = ".$produto;
+				$sql = "SELECT * FROM produtosVar WHERE data_entrega = ".$data." AND idProduto = ".$produto;
 				$st = $conn->prepare($sql);
 				$st->execute();
 
 				if ($st->rowCount() > 0) {
 					$msg = "Produto já cadastrado para este dia";
 				} else {
-					$sql = "INSERT INTO produtosVar (idCalendario,idProduto,estoque) VALUES (".$data.",".$produto.",".$estoque.")";
-					$st = $conn->prepare($sql);
-					$st->execute();
-					$nome="";
-					$preco="";
-					$preco_impessoal="";
-					$msg = "Produto cadastrado com sucesso. Confirme as informações na tabela acima.";
-					setlog('log.txt','Cadastro produto variáveis ('.$produto.')',$sql);
+					$sql = "INSERT INTO produtosVar (idCalendario,idProduto,estoque, data_entrega) VALUES (".$data_id.",".$produto.",".$estoque.",'".$data."')";
+                    $st = $conn->prepare($sql);
+					if ($st->execute()) {
+                        $nome="";
+                        $preco="";
+                        $preco_impessoal="";
+                        $msg = "Produto cadastrado com sucesso. Confirme as informações na tabela acima.";
+                        setlog('log.txt','Cadastro produto variáveis ('.$produto.')',$sql);
+                    } else {
+                        $msg = "Erro ao cadastrar produto, tente novamente.";
+                        setlog('log.txt','Erro no cadastro de produto variáveis ('.$produto.')',$sql);
+                    }					
 				}
 	        } else {
 	            $msg = "Preencha todos os campos para que o produto seja cadastrado";
@@ -150,7 +155,7 @@ if (!isset($_SESSION["data_id"])) {
 	    ?>
 	    <p></p>
 	    <form method="POST" action="">
-	        <input type="hidden" name="data" id="data" value="<?php echo $livres->dataPelaString($_SESSION["data_consulta"]); ?>" />
+	        <input type="hidden" name="data" id="data" value="<?php echo $_SESSION["data_consulta"];//$livres->dataPelaString($_SESSION["data_consulta"]); ?>" />
 	        <span style="color:#FF0000;"><?php echo $msg; ?></span>
 	        <table>
 	            <tr><td colspan="2">Cadastrar Novo Produto</td></tr>

@@ -2,6 +2,8 @@
 class ConsolidarPedidos extends Livres {
     
     private $limite = 1; //número de pedidos consolidados por vez
+    private $table1 = "pedidos_consolidados";
+    private $table2 = "pedidos_consolidados_itens";
 
     public function __construct($dataEntrega = "") {
         if ($dataEntrega != "") {
@@ -101,7 +103,8 @@ class ConsolidarPedidos extends Livres {
             echo '<pre>';
             print_r($dados);
             echo '</pre>';*/            
-            $st->execute($dados);
+            if (!$st->execute($dados)) return false;
+            return true;
         }
     }
 
@@ -431,6 +434,7 @@ class ConsolidarPedidos extends Livres {
                     $totais[$row["pedido_id"]]["fixa"]["quinzenal"] = 0;
                     $totais[$row["pedido_id"]]["fixa"]["mensal"] = 0;
                     $totais[$row["pedido_id"]]["variavel"]["variavel"] = 0;
+                    $totais[$row["pedido_id"]]["variavel"]["avulso"] = 0;
                     $totais[$row["pedido_id"]]["avulso"]["avulso"] = 0;
                     $totais[$row["pedido_id"]]["pre"]["pre"] = 0;
                 }                
@@ -507,6 +511,80 @@ class ConsolidarPedidos extends Livres {
             }
         }
         return $datas;
+    }
+
+    public function cadastrarVariavel($proximo_pedido, $variaveis, $delivery, $endereco, $atualizar_endereco) {
+        $pedido_id = $proximo_pedido["pedido_id"];
+        $sql = "SELECT * FROM ".$this->table1." WHERE pedido_id = ?";
+        $st = $this->conn()->prepare($sql);
+        if (!$st->execute([$pedido_id])) return false;
+        if ($st->rowCount() == 0) return false;
+
+        $oPedidosCons = new PedidosConsolidados($this->dataEntrega);
+        if (!$itens = $oPedidosCons->ItensPorPedido($pedido_id)) return false;
+
+        foreach ($variaveis as $variavel) {
+            $acao = "insert";
+            $item_id = 0;
+            foreach ($itens as $item) {
+                if ($variavel["codigo"] == $item["produto_id"] && strtolower($item["item_tipo_cesta"]) == "variavel" && strtolower($variavel["categoria"]) == strtolower($item["item_freq_cesta"])) {
+                    $acao = "update";
+                    $item_id = $item["item_id"];
+                }                
+            }
+
+            $oProdutos = new Produtos();
+            $produto = $oProdutos->buscaProduto($variavel["codigo"]);
+            $unidades = $oProdutos->unidades("descricao");
+
+            $oProdutores = new Produtores();
+            $produtores = $oProdutores->listaProdutoresPorNome();
+
+            $dados = [
+                ":pedido_id"            => $pedido_id,
+                ":admin_id_consolidado" => 1,
+                ":produto_id"           => $variavel["codigo"],
+                ":item_qtde"            => $variavel["quantidade"],
+                ":item_produto"         => $produto["nome"],
+                ":item_valor"           => $variavel["preco"],
+                ":item_produtor"        => $produtores[$produto["produtor"]],
+                ":item_valor_produtor"  => $produto["preco_produtor"],
+                ":item_tipo"            => $unidades[$produto["unidade"]],
+                ":item_tipo_cesta"      => "variavel",
+                ":item_freq_cesta"      => $variavel["categoria"]
+            ];
+
+            if ($acao == "update") {
+                $dados["item_id"] = $item_id;
+            }
+
+            if ($item_id == 0 && $acao == "update") {
+                $erros[] = "Erro ao obter id para produto '".$produto["nome"]."'. Produto não incluído no pedido.";
+            } else {            
+                if (!$this->novoItem($acao, $dados)) {
+                    $erros[] = "Erro ao incluir produto '".$produto["nome"]."'";
+                }
+            }
+        }
+
+        //atualizar valores totais
+        $this->atualizaValores();
+
+        //atualizar pedido para incluir forma de entrega (já que este dado é preenchido com o variável)
+        $sql = "UPDATE pedidos_consolidados SET pedido_retirada = ".$delivery.",
+                pedido_endereco = '".$endereco."' 
+                WHERE pedido_id = ".$pedido_id;
+        $st = $this->conn()->prepare($sql);
+        $st->execute();
+
+        //se selecionado, atualizar endereço do consumidor no cadastro
+        if ($atualizar_endereco) {
+            $oCons = new Consumidores();
+            $oCons->atualizarCadastro($proximo_pedido["consumidor_id"], ["endereco" => $endereco]);
+        }
+
+        if (!isset($erros)) return true;
+        return $erros;
     }
 
 }

@@ -25,6 +25,11 @@ include "../Painel/helpers.php";
             {{ alerta | raw}}            
         </div>
         {% endif %}
+        {% if sucesso != "" %}
+        <div class="alert alert-success" role="alert">
+            {{ sucesso | raw}}
+        </div>
+        {% endif %}
         {% block content %}
         {% endblock content %}
     </section>
