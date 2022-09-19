@@ -287,12 +287,14 @@ if (isset($_GET["cpf"])) {
         }
     }
 }
+
 //Obter total de grupos
 $sql = "SELECT * FROM Parametros WHERE parametro = 'grupos'";
 $st = $conn->prepare($sql);
 $st->execute();
 $rs = $st->fetch();
 $nGrupos = intval ($rs["valor"]);
+/*
 for ($i = 1; $i <= $nGrupos; $i++) {
     $sql = "SELECT * FROM Consumidores WHERE ativo = 1 AND comunidade = ". $i ." ORDER BY consumidor ASC";
     $st = $conn->prepare($sql);
@@ -339,7 +341,7 @@ for ($i = 1; $i <= $nGrupos; $i++) {
     }
     echo '</table>';
 }
-/*
+*/
 $sql = "SELECT * FROM Consumidores WHERE ativo = 0 or comunidade = 0 ORDER BY consumidor ASC";
 $st = $conn->prepare($sql);
 $st->execute();
@@ -406,7 +408,7 @@ foreach ($consumidores as $consumidor=>$dados) {
     echo '</tr>';
 }
 echo '</table>';
-*/
+
 function formatSaldo($saldo) {
     if ($saldo >= 0) {
         return "R$".number_format(abs($saldo),2,",",".");
