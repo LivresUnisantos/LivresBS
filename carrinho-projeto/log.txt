@@ -1,0 +1,31 @@
+
+2022-09-17-00:27:28 () Pedido do cpf 13401231855 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-00:34:03 () Usuário com cadastro existente (cpf ) tentou realizar preenchimento | SELECT * FROM Consumidores WHERE cpf = ''
+2022-09-17-00:50:24 () Pedido do cpf 26020924874 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-01:14:18 () Pedido do cpf 01270751190 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-01:21:42 () Pedido do cpf 31532574851 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-01:28:50 () Pedido do cpf 34908872805 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-01:38:10 () Pedido do cpf 31649447809 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-01:46:10 () Pedido do cpf 15916043899 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-01:46:47 () Usuário com cadastro existente (cpf ) tentou realizar preenchimento | SELECT * FROM Consumidores WHERE cpf = ''
+2022-09-17-01:46:54 () Usuário com cadastro existente (cpf ) tentou realizar preenchimento | SELECT * FROM Consumidores WHERE cpf = ''
+2022-09-17-01:51:37 () Pedido do cpf 16231420833 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-02:11:19 () Pedido do cpf 42799182879 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-02:19:38 () Pedido do cpf 38104379801 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-02:25:04 () Pedido do cpf 33296411852 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-02:25:21 () Usuário com cadastro existente (cpf ) tentou realizar preenchimento | SELECT * FROM Consumidores WHERE cpf = ''
+2022-09-17-02:30:31 () Pedido do cpf 38918059850 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-02:35:26 () Pedido do cpf 28319161860 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-02:37:36 () Pedido do cpf 31345480890 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-02:40:14 () Pedido do cpf 41471782867 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-02:45:46 () Pedido do cpf 38954878806 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-02:51:28 () Pedido do cpf 32844707866 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-02:51:57 () Pedido do cpf 35304851870 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-02:53:45 () Usuário com cadastro existente (cpf ) tentou realizar preenchimento | SELECT * FROM Consumidores WHERE cpf = ''
+2022-09-17-02:56:59 () Pedido do cpf 30780140885 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-03:01:13 () Pedido do cpf 44210935808 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-03:04:59 () Pedido do cpf 40399854860 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-03:08:50 () Pedido do cpf 34253393896 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-03:15:02 () Pedido do cpf 35126806823 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-03:18:55 () Pedido do cpf 21416757821 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-17-03:25:19 () Pedido do cpf 49021520885 cadastrado (verificar na próxima linha se houve erro) | 
