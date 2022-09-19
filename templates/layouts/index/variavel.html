@@ -13,9 +13,9 @@
 {% endblock %}
 
 {% block content %}
+<h1>Olá {{ cons.consumidor }} | <a href="logout.php">Trocar</a></h1>
 {% if (not sucesso and not alerta) %}
 <form method="POST">
-    <h1>Olá {{ cons.consumidor }} | <a href="logout.php">Trocar</a></h1>
     <h2>Seu Pedido</h2>
     <div>
         <!-- <div>Cota: <span id="preco_cota">R${{pedido.pedido_cota|number_format(2,",",".")}}</span></div> -->
