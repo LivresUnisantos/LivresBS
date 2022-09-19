@@ -127,6 +127,7 @@ $rs = $oListas->produtosListaAtivos(13);
                                     if ($_SERVER["HTTP_HOST"] == "livresbs.com.br") {
                                 ?>
     							    <option value="Terça-Feira">Terça-Feira</option>
+    							    <option value="Quinta-Feira">Quinta-Feira</option>
     							    <option value="Sábado">Sábado</option>
 							    <?php } else { ?>
     							    <option value="Sábado">Sábado</option>
