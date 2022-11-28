@@ -296,6 +296,36 @@ function cleanString($text) {
 }
 
 function setLog($file,$msg,$sql) {
+    
+    /* criar prefixo e pasta para o log */
+    
+    $file = str_replace("\\", "/", $file);
+    $fname = substr($file,0,strrpos($file, "."));
+    if (strpos($fname, "/") !== false) {
+    	$fname = substr($fname, strrpos($fname, "/")+1);
+    }
+    $ext = substr($file, strrpos($file, ".") + 1);
+    $path = str_replace($fname.".".$ext, "", $file);
+    
+    if ($path != "/") {
+    	if ($path == "") {
+    		$path = "/";
+    	} else {
+    		if (substr($path, strlen($path)-1, 1) != "/") {
+    			$path = $path . "/";
+    		}
+    	}
+    }
+    if ($path == "/") $path = "";
+    $date = date("Y-m");
+    $file = $path . 'log_' . $date . "_" . $fname . '.' . $ext;
+    
+    //criar diretório se não existe
+    //$dir = dirname($file);
+    //if (!is_dir($dir)) mkdir($dir, 0777, true);
+    
+    /**/
+    
     $fp = fopen($file, 'a');
     if (session_status() == PHP_SESSION_NONE) {
         $msg = date("Y-m-d-H:i:s")." () ".$msg;
