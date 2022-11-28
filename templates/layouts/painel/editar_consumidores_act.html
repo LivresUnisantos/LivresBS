@@ -21,7 +21,8 @@
             <div class="form-group row">
                 <label for="" class="col-sm-4 col-form-label">CPF</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" value="{{ consumidor.cpf }}">
+                    {# <input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" value="{{ consumidor.cpf }}"> #}
+                    {{ consumidor.cpf|slice(0,3) }}.{{ consumidor.cpf|slice(3,3) }}.{{ consumidor.cpf|slice(6,3) }}-{{ consumidor.cpf|slice(9,2) }}
                 </div>
             </div>
             
