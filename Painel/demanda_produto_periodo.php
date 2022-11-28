@@ -88,125 +88,125 @@ if (isset($_GET["inicio"]) && isset($_GET["fim"])) {
 
 if (!isset($dtI) || !isset($dtF)) {
     echo $form;
-    exit();
-}
+} else {
 
-$sql = "SELECT * FROM Parametros WHERE parametro = 'grupos'";
-$st = $conn->prepare($sql);
-$st->execute();
-$rs = $st->fetch();
-$grupos = $rs["valor"];
-
-for ($i = 1; $i <= $grupos; $i++) {
-    $demanda[$i]["Semanal"] = 0;
-    $demanda[$i]["Quizenal"] = 0;
-    $demanda[$i]["Mensal"] = 0;
-}
-
-$sql = "SELECT * FROM Calendario WHERE data >= '".$dtI."' AND data <= '".$dtF."' ";
-
-$st = $conn->prepare($sql);
-$st->execute();
-$rs = $st->fetchAll();
-
-foreach ($rs as $row) {
+    $sql = "SELECT * FROM Parametros WHERE parametro = 'grupos'";
+    $st = $conn->prepare($sql);
+    $st->execute();
+    $rs = $st->fetch();
+    $grupos = $rs["valor"];
+    
     for ($i = 1; $i <= $grupos; $i++) {
-        $freq = $row[$i."acomunidade"];
-        if (substr($freq,0,1) == "1") {
-            $demanda[$i]["Semanal"]++;
-        }
-        if (substr($freq,1,1) == "1") {
-            $demanda[$i]["Quinzenal"]++;
-        }
-        if (substr($freq,2,1) == "1") {
-            $demanda[$i]["Mensal"]++;
+        $demanda[$i]["Semanal"] = 0;
+        $demanda[$i]["Quizenal"] = 0;
+        $demanda[$i]["Mensal"] = 0;
+    }
+    
+    $sql = "SELECT * FROM Calendario WHERE data >= '".$dtI."' AND data <= '".$dtF."' ";
+    
+    $st = $conn->prepare($sql);
+    $st->execute();
+    $rs = $st->fetchAll();
+    
+    foreach ($rs as $row) {
+        for ($i = 1; $i <= $grupos; $i++) {
+            $freq = $row[$i."acomunidade"];
+            if (substr($freq,0,1) == "1") {
+                $demanda[$i]["Semanal"]++;
+            }
+            if (substr($freq,1,1) == "1") {
+                $demanda[$i]["Quinzenal"]++;
+            }
+            if (substr($freq,2,1) == "1") {
+                $demanda[$i]["Mensal"]++;
+            }
         }
     }
-}
-//
-
-echo '<table>';
-echo '<tr class="firstLine">';
-echo "<td>Grupo</td>";
-echo "<td>Semanal</td>";
-echo "<td>Quinzenal</td>";
-echo "<td>Mensal</td>";
-echo '</tr>';
-echo '<tbody>';
-for ($i = 1; $i <= $grupos; $i++) {
-    if ($demanda[$i]["Semanal"] == "") $demanda[$i]["Semanal"] = 0;
-    if ($demanda[$i]["Quinzenal"] == "") $demanda[$i]["Quinzenal"] = 0;
-    if ($demanda[$i]["Mensal"] == "") $demanda[$i]["Mensal"] = 0;
-    echo '<tr>';
-    echo '<td>Grupo '.$i.'</td>';
-    echo '<td>'.$demanda[$i]["Semanal"].'</td>';
-    echo '<td>'.$demanda[$i]["Quinzenal"].'</td>';
-    echo '<td>'.$demanda[$i]["Mensal"].'</td>';
+    //
+    
+    echo '<table>';
+    echo '<tr class="firstLine">';
+    echo "<td>Grupo</td>";
+    echo "<td>Semanal</td>";
+    echo "<td>Quinzenal</td>";
+    echo "<td>Mensal</td>";
     echo '</tr>';
-}
-echo '</tbody>';
-echo '</table>';
-
-echo '<p>'.$form.'</p>';
-
-$sql = 'SELECT ped.IDProduto, prod.nome, prod.categoria, prod.unidade, prod.produtor, ped.Frequencia, cons.comunidade, SUM(ped.Quantidade) as QtTotal, prod.previsao FROM Pedidos ped';
-$sql .= ' LEFT JOIN Consumidores cons ON ped.IDConsumidor = cons.id LEFT JOIN produtos prod ON ped.IDProduto = prod.id';
-$sql .= " WHERE ped.Frequencia <> '' AND prod.nome NOT LIKE '%zzz%' AND cons.ativo = 1";
-$sql .= ' GROUP BY prod.id, ped.Frequencia, cons.comunidade ORDER BY prod.nome';
-
-$st = $conn->prepare($sql);
-$st->execute();
-$rs=$st->fetchAll();
-foreach ($rs as $row)  {
-    $produtos[$row["IDProduto"]]["Quantidade"] += $row["QtTotal"] * $demanda[$row["comunidade"]][$row["Frequencia"]];
-    $produtos[$row["IDProduto"]]["Produto"] = [
-        "nome" => $row["nome"],
-        "categoria" => $row["categoria"],
-        "unidade" => $row["unidade"],
-        "produtor" => $row["produtor"],
-        "emlinha" => ($row["previsao"] <= $dtI) ? "Sim" : "Não"
-    ];
-}
-
-//
-echo '<input type="text" id="filtro" placeholder="Digite para filtrar" />';
-echo '<label for="quantidade">Apenas quantidade não zerada</label><input type="checkbox" id="quantidade" name="checkbox" value="" />';
-echo '<label for="ativos">Apenas ativos</label><input type="checkbox" id="ativo" name="checkbox" value="" />';
-echo '<table>';
-echo '<tr class="firstLine">';
-echo "<td>Produto</td>";
-echo "<td>Unidade</td>";
-echo "<td>Categoria</td>";
-echo "<td>Produtor</td>";
-echo "<td>Em linha</td>";
-echo "<td>Total</td>";
-echo '</tr>';
-echo '<tbody id="tabela_produtos">';
-$count=0;
-echo "<pre>";
-//print_r($produtos);
-echo "</pre>";
-foreach ($produtos as $id => $produto) {
-    $count++;
-    if ($count % 2 == 0) {
-        echo '<tr bgcolor="#d1f1ff">';
-    } else {
+    echo '<tbody>';
+    for ($i = 1; $i <= $grupos; $i++) {
+        if ($demanda[$i]["Semanal"] == "") $demanda[$i]["Semanal"] = 0;
+        if ($demanda[$i]["Quinzenal"] == "") $demanda[$i]["Quinzenal"] = 0;
+        if ($demanda[$i]["Mensal"] == "") $demanda[$i]["Mensal"] = 0;
         echo '<tr>';
+        echo '<td>Grupo '.$i.'</td>';
+        echo '<td>'.$demanda[$i]["Semanal"].'</td>';
+        echo '<td>'.$demanda[$i]["Quinzenal"].'</td>';
+        echo '<td>'.$demanda[$i]["Mensal"].'</td>';
+        echo '</tr>';
     }
-    echo '<td><a href="https://livresbs.com.br/Painel/demanda_consumidor.php?id='.$id.'" target="_blank">'.$produto["Produto"]["nome"].'</a></td>';
-    echo '<td>'.$produto["Produto"]["unidade"].'</td>';
-    echo '<td>'.$produto["Produto"]["categoria"].'</td>';
-    if ($produto["Produto"]["produtor"] == 'Coopeg - Cooperativa de Produtores Ecologistas de Garibaldi') {
-        echo '<td>Coopeg</td>';
-    } else {
-        echo '<td>'.$produto["Produto"]["produtor"].'</td>';
+    echo '</tbody>';
+    echo '</table>';
+    
+    echo '<p>'.$form.'</p>';
+    
+    $sql = 'SELECT ped.IDProduto, prod.nome, prod.categoria, prod.unidade, prod.produtor, ped.Frequencia, cons.comunidade, SUM(ped.Quantidade) as QtTotal, prod.previsao FROM Pedidos ped';
+    $sql .= ' LEFT JOIN Consumidores cons ON ped.IDConsumidor = cons.id LEFT JOIN produtos prod ON ped.IDProduto = prod.id';
+    $sql .= " WHERE ped.Frequencia <> '' AND prod.nome NOT LIKE '%zzz%' AND cons.ativo = 1";
+    $sql .= ' GROUP BY prod.id, ped.Frequencia, cons.comunidade ORDER BY prod.nome';
+    
+    $st = $conn->prepare($sql);
+    $st->execute();
+    $rs=$st->fetchAll();
+    foreach ($rs as $row)  {
+        $produtos[$row["IDProduto"]]["Quantidade"] += $row["QtTotal"] * $demanda[$row["comunidade"]][$row["Frequencia"]];
+        $produtos[$row["IDProduto"]]["Produto"] = [
+            "nome" => $row["nome"],
+            "categoria" => $row["categoria"],
+            "unidade" => $row["unidade"],
+            "produtor" => $row["produtor"],
+            "emlinha" => ($row["previsao"] <= $dtI) ? "Sim" : "Não"
+        ];
     }
-    echo '<td>'.$produto["Produto"]["emlinha"].'</td>';
-    echo '<td>'.$produto["Quantidade"].'</td>';
-    echo "</tr>";
+    
+    //
+    echo '<input type="text" id="filtro" placeholder="Digite para filtrar" />';
+    echo '<label for="quantidade">Apenas quantidade não zerada</label><input type="checkbox" id="quantidade" name="checkbox" value="" />';
+    echo '<label for="ativos">Apenas ativos</label><input type="checkbox" id="ativo" name="checkbox" value="" />';
+    echo '<table>';
+    echo '<tr class="firstLine">';
+    echo "<td>Produto</td>";
+    echo "<td>Unidade</td>";
+    echo "<td>Categoria</td>";
+    echo "<td>Produtor</td>";
+    echo "<td>Em linha</td>";
+    echo "<td>Total</td>";
+    echo '</tr>';
+    echo '<tbody id="tabela_produtos">';
+    $count=0;
+    echo "<pre>";
+    //print_r($produtos);
+    echo "</pre>";
+    foreach ($produtos as $id => $produto) {
+        $count++;
+        if ($count % 2 == 0) {
+            echo '<tr bgcolor="#d1f1ff">';
+        } else {
+            echo '<tr>';
+        }
+        echo '<td><a href="https://livresbs.com.br/Painel/demanda_consumidor.php?id='.$id.'" target="_blank">'.$produto["Produto"]["nome"].'</a></td>';
+        echo '<td>'.$produto["Produto"]["unidade"].'</td>';
+        echo '<td>'.$produto["Produto"]["categoria"].'</td>';
+        if ($produto["Produto"]["produtor"] == 'Coopeg - Cooperativa de Produtores Ecologistas de Garibaldi') {
+            echo '<td>Coopeg</td>';
+        } else {
+            echo '<td>'.$produto["Produto"]["produtor"].'</td>';
+        }
+        echo '<td>'.$produto["Produto"]["emlinha"].'</td>';
+        echo '<td>'.$produto["Quantidade"].'</td>';
+        echo "</tr>";
+    }
+    echo '</tbody>';
+    echo '</table>';
 }
-echo '</tbody>';
-echo '</table>';
 ?> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
