@@ -14,6 +14,9 @@ $dataStr = "";
 if (isset($_SESSION["data_consulta"])) {
     $getData = $livres->dataPelaString($_SESSION["data_consulta"]);
     if (!$dataStr = $livres->dataPeloID($getData,'string')) {
+        $dataStr = $_SESSION["data_consulta"];
+    }
+    /*if (!$dataStr = $livres->dataPeloID($getData,'string')) {
         echo $twig->render('pagamentos.html', [
             "titulo"            => "LivresBS - Controle Pagamentos",
             "menu_datas"        => $calendario->listaDatas(),
@@ -22,6 +25,7 @@ if (isset($_SESSION["data_consulta"])) {
             ]);
         exit();
     }
+    */
 }
 
 if (isset($_SESSION["data_consulta"])) {
