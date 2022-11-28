@@ -31,7 +31,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="../../Painel/consulta_preco.php">Consulta Preços</a>
                     <a class="dropdown-item" href="../../Painel/consumidores.php">Consumidores</a>
-                    <a class="dropdown-item" href="../../Painel/consumidores_inativos.php">Consumidores Inativos</a>
+                    <!-- <a class="dropdown-item" href="../../Painel/consumidores_inativos.php">Consumidores Inativos</a> -->
                     <a class="dropdown-item" href="../../Painel/estoque.php">Estoque</a>
                     <a class="dropdown-item" href="../../Painel/editar_listas.php">Listas</a>
                     <a class="dropdown-item" href="../../Painel/produtos.php?imprimir=1">Produtos</a>
@@ -43,7 +43,8 @@
                     Planejamento
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="../../Painel/demanda_produto.php">Demanda</a>
+                    <a class="dropdown-item" href="../../Painel/demanda_produto.php">Demanda por Grupo</a>
+                    <a class="dropdown-item" href="../../Painel/demanda_produto_periodo.php">Demanda por Período</a>
                     <a class="dropdown-item" href="../../Painel/pagamentos.php{% if (data_selecionada != '') %}?data={{data_selecionada}}{% endif %}">Pagamentos</a>
                     <a class="dropdown-item" href="../../Painel/contabilidade.php{% if (data_selecionada != '') %}?data={{data_selecionada}}{% endif %}">Resumo Contabilidade</a>
                 </div>

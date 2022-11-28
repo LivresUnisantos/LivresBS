@@ -1,0 +1,183 @@
+<div class="container">
+    {% if not consumidor %}
+        Consumidor não encontrado
+    {% else %}
+        <form method="POST" id="formEditarConsumidor" action="editar_consumidores_act.php">
+            <div class="form-group row">
+                <label for="" class="col-sm-4 col-form-label">Consumidor</label>
+                <div class="col-sm-8">
+                    <input type="hidden" id="id" name="id" value="{{ consumidor.id }}" />
+                    <input type="text" class="form-control" id="consumidor" name="consumidor" placeholder="Nome" value="{{ consumidor.consumidor }}">
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label for="" class="col-sm-4 col-form-label">Email</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="email" name="email" placeholder="Email" value="{{ consumidor.email }}">
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label for="" class="col-sm-4 col-form-label">CPF</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" value="{{ consumidor.cpf }}">
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label for="" class="col-sm-4 col-form-label">Endereço</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="endereco" name="endereco" placeholder="Endereço" value="{{ consumidor.endereco }}">
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label for="" class="col-sm-4 col-form-label">Telefone</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="telefone" name="telefone" placeholder="Telefone" value="{{ consumidor.telefone }}">
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label for="" class="col-sm-4 col-form-label">Ativo</label>
+                <div class="col-sm-8">
+                    <select name="ativo" id="ativo" class="form-control">
+                        {% if (consumidor.ativo == 1) %}
+                            <option value="0" selected="selected">Ativo</option>
+                            <option value="1">Inativo</option>
+                        {% else %}
+                            <option value="0">Ativo</option>
+                            <option value="1" selected="selected">Inativo</option>
+                        {% endif %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label for="" class="col-sm-4 col-form-label">Comunidade</label>
+                <div class="col-sm-8">
+                    <select id="comunidade" name="comunidade" class="form-control">
+                        {% for i in 0..grupos %}
+                            {% if (consumidor.comunidade == i) %}
+                                <option value="{{ i }}" selected="selected">{{ i }}</option>
+                            {% else %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label for="" class="col-sm-4 col-form-label">Nascimento</label>
+                <div class="col-sm-8">
+                    <input type="date" class="form-control" id="nascimento" name="nascimento" placeholder="Nascimento" value="{{ consumidor.nascimento }}">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="" class="col-sm-4 col-form-label">Banco</label>
+                <div class="col-sm-8">
+                    <select id="banco" name="banco" class="form-control">
+                        {% if (consumidor.banco == 0) %}
+                            <option value="0" selected="selected">Não</option>
+                            <option value="1">Sim</option>
+                        {% else %}
+                            <option value="0">Não</option>
+                            <option value="1" selected="selected">Sim</option>
+                        {% endif %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <div class="col-sm-8">
+                    <input type="submit" class="btn btn-primary" value="Salvar" />
+                </div>
+            </div>
+        </form>
+    {% endif %}
+</div>
+<script>
+    function formatMoeda(v) {
+        v = v.replace("R","");
+        v = v.replace("$","");
+        v = v.replace(",", ".");
+        if (v.search("\\.") == -1) {
+            return "R$" + v + ",00";
+        }
+        inteiro = v.substring(0,v.search("\\."))
+        dec = v.substring(v.search(".")+2);
+        dec = dec.substring(0,2);
+        if (dec.length == 1) {
+            dec = dec + "0";
+        }
+        return "R$" + inteiro + "," + dec;
+    }
+
+    function formatData(d) {
+        arr = d.split("-");
+        return arr[2] + "/" + arr[1] + "/" + arr[0];
+    }
+
+    $(document).ready(function() {
+        var previsao = $("#previsao").val();
+        console.log(previsao);
+        if (previsao == '2037-12-31') {
+            $("#previsao").hide();
+            $("#indisponivel").prop("checked", true);
+        } else {
+            $("#previsao").show();
+            $("#indisponivel").prop("checked", false);
+        }
+    });
+
+    $("#indisponivel").click(function() {
+        if ($(this).prop("checked")) {
+            $("#previsao").val("2037-12-31");
+            $("#previsao").hide();
+        } else {
+            $("#previsao").show();
+        }
+    });
+
+    $("#previsao").change(function() {
+        if ($(this).val() == '2037-12-31') {
+            $("#previsao").hide();
+            $("#indisponivel").prop("checked", true);
+        }
+    });
+
+    $("#formEditarConsumidor").submit(function(e) {
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+
+        var form = $(this);
+        var url = form.attr('action');
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(), // serializes the form's elements.
+            success: function(data) {
+                alert(data); // show response from the php script.
+                var dados = form.serializeArray().reduce(function(obj, item) {
+                    obj[item.name] = item.value;
+                    return obj;
+                }, {});
+                id = dados["id"];
+
+                $("#consumidor_"+id).text(dados["consumidor"]);
+                $("#nascimento_"+id).text(dados["nascimento"].substr(8,2)+"/"+dados["nascimento"].substr(5,2)+"/"+dados["nascimento"].substr(0,4));
+                
+                if (dados["banco"] == 0) {
+                    $("#banco_"+id).text("-");
+                } else {
+                    $("#banco_"+id).text("Sim");
+                }
+
+                dialog.dialog("close");
+            }
+        });
+    });
+</script>

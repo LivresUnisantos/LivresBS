@@ -1,0 +1,220 @@
+{% extends "index.html" %}
+
+{% block content %}
+    <div class="input-group mb-2 mr-sm-2 inline">
+        <div class="col-sm-1">
+            <select id="filtro_ativo" name="filtro_ativo" class="form-control">
+                <option value="">Todos Status</option>
+                <option value="1">Só Ativos</option>
+                <option value="0">Só Inativos</option>
+            </select>
+        </div>
+        
+        <div class="col-sm-1">
+            <select id="filtro_grupo" name="filtro_grupo" class="form-control">
+                <option value="">Todos Grupos</option>
+            {% for i in 0..grupos %}
+                <option value="{{ i }}">Grupo {{ i }}</option>
+            {% endfor %}
+            </select>
+        </div>
+        Mostrando&nbsp;<span id="contador_filtro">{{ conteudo|length }}</span>&nbsp;consumidores de {{ conteudo|length }}
+    </div>
+    
+    
+    <div id="popup" title="Editar Produto" style="display: none;">
+        <p>Aguarde, carregando...</p>
+    </div>
+    {% if conteudo %}
+        <div class="input-group mb-2 mr-sm-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Filtro</div>
+            </div>
+            <input type="text" class="form-control" id="filtro" name="Filtro" placeholder="Procure por nome, código, grupo ou nascimento">
+        </div>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    {% if level_user >= level_write %}
+                        <th>&nbsp;</th>
+                    {% endif %}
+                    <th>Código</th>
+                    <th>Consumidor</th>
+                    <th>Grupo</th>
+                    <th>Status</th>
+                    <th>Nascimento</th>
+                    <th>Ver cesta</th>
+                    <th>Editar Cesta</th>
+                    <th>Banco</th>
+                </tr>
+            </thead>
+            <tbody id="tabela_consumidores">
+                {% for c in conteudo %}
+                    <tr>
+                        {% if level_user >= level_write %}
+                            <td><img src="../images/edit.png" act="editConsumidor" width="16" height="16" alt="Editar" idConsumidor="{{c.id}}" style="cursor: pointer;"></td>
+                        {% endif %}
+                        <td id="codigo_{{ c.id }}">{{c.id}}</td>
+                        <td id="consumidor_{{ c.id }}">{{c.consumidor}}</td>
+                        <td name="grupo" id="grupo_{{c.id}}">G{{ c.comunidade }}</td>
+                        {% if (c.ativo == 0) %}
+                            <td name="status_ativo" id="ativo_{{c.id}}">Inativo</td>
+                        {% else %}
+                            <td name="status_ativo" id="ativo_{{c.id}}">Ativo</td>
+                        {% endif %}
+                        {% if (c.nascimento != "" and c.nascimento != '0000-00-00') %}
+                            <td id="nascimento_{{ c.id }}">{{c.nascimento|date("d/m/Y")}}</td>
+                        {% else %}
+                            <td id="nascimento_{{ c.id }}">&nbsp;</td>
+                        {% endif %}
+                        <td id="verCesta_{{ c.id }}"><a href="https://livresbs.com.br/Cestas/?cpf={{ c.cpf }}">Ver Cesta</a></td>
+                        <td id="editarCesta_{{ c.id }}"><a href="https://livresbs.com.br/Painel/editar_cesta.php?cpf={{ c.cpf }}">Editar Cesta</a></td>
+                        <td id="banco_{{ c.id }}">{{ (c.banco == 1) ? 'Sim' : '-' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <span class="cabecalho_entregas">Não há consumidores cadastrados</span>
+    {% endif %}
+    <script>
+        $(document).ready(function(){
+            $("#filtro").on("keyup", function() {
+                filtro();
+            });
+            $("#filtro_soativos, #filtro_grupo, #filtro_ativo").on("change", function() {
+                filtro();
+            });
+            
+            
+            function filtro() {
+                var value = $("#filtro").val().toLowerCase();
+                var ativos = $("#filtro_ativo").val();
+                var grupos = $("#filtro_grupo").val();
+                count = 0;
+                $("#tabela_consumidores tr").filter(function() {
+                    if ($(this).find('td[name="status_ativo"]').html() == "Ativo") {
+                        ativo = true;
+                    } else {
+                        ativo = false;
+                    }
+                    grupo = $(this).find('td[name="grupo"]').html();
+                    if (grupos == "") {
+                        checkGrupo = true;
+                    } else {
+                        if (grupo == "G"+grupos) {
+                            checkGrupo = true;
+                        } else {
+                            checkGrupo = false;
+                        }
+                    }
+                    
+                    checkValue = $(this).text().toLowerCase().indexOf(value) > -1;
+                    
+                    //ativo/inativo
+                    if (ativos == "0") {
+                        if (ativo == false) {
+                            check = true;
+                        } else {
+                            check = false;
+                        }
+                    } else {
+                        if (ativos == "1") {
+                            if (ativo == true) {
+                                check = true;
+                            } else {
+                                check = false;
+                            }
+                        } else {
+                            check = true;
+                        }
+                    }
+                    
+                    //valor digitado na busca
+                    if (checkValue == false) {
+                        check = false;
+                    }
+                    
+                    //grupo selecionado
+                    if (checkGrupo == false) {
+                        check = false;
+                    }
+                    
+                    if (check == true) {
+                        count++;
+                    }
+                    
+                    $(this).toggle(check);
+                });
+                console.log(count);
+                $("#contador_filtro").html(count);
+            }
+            
+            /*function filtro() {
+                var value = $("#filtro").val().toLowerCase();
+                var soAtivos = $("#filtro_soativos").prop('checked');
+                var grupos = $("#filtro_grupo").val();
+                $("#tabela_consumidores tr").filter(function() {
+                    if ($(this).find('td[name="status_ativo"]').html() == "Ativo") {
+                        ativo = true;
+                    } else {
+                        ativo = false;
+                    }
+                    grupo = $(this).find('td[name="grupo"]').html();
+                    if (grupos == "") {
+                        checkGrupo = true;
+                    } else {
+                        if (grupo == "G"+grupos) {
+                            checkGrupo = true;
+                        } else {
+                            checkGrupo = false;
+                        }
+                    }
+                    
+                    checkStatus = soAtivos && ativo;
+                    checkValue = $(this).text().toLowerCase().indexOf(value) > -1;
+                    
+                    if (soAtivos) {
+                        if (ativo == true) {
+                            check = checkValue;
+                        } else {
+                            check = false;
+                        }
+                    } else {
+                        check = checkValue;
+                    }
+                    
+                    if (check) {
+                        if (checkGrupo == false) {
+                            check = false;
+                        }
+                    }
+                    
+                    $(this).toggle(check);
+                });
+            }*/
+
+            dialog = $("#popup").dialog({
+                autoOpen: false,
+                height: 600,
+                width: 600,
+                modal: true,
+            });
+          
+            $("[act=editConsumidor]").click(function() {
+                $("#popup").html("Aguarde, carregando...");
+                idConsumidor = $(this).attr("idConsumidor");
+                $.ajax({
+                    method: "GET",
+                    url: "editar_consumidores_act.php",
+                    data: { id: idConsumidor }
+                    })
+                    .done(function(msg) {
+                        //alert( "Data Saved: " + msg );
+                        $("#popup").html(msg);
+                    });
+                dialog.dialog("open");
+            });
+        });
+    </script>
+{% endblock content %}

@@ -30,6 +30,29 @@ class Consumidores extends Livres {
         }
     }
     
+    public function atualizaConsumidor($dados) {
+        $id = $dados["id"];
+        if (!$this->encontrarPorId($id)) {
+            return "Consumidor não encontrado";
+        }
+        
+        $sqlClause = "";
+        foreach ($dados as $campo => $valor) {
+            if ($campo != "id") {
+                if ($sqlClause != "") { $sqlClause .= ", "; }
+                $sqlClause .= $campo." = :".$campo;
+            }
+        }
+
+        $sql = "UPDATE Consumidores SET ".$sqlClause." WHERE id = :id";
+        $st = $this->conn()->prepare($sql);
+        if ($st->execute($dados)) {
+            echo "Consumidor atualizado";
+        } else {
+            echo "Falha ao atualizar consumidor";
+        }
+    }
+    
     public function consumidoresAtivos($ordenar = "") {
         return $this->listaConsumidores('ativos', $ordenar);
     }
@@ -53,7 +76,7 @@ class Consumidores extends Livres {
         if ($ordenar == "") {
             $sql .= " ORDER BY consumidor, ativo, comunidade ASC";
         } else {
-            $sql .= " ORDER BY ".$ordenar." ASC";
+            $sql .= " ORDER BY ".$ordenar;
         }
         $st = $this->conn()->prepare($sql);
         $st->execute();
