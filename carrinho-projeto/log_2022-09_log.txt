@@ -1,0 +1,9 @@
+
+2022-09-24-19:38:29 () Pedido do cpf 32895465860 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-24-19:52:47 () Pedido do cpf 28448785800 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-24-19:57:11 () Pedido do cpf 31052714811 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-24-20:03:33 () Pedido do cpf 36775620829 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-24-20:07:59 () Pedido do cpf 05308227845 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-24-20:15:43 () Pedido do cpf 30212159801 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-24-20:24:03 () Pedido do cpf 39427089814 cadastrado (verificar na próxima linha se houve erro) | 
+2022-09-26-19:17:07 () Pedido do cpf 28125987860 cadastrado (verificar na próxima linha se houve erro) | 

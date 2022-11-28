@@ -1,0 +1,6 @@
+
+2022-10-08-22:49:11 () Pedido do cpf 01339511894 cadastrado (verificar na próxima linha se houve erro) | 
+2022-10-08-23:21:06 () Pedido do cpf 26362337840 cadastrado (verificar na próxima linha se houve erro) | 
+2022-10-08-23:31:52 () Pedido do cpf 23459536837 cadastrado (verificar na próxima linha se houve erro) | 
+2022-10-09-01:22:46 () Pedido do cpf 04871610845 cadastrado (verificar na próxima linha se houve erro) | 
+2022-10-15-17:23:33 () Pedido do cpf 42117284825 cadastrado (verificar na próxima linha se houve erro) | 

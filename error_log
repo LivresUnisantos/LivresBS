@@ -1,1 +1,2 @@
 [05-Aug-2019 19:19:20 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/livresbs/public_html/index.php on line 125
+[19-Sep-2022 21:25:54 UTC] PHP Warning:  Use of undefined constant whoami - assumed 'whoami' (this will throw an Error in a future version of PHP) in /home/livresbs/public_html/testar.php on line 2

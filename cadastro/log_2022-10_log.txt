@@ -1,0 +1,7 @@
+
+2022-10-06-03:46:06 () Pedido do cpf 27886752830 cadastrado (verificar na próxima linha se houve erro) | 
+2022-10-18-19:35:43 () Pedido do cpf 31899221875 cadastrado (verificar na próxima linha se houve erro) | 
+2022-10-18-19:35:44 () Usuário com cadastro existente (cpf 31899221875) tentou realizar preenchimento | SELECT * FROM Consumidores WHERE cpf = '31899221875'
+2022-10-20-08:37:14 () Pedido do cpf 03151939724 cadastrado (verificar na próxima linha se houve erro) | 
+2022-10-25-01:18:19 () Pedido do cpf 27802474876 cadastrado (verificar na próxima linha se houve erro) | 
+2022-10-28-18:17:35 () Pedido do cpf 27802474876 cadastrado (verificar na próxima linha se houve erro) | 
