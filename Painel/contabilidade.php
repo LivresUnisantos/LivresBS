@@ -114,8 +114,8 @@ if (!isset($_SESSION["data_consulta"])) {
 			$totais["receitas"]["pedidos"] += $pedido["pedido_valor_total"];
 
 			$totais["receitas"]["cota"] += $pedido["pedido_cota"];
-			$totais["receitas"]["fixa"] += $pedido["pedido_fixa"];
-			$totais["receitas"]["variavel"] += ($pedido["pedido_variavel"] - ($pedido["pedido_cota"] - $pedido["pedido_fixa"]) > 0.5 ) ? $pedido["pedido_variavel"]: $pedido["pedido_cota"] - $pedido["pedido_fixa"];
+			$totais["receitas"]["fixa"] += $pedido["pedido_fixa"]+$pedido["pedido_mensal"];
+			$totais["receitas"]["variavel"] += (abs($pedido["pedido_variavel"] - ($pedido["pedido_cota"] - $pedido["pedido_fixa"])) > 0.5) ? $pedido["pedido_variavel"]: $pedido["pedido_cota"] - $pedido["pedido_fixa"];
 			$totais["receitas"]["avulso"] += $pedido["pedido_avulso"];
 		}
 		$totais["receitas"]["pre"] = $pedidoPre;
