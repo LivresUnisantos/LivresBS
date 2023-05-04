@@ -73,7 +73,7 @@ $itensPD = $Read->getResult();
 
 <header class="dashboard_header">
     <?php
-//TOTAIS
+    //TOTAIS
     $Read->FullRead("SELECT pedido_id FROM " . DB_PD_CONS . " WHERE $wData[0] AND pedido_pre = 0", "{$wData[1]}");
     if ($Read->getResult()):
         $PedidosTotal = $Read->getRowCount();
@@ -129,3 +129,4 @@ $itensPD = $Read->getResult();
         <div class="clear"></div>
     </div>
 </div>
+<?php

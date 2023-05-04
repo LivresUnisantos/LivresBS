@@ -334,6 +334,12 @@ if (!isset($_GET["data"]) || !isset($_SESSION["data_id"])) {
         	        $mostrarCesta = false;
         	        //exit();
         	    }
+        	    
+        	    if ($rsCotaNova["pedido_fixa"] == 0 && $rsCotaNova["pedido_mensal"] != 0) {
+        	        $mostrarCesta = false;
+        	        echo $cons["consumidor"];
+        	    }
+        	    
         	    if ($mostrarCesta) {
             	    //Fim cálculo cota variável
                 	//Obter pedido já feito

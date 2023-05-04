@@ -7,6 +7,7 @@
             <thead class="thead-light">
                 <tr>
                     <th>Produto</th>
+                    <th>Produtor</th>
                     <th>Comboio</th>
                     <th>Consumidor Consciente</th>
                     <th>Livre Mercado</th>
@@ -16,6 +17,7 @@
                 {% for p in conteudo %}
                     <tr>
                         <td>{{p.nome}}</td>
+                        <td>{{p.produtor}}</td>
                         <td>R${{p.preco|number_format(2,",",".")}}</td>
                         <td>R${{p.preco_lojinha|number_format(2,",",".")}}</td>
                         <td>R${{p.preco_mercado|number_format(2,",",".")}}</td>

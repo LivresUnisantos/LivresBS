@@ -1,5 +1,5 @@
 <?php
-$levelAll = 20000; //nível em que é possível alterar senha/nível de qualquer usuário
+$levelAll = 30000; //nível em que é possível alterar senha/nível de qualquer usuário
 include "../config.php";
 include "acesso.php";
 include "password.php";

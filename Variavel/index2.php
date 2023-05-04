@@ -28,7 +28,7 @@ $produtos_promo = $oListas->listarVariaveis($proximaEntrega);
 
 if (!$produtos_promo || count($produtos_promo) == 0) {
     $erros[] = "Ainda não foram disponibilizados produtos para preenchimento";
-    $livres->setLog("log.txt","CPF: ".$cpf." - tentativa de preenchimento sem produtos cadastrados","");
+    $livres->setLog("log.txt","CPF: ".$_SESSION["cpf"]." - tentativa de preenchimento sem produtos cadastrados","");
 }
 
 if ($proximoPedidoVariavel !== false) {

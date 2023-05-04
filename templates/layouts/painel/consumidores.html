@@ -146,53 +146,8 @@
                     
                     $(this).toggle(check);
                 });
-                console.log(count);
                 $("#contador_filtro").html(count);
             }
-            
-            /*function filtro() {
-                var value = $("#filtro").val().toLowerCase();
-                var soAtivos = $("#filtro_soativos").prop('checked');
-                var grupos = $("#filtro_grupo").val();
-                $("#tabela_consumidores tr").filter(function() {
-                    if ($(this).find('td[name="status_ativo"]').html() == "Ativo") {
-                        ativo = true;
-                    } else {
-                        ativo = false;
-                    }
-                    grupo = $(this).find('td[name="grupo"]').html();
-                    if (grupos == "") {
-                        checkGrupo = true;
-                    } else {
-                        if (grupo == "G"+grupos) {
-                            checkGrupo = true;
-                        } else {
-                            checkGrupo = false;
-                        }
-                    }
-                    
-                    checkStatus = soAtivos && ativo;
-                    checkValue = $(this).text().toLowerCase().indexOf(value) > -1;
-                    
-                    if (soAtivos) {
-                        if (ativo == true) {
-                            check = checkValue;
-                        } else {
-                            check = false;
-                        }
-                    } else {
-                        check = checkValue;
-                    }
-                    
-                    if (check) {
-                        if (checkGrupo == false) {
-                            check = false;
-                        }
-                    }
-                    
-                    $(this).toggle(check);
-                });
-            }*/
 
             dialog = $("#popup").dialog({
                 autoOpen: false,

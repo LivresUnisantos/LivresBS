@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--  This file has been downloaded from bootdey.com @bootdey on twitter -->
+    <!--  All snippets are MIT license http://bootdey.com/license -->
+    <!-- Layout geral -->
+    <!-- https://www.bootdey.com/snippets/view/Shop-Product-List -->
+    <!-- lista de produtos -->
+    <!-- https://www.bootdey.com/snippets/view/Box-Product-List -->
+    <title>Livres BS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://kit.fontawesome.com/81e3d3f323.js" crossorigin="anonymous"></script>
+    <base href="{{ base_url }}" />
+</head>
+<body>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="../../../produtos/catalogo-produtos.css" rel="stylesheet">
+<div id="popup" title="" style="display: none;">
+    <p><img src="entenda-precos.png" width="1056" height="352" /></p>
+    <p>(*) Itens não certificados mas sem veneno<br>
+(**) itens de produção local e/ou da Economia Solidária mas contendo algum ingrediente não-orgânico</p>
+</div>
+<div class="container">
+    <div class="row">
+        <!--<div class="col-sm-3 hidden-xs">-->
+        <div class="col-sm-3">
+            {% if lista == 1 %}
+            <form method="GET">
+            <p><button target_link="https://livresbs.com.br/Consumidor/login.php" type="button" class="form-control btn btn-success">Fazer pedido</button></p>
+            <p><button target_link="https://livresbs.com.br/Consumidor/instrucoes/" type="button" class="form-control btn btn-warning">Instruções</button></p>
+            </form>
+            {% endif %}
+            {% if lista == 2 %}
+            <form method="GET">
+            <p><button target_link="https://api.whatsapp.com/send/?phone=5513991386571&text&app_absent=0" type="button" class="form-control btn btn-success">Faça seu pedido</button></p>
+            <p>
+                Acesse nossas redes 
+                <a href="https://api.whatsapp.com/send/?phone=5513991386571&text&app_absent=0" target="_blank"><i class="fab fa-whatsapp fa-2x"></i></a> 
+                <a href="https://www.facebook.com/livrescoopbs" target="_blank"><i class="fab fa-instagram fa-2x"></i></a> 
+                <a href="https://www.instagram.com/livrescoopbs/" target="_blank"><i class="fab fa-facebook fa-2x"></i></i></a>
+            </p>
+            </form>
+            {% endif %}
+            <form method="GET">
+                <input type="text" value="{{ filtro }}" id="f" name="f" class="form-control" />
+                <input type="submit" value="Buscar" class="form-control" />
+            </form>
+            <div>&nbsp;</div>
+            <div class="list-group">
+                <a href="./{{ lista }}/todos/{{ordem}}" class="list-group-item">Todos</a>
+                {% for c in categorias %}
+                    <a href="{{ lista }}/{{ c.Categoria }}/{{ordem}}{{ (filtro != '') ? '?f=' ~ filtro : '' }}" class="list-group-item">{{ c.Categoria }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-sm-9">
+                    <img src="icon-livremercado.png" width="25" height="25" /> Livre mercado |
+                    <img src="icon-consciente.png" width="25" height="25" /> Consumidor Consciente |
+                    <img src="icon-comboio.png" width="25" height="25" /> Comboio Orgânico <a href="#" id="comofunciona">Como funciona?</a>
+                </div>
+                <div class="col-sm-1 text-right">
+                    <label class="control-label" for="input-sort">Ordenar:</label>
+                </div>                
+                <div class="col-sm-2 text-right">
+                    <select id="input-sort" class="form-control">
+                        {% for o in ordens %}
+                            <option value="{{ lista }}/{{ categoria }}/{{ o }}" {{ (o == ordem) ? 'selected' : '' }}>{{ o }}</option>
+                        {% endfor %}
+                  </select>
+                </div>
+            </div>
+            <!--<div class="row">
+            <div class="col-md-12">-->
+                <!-- card produto -->
+                {% if not produtos %}
+                Nenhum produto disponível
+                {% endif %}
+                {% for p in produtos %}
+                    {% if p.preco_mercado > 0 %}
+                        <!--<div class="col-sm-4 col-md-3 hidden-xs box-product-outer">-->
+                        <div class="col-sm-4 col-md-3 box-product-outer">
+                        	<div class="box-product">
+                        		<div class="img-wrapper">
+                        			<a href="#" produto-link>
+                    			    {% if (p.imagem != "") %}
+                    				    <img alt="Product" src="../{{ p.imagem }}" produto-link>
+                    				{% else %}
+                    				    <img alt="Product" src="../images/produtos/padrao.png" produto-link>
+                    				{% endif %}
+                        			</a>
+                        			<div class="tags">
+                        				<span class="label-tags"><span class="label label-info">{{ p.produtor }}</span></span>
+                        				<span class="label-tags"><span class="label label-danger">{{ p.categoria }}</span></span>
+                        			</div>
+                        			<!-- HTML para exibir opções ao passar mouse em cima da foto -->
+                        			<!--<div class="option">
+                        				<a href="#" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Add to Cart"><i class="ace-icon fa fa-shopping-cart"></i></a>
+                        				<a href="#" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Compare"><i class="ace-icon fa fa-align-left"></i></a>
+                        				<a href="#" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Wishlist"><i class="ace-icon fa fa-heart"></i></a>
+                        			</div>-->
+                        		</div>
+                        		<h6><a href="" produto-link>{{ p.nome }}</a></h6>
+                        		<div class="price">
+                        			<div><img src="icon-livremercado.png" width="25" height="25" /> R${{p.preco_mercado|number_format(2,",",".")}}</div>
+                        			<div><img src="icon-consciente.png" width="25" height="25" /> R${{p.preco_lojinha|number_format(2,",",".")}}</div>
+                        			<div><img src="icon-comboio.png" width="25" height="25" /> R${{p.preco|number_format(2,",",".")}}<span class="price-down">-{{(100 - p.preco*100//p.preco_mercado)|number_format(0,",",".")}}%</span></div>
+                        		</div>
+                        	</div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            <!--</div>
+            </div>-->
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        dialog = $("#popup").dialog({
+            autoOpen: false,
+            height: 480,
+            width: 1090,
+            modal: true,
+            closeOnEscape: false,
+            close: function() {
+                if (!sessionStorage.popupMostrado) {
+                    if (confirm("Deseja que esta janela não seja exibida no seu próximo acesso? Você pode acessá-la a qualquer momento clicando no link 'Como Funciona' no topo da janela")) {
+                        sessionStorage.popupMostrado = 1;
+                    }
+                }
+            }
+        });
+        if (!sessionStorage.popupMostrado) {
+            dialog.dialog("open").siblings('.ui-dialog-titlebar').removeClass('ui-widget-header');
+            //sessionStorage.popupMostrado = 1;
+            //sessionStorage.removeItem('popupMostrado');
+        }
+        
+        $("#comofunciona").click(function() {
+            event.preventDefault();
+            dialog.dialog("open").siblings('.ui-dialog-titlebar').removeClass('ui-widget-header');
+        });
+    });
+    $("#input-sort").on('change', function() {
+        window.location.href = $(this).val();
+    });
+    $("[produto-link]").click(function(event){
+        event.preventDefault();
+    });
+    $("button").on("click", function() {
+        if ($(this).attr('target_link') != "") {
+            window.open($(this).attr('target_link'));
+        }
+    })
+</script>
+</body>
+</html>

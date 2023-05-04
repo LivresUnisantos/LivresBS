@@ -89,7 +89,8 @@ if (!isset($_SESSION["data_consulta"])) {
 					|| !array_key_exists($item["item_tipo_cesta"],$totais["despesas"][$produtor])) {
 				$totais["despesas"][$produtor][$item["item_tipo_cesta"]] = 0;
 			}
-			if ($item["produto_id"] == 136 || $item["produto_id"] == 137 || $item["produto_id"] == 484 || $item["produto_id"] == 410 || $item["produto_id"] == 411 || $item["produto_id"] == 711 || $item["produto_id"] == 736) {
+			
+			if ($item["produto_id"] == 136 || $item["produto_id"] == 137 || $item["produto_id"] == 484 || $item["produto_id"] == 410 || $item["produto_id"] == 411 || $item["produto_id"] == 711 || $item["produto_id"] == 736 || $item["produto_id"] == 956|| $item["produto_id"] == 957 || $item["produto_id"] == 958 || $item["produto_id"] == 959) {
 				if (!isset($totais) || !is_array($totais) || !array_key_exists("receitas", $totais) || !array_key_exists("contribuicao", $totais["receitas"])) {
 					$totais["receitas"]["contribuicao"] = 0;					
 				}

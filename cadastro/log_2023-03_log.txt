@@ -1,0 +1,33 @@
+
+2023-03-01-14:32:39 () Pedido do cpf 34947269812 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-03-19:43:45 () Pedido do cpf 31655618857 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-03-22:04:54 () Pedido do cpf 34209431800 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-03-22:08:46 () Pedido do cpf 48655772895 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-03-23:30:14 () Pedido do cpf 17356168855 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-07-19:13:37 () Pedido do cpf 33811621874 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-08-14:45:24 () Pedido do cpf 46779416886 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-08-18:58:31 () Pedido do cpf 56255646807 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-08-19:03:04 () Pedido do cpf 40432402870 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-08-20:09:39 () Pedido do cpf 38322033893 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-16-00:18:58 () Pedido do cpf 48021923806 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-16-00:18:59 () Usuário com cadastro existente (cpf ) tentou realizar preenchimento | SELECT * FROM Consumidores WHERE cpf = ''
+2023-03-19-19:51:34 () Pedido do cpf 34574135840 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-23-15:07:37 () Pedido do cpf 46622033846 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-23-15:07:37 () Usuário com cadastro existente (cpf ) tentou realizar preenchimento | SELECT * FROM Consumidores WHERE cpf = ''
+2023-03-25-17:52:52 () Pedido do cpf 42167122829 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-25-18:10:24 () Pedido do cpf 10832104833 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-25-18:38:39 () Pedido do cpf 05305994810 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-25-19:02:26 () Pedido do cpf 40561883866 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-25-19:25:01 () Pedido do cpf 31239023820 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-25-19:51:58 () Pedido do cpf 33421027803 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-25-20:13:40 () Pedido do cpf 34049073889 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-25-20:41:03 () Pedido do cpf 03659932809 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-25-21:09:01 () Pedido do cpf 42322224804 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-25-21:15:01 () Pedido do cpf 22623904871 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-25-21:24:00 () Pedido do cpf 23074630892 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-25-21:30:52 () Pedido do cpf 40140314890 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-25-21:45:08 () Pedido do cpf 42359860828 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-27-19:33:19 () Pedido do cpf 36706438855 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-27-19:40:25 () Pedido do cpf 19932077836 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-29-17:51:02 () Pedido do cpf 22122280824 cadastrado (verificar na próxima linha se houve erro) | 
+2023-03-31-01:46:51 () Pedido do cpf 34020015864 cadastrado (verificar na próxima linha se houve erro) | 

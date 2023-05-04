@@ -24,22 +24,26 @@ include "../Painel/helpers.php";
 		    var delivery = $("#delivery").val();
 		    var endereco_entrega =  $("#endereco_entrega").val();
 		    var adicional = $("input[name='adicional']:checked").val();
-		    if (opcao1 == "" && opcao2 == "") {
-		        alert ("Escolha ao menos uma opção de variável.");
-		        event.preventDefault();
-		        return false;
-		    } else {
-		        if (opcao1 != "" && qt1 == "") {
-		            alert ("Escolha a quantidade de produtos na opção 1.");
-		            event.preventDefault();
-		            return false;
-		        } else {
-		            if (opcao2 != "" && qt2 == "") {
-		                alert ("Escolha a quantidade de produtos na opção 2.");
+		    var valorCesta = $("#valorCesta").val();
+		    
+		    if (valorCesta > 0) {
+    		    if (opcao1 == "" && opcao2 == "") {
+    		        alert ("Escolha ao menos uma opção de variável.");
+    		        event.preventDefault();
+    		        return false;
+    		    } else {
+    		        if (opcao1 != "" && qt1 == "") {
+    		            alert ("Escolha a quantidade de produtos na opção 1.");
     		            event.preventDefault();
     		            return false;
-		            }
-		        }
+    		        } else {
+    		            if (opcao2 != "" && qt2 == "") {
+    		                alert ("Escolha a quantidade de produtos na opção 2.");
+        		            event.preventDefault();
+        		            return false;
+    		            }
+    		        }
+    		    }
 		    }
 		    if (delivery == "") {
 		        alert('Escolha se você deseja delivery ou retirada. Caso não saiba ainda, não tem problema. Marque a opção "não sei".');
@@ -54,7 +58,7 @@ include "../Painel/helpers.php";
 		            }
 		        }
 		    }
-		    if (typeof adicional == "undefined") {
+		    if (typeof adicional == "undefined" && valorCesta > 0) {
 		        alert('Selecione se você deseja pagar adicional referente aos variáveis ou não.');
 		        event.preventDefault();
 		        return false;
@@ -195,28 +199,29 @@ if (!isset($_GET["cpf"])) {
     $idProximaEntrega = $rsProxima["id"];
     $frequencia=getFrequencias($conn,$idProximaEntrega);
 
-    //Entregas de sábado fecham na quinta-feira (2 dias antes) e entregas de terça-feira fecham no sábado (3 dias antes)
-    if (date("w",strtotime($proximaEntrega)) == 2) { //date("w") retorna o dia da semana em número, sendo domingo = 0
-        //entrega terça-feira
-        $limite = strtotime('-2 days', strtotime($proximaEntrega));
-        $limite = strtotime('+ 12 hours', $limite);
-    } else {
-        //qualquer outra data
-        $limite = strtotime('-2 days', strtotime($proximaEntrega));
-        $limite = strtotime('+ 12 hours', $limite);
-    }
+    //Variável fecha ao meio-dia 2 dias antes da entrega.
+    $limite = strtotime('-2 days', strtotime($proximaEntrega));
+    $limite = strtotime('+ 12 hours', $limite);
     $limite = date("Y-m-d H:i",$limite);
     
-    /*****/
+    //devido ao carnaval, entrega de 21/02/23 será feita em 23/02/23.
+    //Esse IF pode ser apagado depois de 24/02/23
+    if (strtotime($proximaEntrega) == strtotime('2023-02-21')) {
+        $limite = strtotime('-2 hours', strtotime($proximaEntrega));
+        $limite = strtotime('+ 12 hours', $limite);
+        $limite = date("Y-m-d H:i",$limite);
+    }
+    
+    /**/
     //Armeng para permitir testes fora do horário aberto para pedido
     //$limite = strtotime("-3 hours",strtotime(date("Y-m-d H:i:s")));
     //$limite = date("Y-m-d H:i",$limite);
-    /*****/
+    /**/
     
     $agora = strtotime("-3 hours",strtotime(date("Y-m-d H:i:s")));
     $agora = date("Y-m-d H:i",$agora);
     //echo $agora;
-
+    
     if (strtotime($agora) > strtotime($limite)) {
         $msg = "Ops... Ultrapassamos o horário limite para escolha dos variáveis essa semana. <br>";
         if (date("w",strtotime($proximaEntrega)) == 2) { //date("w") retorna o dia da semana em número, sendo domingo = 0
@@ -260,12 +265,12 @@ if (!isset($_GET["cpf"])) {
         foreach ($rsPedidoVar as $rowVar) {
             $msg .= "<br>Seu pedido:";
             $contaOpcao=1;
-            if (!is_null($rowVar["idOpcao1"])) {
-                $msg .= "<br>1ª Opção: ".$prodVariaveis[$rowVar["idOpcao1"]];
+            if (!is_null($rowVar["escolhaOpcao1"])) {
+                $msg .= "<br>1ª Opção: ".$prodVariaveis[$rowVar["escolhaOpcao1"]];
                 $contaOpcao=2;
             }
-            if (!is_null($rowVar["idOpcao2"])) {
-                $msg .= "<br>".$contaOpcao."ª Opção: ".$prodVariaveis[$rowVar["idOpcao2"]];
+            if (!is_null($rowVar["escolhaOpcao2"])) {
+                $msg .= "<br>".$contaOpcao."ª Opção: ".$prodVariaveis[$rowVar["escolhaOpcao2"]];
             }
             $msg .= "</p>";
         }
@@ -274,54 +279,99 @@ if (!isset($_GET["cpf"])) {
         if (isset($_POST["cpf"])) {
             setLog("log.txt","CPF: ".$cpf." - Clicou para salvar o pedido.","");
             $cpf=$_POST["cpf"];
-            $opcao1=$_POST["opcao1"];
-            $opcao2=$_POST["opcao2"];
-            $qt1=$_POST["quantidade_1"];
-            $qt2=$_POST["quantidade_2"];
+            if (isset($_POST["opcao1"])) {
+                $soMensal=false;
+                $opcao1=$_POST["opcao1"];
+                $opcao2=$_POST["opcao2"];
+                $qt1=$_POST["quantidade_1"];
+                $qt2=$_POST["quantidade_2"];
+                
+                if ($opcao1 == "") { $opcao1 = "NULL"; };
+                if ($opcao2 == "") { $opcao2 = "NULL"; };
+                if ($qt1 == "") { $qt1 = "NULL"; };
+                if ($qt2 == "") { $qt2 = "NULL"; };
+            } else {
+                $soMensal=true;
+                $opcao1 = "";
+                $opcao2 = "";
+                $qt1 = "";
+                $qt2 = "";
+            }
             $delivery=$_POST["delivery"];
             $endereco_entrega=$_POST["endereco_entrega"];
-            if ($opcao1 == "") { $opcao1 = "NULL"; };
-            if ($opcao2 == "") { $opcao2 = "NULL"; };
-            if ($qt1 == "") { $qt1 = "NULL"; };
-            if ($qt2 == "") { $qt2 = "NULL"; };
             
-            if (strlen($cpf) == 0 || ($opcao1 == "NULL" && $opcao2 == "NULL")) {
-                $msg = "&nbsp;Você precisa selecionar ao menos a 1ª opção de variável.";
-            } else {
-                if (($opcao1 != "NULL" && $qt1 == "NULL") || ($opcao2 != "NULL" && $qt2 == "NULL")) {
-                    $msg = "&nbsp;Você precisa selecionar a quantidade de produtos nas opções de variável preenchidas.";
+            if ($soMensal) {
+                if (strlen($cpf) == 0) {
+                    $msg = "&nbsp;Você precisa preencher seu CPF.";
                 } else {
                     if ($endereco_entrega == "" && ($delivery == "Sim" || $delivery == "Não sei ainda")) {
                         $msg = "&nbsp;Você precisa preencher o seu endereço de entrega.";
                     } else {
-                        if (!isset($_POST["adicional"])) {
-                            $msg = "&nbsp;Selecione se você deseja pagar adicional referente aos variáveis ou não.";
-                            setLog("log.txt","CPF: ".$cpf." - Adicional não preenchido","");
+                        if (strlen($_POST["delivery"]) == 0) {
+                            $msg = '&nbsp;Selecione se você deseja delivery essa semana. Caso você ainda não tenha certeza, não tem problema, marque a opção "não sei".';
+                            setLog("log.txt","CPF: ".$cpf." - Delivery não preenchido","");
                         } else {
-                            if (strlen($_POST["delivery"]) == 0) {
-                                $msg = '&nbsp;Selecione se você deseja delivery essa semana. Caso você ainda não tenha certeza, não tem problema, marque a opção "não sei".';
-                                setLog("log.txt","CPF: ".$cpf." - Delivery não preenchido","");
+							$delivery = $_POST["delivery"];
+							if ($delivery == "Não") {
+								$endereco_entrega = "";
+							}
+                            $sqlBusca = "SELECT * FROM PedidosVar WHERE idConsumidor = ".$idConsumidor." AND idCalendario = ".$idProximaEntrega;
+                        	$st = $conn->prepare($sqlBusca);
+                        	$st->execute();
+                        	if ($st->rowCount() > 0) {
+                        	    $sql = "UPDATE PedidosVar SET idOpcao1 = NULL, idOpcao2 = NULL, adicional = 0, delivery='".$delivery."', endereco_entrega='". $endereco_entrega ."' WHERE idConsumidor = ".$idConsumidor." AND idCalendario = ".$idProximaEntrega;
+                        	    $st = $conn->prepare($sql);
+                	            $st->execute();
+                	            setLog("log.txt","CPF: ".$cpf." - Pedido atualizado, apenas delivery, cesta mensal (já havia resposta Livres)",$sql);
+                        	} else {
+                                $sql = "INSERT INTO PedidosVar (idConsumidor,idCalendario,delivery, endereco_entrega) VALUES (".$idConsumidor.",".$idProximaEntrega.",'".$delivery."','".$endereco_entrega."')";
+                                $st = $conn->prepare($sql);
+                	            $st->execute();
+                	            setLog("log.txt","CPF: ".$cpf." - Pedido inserido (apenas delivery, cesta mensal)",$sql);
+                        	}
+            	            $msg = "&nbsp;Sua opção de delivery foi registrada.";
+                        }
+                    }
+                }
+            } else {
+                if (strlen($cpf) == 0 || ($opcao1 == "NULL" && $opcao2 == "NULL")) {
+                    $msg = "&nbsp;Você precisa selecionar ao menos a 1ª opção de variável.";
+                } else {
+                    if (($opcao1 != "NULL" && $qt1 == "NULL") || ($opcao2 != "NULL" && $qt2 == "NULL")) {
+                        $msg = "&nbsp;Você precisa selecionar a quantidade de produtos nas opções de variável preenchidas.";
+                    } else {
+                        if ($endereco_entrega == "" && ($delivery == "Sim" || $delivery == "Não sei ainda")) {
+                            $msg = "&nbsp;Você precisa preencher o seu endereço de entrega.";
+                        } else {
+                            if (!isset($_POST["adicional"])) {
+                                $msg = "&nbsp;Selecione se você deseja pagar adicional referente aos variáveis ou não.";
+                                setLog("log.txt","CPF: ".$cpf." - Adicional não preenchido","");
                             } else {
-                                $adicional = $_POST["adicional"];
-								$delivery = $_POST["delivery"];
-								if ($delivery == "Não") {
-									$endereco_entrega = "";
-								}
-                                $sqlBusca = "SELECT * FROM PedidosVar WHERE idConsumidor = ".$idConsumidor." AND idCalendario = ".$idProximaEntrega;
-                            	$st = $conn->prepare($sqlBusca);
-                            	$st->execute();
-                            	if ($st->rowCount() > 0) {
-                            	    $sql = "UPDATE PedidosVar SET idOpcao1 = ".$opcao1.", idOpcao2 = ".$opcao2.", adicional = ".$adicional.", delivery='".$delivery."', endereco_entrega='". $endereco_entrega ."' WHERE idConsumidor = ".$idConsumidor." AND idCalendario = ".$idProximaEntrega;
-                            	    $st = $conn->prepare($sql);
-                    	            $st->execute();
-                    	            setLog("log.txt","CPF: ".$cpf." - Pedido atualizado (já havia resposta Livres)",$sql);
-                            	} else {
-                                    $sql = "INSERT INTO PedidosVar (idConsumidor,idCalendario,idOpcao1,idOpcao2,quantidadeOpcao1, quantidadeOpcao2, adicional,delivery, endereco_entrega) VALUES (".$idConsumidor.",".$idProximaEntrega.",".$opcao1.",".$opcao2.",$qt1,$qt2,$adicional,'".$delivery."','".$endereco_entrega."')";
-                                    $st = $conn->prepare($sql);
-                    	            $st->execute();
-                    	            setLog("log.txt","CPF: ".$cpf." - Pedido inserido",$sql);
-                            	}
-                	            $msg = "&nbsp;Seu pedido de variáveis foi realizado.";
+                                if (strlen($_POST["delivery"]) == 0) {
+                                    $msg = '&nbsp;Selecione se você deseja delivery essa semana. Caso você ainda não tenha certeza, não tem problema, marque a opção "não sei".';
+                                    setLog("log.txt","CPF: ".$cpf." - Delivery não preenchido","");
+                                } else {
+                                    $adicional = $_POST["adicional"];
+    								$delivery = $_POST["delivery"];
+    								if ($delivery == "Não") {
+    									$endereco_entrega = "";
+    								}
+                                    $sqlBusca = "SELECT * FROM PedidosVar WHERE idConsumidor = ".$idConsumidor." AND idCalendario = ".$idProximaEntrega;
+                                	$st = $conn->prepare($sqlBusca);
+                                	$st->execute();
+                                	if ($st->rowCount() > 0) {
+                                	    $sql = "UPDATE PedidosVar SET idOpcao1 = ".$opcao1.", idOpcao2 = ".$opcao2.", adicional = ".$adicional.", delivery='".$delivery."', endereco_entrega='". $endereco_entrega ."' WHERE idConsumidor = ".$idConsumidor." AND idCalendario = ".$idProximaEntrega;
+                                	    $st = $conn->prepare($sql);
+                        	            $st->execute();
+                        	            setLog("log.txt","CPF: ".$cpf." - Pedido atualizado (já havia resposta Livres)",$sql);
+                                	} else {
+                                        $sql = "INSERT INTO PedidosVar (idConsumidor,idCalendario,idOpcao1,idOpcao2,quantidadeOpcao1, quantidadeOpcao2, adicional,delivery, endereco_entrega) VALUES (".$idConsumidor.",".$idProximaEntrega.",".$opcao1.",".$opcao2.",$qt1,$qt2,$adicional,'".$delivery."','".$endereco_entrega."')";
+                                        $st = $conn->prepare($sql);
+                        	            $st->execute();
+                        	            setLog("log.txt","CPF: ".$cpf." - Pedido inserido",$sql);
+                                	}
+                    	            $msg = "&nbsp;Seu pedido de variáveis foi realizado.";
+                                }
                             }
                         }
                     }
@@ -360,9 +410,9 @@ if (!isset($_GET["cpf"])) {
 	$rs = $st->fetch();
 	$cota = $rs["pedido_cota"];
 	$valorCesta = $rs["pedido_fixa"];
-    if ($valorCesta == 0) {
-        $valorCesta = $rs["pedido_mensal"];
-    }
+    //if ($valorCesta == 0) {
+    //    $valorCesta = $rs["pedido_mensal"];
+    //}
 	if (getFreq($frequencia[$comunidade],"q") || (getFreq($frequencia[$comunidade],"s") && $contaSemanal > 0)) {
 	} else {
 	    if (strlen($msg) == 0) {
@@ -370,6 +420,19 @@ if (!isset($_GET["cpf"])) {
 	        $msg .= "<br>Na próxima semana estaremos esperando você! :)";
 	        setLog("log.txt","CPF: ".$cpf." - Tentou acesso, porém não possui cesta essa semana.","");
 	    }
+	}
+	
+	if ($valorCesta == 0) {
+	    $sql = "SELECT * FROM PedidosVar WHERE idConsumidor = ".$idConsumidor." AND idCalendario = ".$idProximaEntrega;
+    	$st = $conn->prepare($sql);
+    	$st->execute();
+    	$rsCheck=$st->rowCount();
+    	if ($rsCheck > 0) {
+    	    if (strlen($msg) == 0) {
+    	        $msg = "<p>&nbsp;Você só possui cesta mensal e não há variáveis nessa semana.</p><p>Seus dados de delivery já foram preenchidos. Caso deseje alterar, entre em contato diretamente com o Livres.</p>";
+                setLog("log.txt","CPF: ".$cpf." - Logou para realizar pedido, mas pedido já havia sido realizado (cesta apenas mensal).","");
+    	    }
+    	}
 	}
 	?>
 	<p></p>
@@ -392,6 +455,7 @@ if (!isset($_GET["cpf"])) {
 				</div>
                 <?php
         	} else {
+        	    if ($valorCesta > 0) {
         	?>
                 <div class="grid-x grid-padding-x">
     				<div class="large-12 medium-12 cell text-center callout" id="semanal">
@@ -438,16 +502,25 @@ if (!isset($_GET["cpf"])) {
     					</div>
     				</div>
     			</div>
+    		    <?
+        	    }
+        	    ?>
     
     			<div class="grid-x grid-padding-x">
     				<div class="large-12 medium-12 cell text-center callout" id="semanal">
+    				    <?php if ($valorCesta > 0) { ?>
     					<h5>Escolha suas opções de variáveis para entrega de <?php echo date("d/m/Y",strtotime($proximaEntrega)); ?></h5>
     					<h5>Você possui R$<?php echo number_format($cota-$valorCesta,2,",",".");?> de variável para esta semana.</h5>
+    					<? } else { ?>
+    					<h5>Você só possui cesta mensal essa semana, portanto não há pedido variável.</h5>
+    					<h5>Preencha os seus dados de delivery abaixo.</h5>
+    					<? } ?>
     					<?php echo '<a href="../Cestas/?cpf='.$cpf.'" target="_blank">Clique aqui caso deseje consultar sua cesta</a>'; ?>
     					<p></p>
     					<div class="grid-x grid-padding-x">
     					    <form id="form_variavel" name="form_variavel" method="POST" action="">
     					        <input type="hidden" name="cpf" id="cpf" value="<?php echo $_GET["cpf"]; ?>">
+    					        <? if ($valorCesta > 0) { ?>
     					        <div class="grid-x grid-padding-x">
     					            <div class="large-2 medium-3 cell">
     					                1ª Opção
@@ -528,6 +601,7 @@ if (!isset($_GET["cpf"])) {
                     				    Subtotal R$0,00
                 					</div>
     					        </div>
+    					        <? } ?>
         						<p>
         						    <label for="delivery">Você deseja delivery essa semana?</label>
         						    <select id="delivery" name="delivery">
@@ -541,10 +615,13 @@ if (!isset($_GET["cpf"])) {
         						    <label for="endereco_entrega">Qual endereço de entrega?</label>
         						    <input type="text" id="endereco_entrega" name="endereco_entrega" value="<?php echo $endereco_entrega; ?>" />
         						</p>
+        						<input type="hidden" id="valorCesta" name="valorCesta" value="<?php echo $valorCesta; ?>" />
+        						<? if ($valorCesta > 0) { ?>
         						<p><input type="radio" group="adicional" name="adicional" id="adicionalSim" value="1" />
         						<label for="adicionalSim">Desejo que as duas opções de produtos sejam incluídas na minha cesta, mesmo que isso ultrapasse minha cota de variável. Pagarei a diferença.</label></p>
         						<p><input type="radio" group="adicional" name="adicional" id="adicionalNao" value="0" />
         						<label for="adicionalNao">Não quero que minha cota de variável seja ultrapassada. Coloque apenas o necessário de produto para atingir o valor de R$<?php echo number_format($cota-$valorCesta,2,",",".");?>.</label></p>
+        						<? } ?>
         						<p><input type="submit" value="Salvar" id="salvar" name="salvar" /></p>
     						</form>
     					</div>

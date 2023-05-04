@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $levelRequired=10000;
 include "../config.php";
 include "helpers.php";
@@ -114,7 +118,7 @@ if ($st->rowCount() > 0) {
         //if abaixo serve para evitar loop infinito
         if ($limiteQuantidades["minimo"]<$limiteQuantidades["maximo"] && $limiteQuantidades["incremento"] > 0) {
             for ($i=$limiteQuantidades["minimo"]; $i<=$limiteQuantidades["maximo"]; $i+=$limiteQuantidades["incremento"]) {
-                if ($i == $row["quantidade"]) {
+                if (number_format(floatval($i),3,",",".") == number_format(floatval($row["quantidade"]),3,",",".")) {
                     $selected = ' selected="selected"';
                 } else {
                     $selected = "";

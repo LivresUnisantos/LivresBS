@@ -1,5 +1,5 @@
 <?php
-$NivelAcess = LEVEL_SUPER_ADMIN;
+$NivelAcess = LEVEL_PED_PRE;
 if (empty($_SESSION['logado']) || empty($_SESSION['level']) || $_SESSION['level'] < $NivelAcess):
     Erro('<b class="icon-warning">OPPSSS:</b> Você não tem permissão para essa ação ou não está logado como administrador!', E_USER_ERROR);
     die;

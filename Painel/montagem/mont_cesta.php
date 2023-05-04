@@ -1,4 +1,5 @@
 <?php
+
 $bc = ($banco == true ? '*' : '');
 $cesta_montagem = "<article class='single_order cestaDel' id='{$pedido_id}'>
     <header>
@@ -6,7 +7,7 @@ $cesta_montagem = "<article class='single_order cestaDel' id='{$pedido_id}'>
 if ($_SESSION["level"] >= LEVEL_BIKERS):
     $cesta_montagem .= "<span class='icon-shrink2 btn btn_sanfona icon-notext j_sanfona wc_tooltip' style='margin:11px 0 0 8px !important;'><span class='wc_tooltip_balloon'>Recolher</span></span>";
     $cesta_montagem .= "<div style='display:inline-block; float:right;padding:10px;'>";
-    if ($_SESSION["level"] >= LEVEL_SUPER_ADMIN):
+    if ($_SESSION["level"] >= LEVEL_EDITAR_CESTA):
         $cesta_montagem .= "<a title='Editar cesta' href='index.php?lbs=editar&id={$pedido_id}' class='post_single_center icon-pencil btn btn_blue' style='margin-right:10px;'>Editar</a>
                     <span rel='cestaDel' class='j_delete_action icon-cancel-circle btn btn_red' id='{$pedido_id}'>Excluir</span>
                     <span rel='cestaDel' callback='Pedidos' callback_action='deleteCesta' class='j_delete_action_confirm icon-warning btn btn_yellow' style='display: none' id='{$pedido_id}'>Remover Cesta?</span>";
@@ -18,12 +19,10 @@ if ($_SESSION["level"] >= LEVEL_BIKERS):
                     <input type='hidden' name='pedido_id' value='{$pedido_id}' />
                     <label style='width: 100%;display: inline-block;margin-top:10px;'>
                         <select name='pedido_retirada'>";
-    $Read->ExeRead(DB_ENTREGA);
-    if ($Read->getResult()):
-        foreach ($Read->getResult() as $retirada):
-            $cesta_montagem .= "<option value='{$retirada['id']}' " . ($pedido_retirada == $retirada['id'] ? 'selected="selected"' : '') . ">{$retirada['descricao_entrega']}</option>";
-        endforeach;
-    endif;
+    $retivadas = getEntregaForma();
+    foreach ($retivadas as $key => $retirada):
+        $cesta_montagem .= "<option value='{$key}' " . ($pedido_retirada == $key ? 'selected="selected"' : '') . ">{$retirada}</option>";
+    endforeach;
     $cesta_montagem .= "</select>
                     </label>
                     <i class='form_load none'></i>

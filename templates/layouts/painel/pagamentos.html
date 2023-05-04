@@ -101,67 +101,69 @@
                 </thead>
                 <tbody id="tabela_pagamentos">
                     {% for p in conteudo %}
-                        {% if (p.pedido.pgt_valorpago != p.pedido.pedido_valor_total and p.pedido.pgt_status > 0) %}
-                            <tr id="tr_{{ p.pedido.pedido_id }}" pedido_id="{{ p.pedido.pedido_id }}" class="alert-danger" erro-valor-pago="">
-                        {% else %}
-                            {% if (p.pedido.pgt_valor_linkpix != "" and p.pedido.pgt_valor_linkpix != p.pedido.pedido_valor_total) %}
-                                <tr id="tr_{{ p.pedido.pedido_id }}" pedido_id="{{ p.pedido.pedido_id }}" class="alert-warning" erro-valor-pix="">
+                        {% if (p.consumidor.comunidade != 12) %}
+                            {% if (p.pedido.pgt_valorpago != p.pedido.pedido_valor_total and p.pedido.pgt_status > 0) %}
+                                <tr id="tr_{{ p.pedido.pedido_id }}" pedido_id="{{ p.pedido.pedido_id }}" class="alert-danger" erro-valor-pago="">
                             {% else %}
-                                <tr id="tr_{{ p.pedido.pedido_id }}" pedido_id="{{ p.pedido.pedido_id }}">
-                            {% endif %}
-                        {% endif %}
-                            <form action="pagamentos_act.php" method="POST" id="salvar_pagamento_{{ p.pedido.pedido_id}}" name="salvar_pagamento">
-                            <input type="hidden" id="id_pedido_{{ p.pedido.pedido_id }}" name="id_pedido" value="{{ p.pedido.pedido_id }}" />
-                            <td id="pix_{{ p.pedido.pedido_id }}">
-                                {% if (p.pedido.pgt_pix_copiacola == "") %}
-                                    <a href="#" link_pix_criar pedido_id="{{ p.pedido.pedido_id }}" title="Criar link de pagamento"><i class="bi bi-plus-circle" style="color: green"></i></i></a>
+                                {% if (p.pedido.pgt_valor_linkpix != "" and p.pedido.pgt_valor_linkpix != p.pedido.pedido_valor_total) %}
+                                    <tr id="tr_{{ p.pedido.pedido_id }}" pedido_id="{{ p.pedido.pedido_id }}" class="alert-warning" erro-valor-pix="">
                                 {% else %}
-                                    <a href="{{ url_pix_pagamento }}{{p.pedido.pgt_pix_uuid }}" target="_blank" title="Acessar link de pagamento"><i class="bi bi-check-all" style="color:green"></i></a>
-                                    <a href="#" link_pix_atualizar pedido_id="{{ p.pedido.pedido_id }}" title="Atualizar link de pagamento"><i class="bi bi-arrow-clockwise"></i></a>
-                                    <a href="#" link_pix_apagar pedido_id="{{ p.pedido.pedido_id }}" title="Apagar link de pagamento"><i class="bi bi-x" style="color: red"></i></a>
+                                    <tr id="tr_{{ p.pedido.pedido_id }}" pedido_id="{{ p.pedido.pedido_id }}">
                                 {% endif %}
-                            </td>
-                            {% if data_entrega == '' %}
-                                <td id="data_{{ p.pedido.pedido_id }}">{{p.pedido.pedido_data|date('d/m/Y')}}</td>
                             {% endif %}
-                            <td id="codigo_{{ p.pedido.pedido_id }}">{{p.pedido.pedido_id}}</td>
-                            <td id="consumidor_{{ p.pedido.pedido_id }}">{{p.consumidor.consumidor}}</td>
-                            <td id="comunidade_{{ p.pedido.pedido_id }}">G{{p.consumidor.comunidade}}</td>
-                            <td id="cota_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_cota|number_format(2,",",".")}}</td>
-                            <td id="fixa_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_fixa|number_format(2,",",".")}}</td>
-                            <td id="variavel_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_variavel|number_format(2,",",".")}}</td>
-                            <td id="mensal_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_mensal|number_format(2,",",".")}}</td>
-                            <td id="extra_{{ p.pedido.pedido_id }}">R${{ p.pedido.pedido_avulso|number_format(2,",",".") }}</td>
-                            <td id="entrega_{{ p.pedido.pedido_id }}">R${{ p.pedido.pedido_entrega_valor|number_format(2,",",".") }}</td>
-                            <td id="total_{{ p.pedido.ipedido_id }}">R${{p.pedido.pedido_valor_total|number_format(2,",",".")}}</td>
-                            <td id="status_{{ p.pedido.pedido_id }}">
-                                <select id="pgt_status_{{ p.pedido.pedido_id }}" name="pgt_status">
-                                    {% for s, txt in status_pagamento %}
-                                        {% if (s == p.pedido.pgt_status) %}
-                                        	<option value="{{ s }}" selected>{{ txt }}</option>
-                                        {% else %}
-                                        	<option value="{{ s }}">{{ txt }}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                            </td>
-                            <td id="valor_pago_{{ p.pedido.pedido_id }}">R$<input type="text" id="pgt_valorpago_{{ p.pedido.pedido_id }}" size="6" pedido_id="{{ p.pedido.pedido_id}}" name="pgt_valorpago" value="{{p.pedido.pgt_valorpago|number_format(2,",",".")}}" /></td>
-                            <td id="forma_pagamento_{{ p.pedido.pedido_id }}">
-                                <select id="pgt_forma_{{ p.pedido.pedido_id }}" name="pgt_forma">
-                                    <option value=""></option>
-                                    {% for f in formas_pagamento %}
-                                        {% if (f == p.pedido.pgt_forma) %}
-                                            <option value="{{ f }}" selected>{{ f }}</option>
-                                        {% else %}
-                                            <option value="{{ f }}">{{ f }}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                            </td>
-                            <td id="coment_pagamento_{{ p.pedido.pedido_id}}"><input type="text" id="pgt_comentario_{{ p.pedido.pedido_id }}" name="pgt_comentario" value="{{ p.pedido.pgt_comentario }}"/></td>
-                            <td id="salvar_{{ p.pedido.pedido_id }}"><input type="submit" idPedido="{{p.pedido.pedido_id}}" act="editar_pagamento" id="btnsalvar_{{p.pedido.pedido_id}}" name="btnsalvar" value="Salvar" /></td>
-                            </form>
-                        </tr>
+                                <form action="pagamentos_act.php" method="POST" id="salvar_pagamento_{{ p.pedido.pedido_id}}" name="salvar_pagamento">
+                                <input type="hidden" id="id_pedido_{{ p.pedido.pedido_id }}" name="id_pedido" value="{{ p.pedido.pedido_id }}" />
+                                <td id="pix_{{ p.pedido.pedido_id }}">
+                                    {% if (p.pedido.pgt_pix_copiacola == "") %}
+                                        <a href="#" link_pix_criar pedido_id="{{ p.pedido.pedido_id }}" title="Criar link de pagamento"><i class="bi bi-plus-circle" style="color: green"></i></i></a>
+                                    {% else %}
+                                        <a href="{{ url_pix_pagamento }}{{p.pedido.pgt_pix_uuid }}" target="_blank" title="Acessar link de pagamento"><i class="bi bi-check-all" style="color:green"></i></a>
+                                        <a href="#" link_pix_atualizar pedido_id="{{ p.pedido.pedido_id }}" title="Atualizar link de pagamento"><i class="bi bi-arrow-clockwise"></i></a>
+                                        <a href="#" link_pix_apagar pedido_id="{{ p.pedido.pedido_id }}" title="Apagar link de pagamento"><i class="bi bi-x" style="color: red"></i></a>
+                                    {% endif %}
+                                </td>
+                                {% if data_entrega == '' %}
+                                    <td id="data_{{ p.pedido.pedido_id }}">{{p.pedido.pedido_data|date('d/m/Y')}}</td>
+                                {% endif %}
+                                <td id="codigo_{{ p.pedido.pedido_id }}">{{p.pedido.pedido_id}}</td>
+                                <td id="consumidor_{{ p.pedido.pedido_id }}">{{p.consumidor.consumidor}}</td>
+                                <td id="comunidade_{{ p.pedido.pedido_id }}">G{{p.consumidor.comunidade}}</td>
+                                <td id="cota_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_cota|number_format(2,",",".")}}</td>
+                                <td id="fixa_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_fixa|number_format(2,",",".")}}</td>
+                                <td id="variavel_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_variavel|number_format(2,",",".")}}</td>
+                                <td id="mensal_{{ p.pedido.pedido_id }}">R${{p.pedido.pedido_mensal|number_format(2,",",".")}}</td>
+                                <td id="extra_{{ p.pedido.pedido_id }}">R${{ p.pedido.pedido_avulso|number_format(2,",",".") }}</td>
+                                <td id="entrega_{{ p.pedido.pedido_id }}">R${{ p.pedido.pedido_entrega_valor|number_format(2,",",".") }}</td>
+                                <td id="total_{{ p.pedido.ipedido_id }}">R${{p.pedido.pedido_valor_total|number_format(2,",",".")}}</td>
+                                <td id="status_{{ p.pedido.pedido_id }}">
+                                    <select id="pgt_status_{{ p.pedido.pedido_id }}" name="pgt_status">
+                                        {% for s, txt in status_pagamento %}
+                                            {% if (s == p.pedido.pgt_status) %}
+                                            	<option value="{{ s }}" selected>{{ txt }}</option>
+                                            {% else %}
+                                            	<option value="{{ s }}">{{ txt }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td id="valor_pago_{{ p.pedido.pedido_id }}">R$<input type="text" id="pgt_valorpago_{{ p.pedido.pedido_id }}" size="6" pedido_id="{{ p.pedido.pedido_id}}" name="pgt_valorpago" value="{{p.pedido.pgt_valorpago|number_format(2,",",".")}}" /></td>
+                                <td id="forma_pagamento_{{ p.pedido.pedido_id }}">
+                                    <select id="pgt_forma_{{ p.pedido.pedido_id }}" name="pgt_forma">
+                                        <option value=""></option>
+                                        {% for f in formas_pagamento %}
+                                            {% if (f == p.pedido.pgt_forma) %}
+                                                <option value="{{ f }}" selected>{{ f }}</option>
+                                            {% else %}
+                                                <option value="{{ f }}">{{ f }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td id="coment_pagamento_{{ p.pedido.pedido_id}}"><input type="text" id="pgt_comentario_{{ p.pedido.pedido_id }}" name="pgt_comentario" value="{{ p.pedido.pgt_comentario }}"/></td>
+                                <td id="salvar_{{ p.pedido.pedido_id }}"><input type="submit" idPedido="{{p.pedido.pedido_id}}" act="editar_pagamento" id="btnsalvar_{{p.pedido.pedido_id}}" name="btnsalvar" value="Salvar" /></td>
+                                </form>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                 </tbody>
             </table>

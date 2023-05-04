@@ -45,11 +45,11 @@
                 <div class="col-sm-8">
                     <select name="ativo" id="ativo" class="form-control">
                         {% if (consumidor.ativo == 1) %}
-                            <option value="0" selected="selected">Ativo</option>
-                            <option value="1">Inativo</option>
+                            <option value="1" selected="selected">Ativo</option>
+                            <option value="0">Inativo</option>
                         {% else %}
-                            <option value="0">Ativo</option>
-                            <option value="1" selected="selected">Inativo</option>
+                            <option value="1">Ativo</option>
+                            <option value="0" selected="selected">Inativo</option>
                         {% endif %}
                     </select>
                 </div>
@@ -169,8 +169,13 @@
                 id = dados["id"];
 
                 $("#consumidor_"+id).text(dados["consumidor"]);
-                $("#nascimento_"+id).text(dados["nascimento"].substr(8,2)+"/"+dados["nascimento"].substr(5,2)+"/"+dados["nascimento"].substr(0,4));
-                
+                $("#grupo_"+id).text("G"+dados["comunidade"]);
+                $("#ativo_"+id).text((dados["ativo"] == 0) ? 'Inativo' : 'Ativo');
+                if (dados["nascimento"] != "") {
+                    $("#nascimento_"+id).text(dados["nascimento"].substr(8,2)+"/"+dados["nascimento"].substr(5,2)+"/"+dados["nascimento"].substr(0,4));
+                } else {
+                    $("#nascimento_"+id).text('');
+                }
                 if (dados["banco"] == 0) {
                     $("#banco_"+id).text("-");
                 } else {

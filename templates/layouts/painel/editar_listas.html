@@ -169,7 +169,6 @@
                         $("#filtro_estoquezero").prop('checked', false);
                     }
                 }
-                console.log($(this).prop('checked'));
             });
             
             //impede que apenas ativos/apenas inativos sejam ativados simultanemanete
@@ -183,7 +182,6 @@
                         $("#filtro_apenasativos").prop('checked', false);
                     }
                 }
-                console.log($(this).prop('checked'));
             });
             
             $("#filtro, #filtro_estoquezero, #filtro_estoquenaozero, #filtro_apenasativos, #filtro_apenasinativos").on("keyup click", function() {

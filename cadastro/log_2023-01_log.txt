@@ -1,0 +1,9 @@
+
+2023-01-04-18:34:38 () Pedido do cpf 01419094041 cadastrado (verificar na próxima linha se houve erro) | 
+2023-01-05-23:31:47 () Pedido do cpf 32588522866 cadastrado (verificar na próxima linha se houve erro) | 
+2023-01-05-23:32:29 () Usuário com cadastro existente (cpf ) tentou realizar preenchimento | SELECT * FROM Consumidores WHERE cpf = ''
+2023-01-13-15:40:12 () Pedido do cpf 41347460861 cadastrado (verificar na próxima linha se houve erro) | 
+2023-01-13-18:04:11 () Usuário com cadastro existente (cpf 41347460861) tentou realizar preenchimento | SELECT * FROM Consumidores WHERE cpf = '41347460861'
+2023-01-19-17:22:09 () Pedido do cpf 42829261801 cadastrado (verificar na próxima linha se houve erro) | 
+2023-01-29-18:33:39 () Pedido do cpf 46622033846 cadastrado (verificar na próxima linha se houve erro) | 
+2023-01-31-17:14:53 () Pedido do cpf 27679190860 cadastrado (verificar na próxima linha se houve erro) | 

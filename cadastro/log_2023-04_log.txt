@@ -1,0 +1,26 @@
+
+2023-04-04-16:53:34 () Pedido do cpf 36894073899 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-11-14:01:03 () Pedido do cpf 31799305864 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-11-22:31:53 () Pedido do cpf 07003694816 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-13-03:22:53 () Pedido do cpf 45261332800 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-16-19:49:06 () Pedido do cpf 30736437886 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-18-19:04:30 () Pedido do cpf 38082597879 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-21-17:51:33 () Pedido do cpf 23140124880 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-21-18:24:40 () Pedido do cpf 05085502892 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-21-19:13:09 () Pedido do cpf 05538526801 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-21-19:53:21 () Pedido do cpf 10655561790 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-21-20:21:11 () Pedido do cpf 22706668873 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-21-20:31:16 () Pedido do cpf 61070629804 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-21-21:12:42 () Pedido do cpf 00509332803 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-21-21:19:41 () Pedido do cpf 31117935833 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-21-21:30:23 () Pedido do cpf 18989685869 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-21-22:05:11 () Pedido do cpf 28341062828 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-21-23:22:25 () Pedido do cpf 33450236873 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-22-14:37:25 () Pedido do cpf 12576903886 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-22-15:21:27 () Pedido do cpf 24567846850 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-25-18:23:37 () Pedido do cpf 29323378828 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-27-17:55:03 () Pedido do cpf 12752003897 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-27-21:37:09 () Pedido do cpf 05037093872 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-28-21:08:08 () Pedido do cpf 40416460810 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-29-15:12:51 () Pedido do cpf 36923471893 cadastrado (verificar na próxima linha se houve erro) | 
+2023-04-29-15:39:26 () Pedido do cpf 48707260687 cadastrado (verificar na próxima linha se houve erro) | 

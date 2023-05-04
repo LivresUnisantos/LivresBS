@@ -24,7 +24,7 @@ echo $twig->render('consumidores.html', [
     "data_selecionada"  => (isset($_SESSION['data_consulta']) ? date('d/m/Y H:i',strtotime($_SESSION["data_consulta"])) : ""),
     "frequencia_semana" => $calendario->montaDisplayFrequenciaSemana(),
     "level_user"        => $_SESSION["level"],
-    "level_write"       => 15000,
+    "level_write"       => 11000,
     "conteudo"          => $consumidores,
     "grupos"            => $livres->getParametro("grupos")
     ]);

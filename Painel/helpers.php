@@ -260,7 +260,7 @@ function defineLimitesQuantidade($unidade) {
         case "kg":
             $arr["minimo"] = 0;
             $arr["maximo"] = 5;
-            $arr["incremento"] = 0.25;
+            $arr["incremento"] = 0.05;
             break;
         default:
             $arr["minimo"] = 0;

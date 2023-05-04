@@ -1,0 +1,337 @@
+
+2023-04-01-22:58:36 () cleuza.duarte.oliveira@gmail.com tentou logar com cpf/senha incorreto | 
+2023-04-01-22:59:37 () Usuário logado. CPF: 35980435972 / Email: cleuza.duarte.oliveira@gmail.com | 
+2023-04-01-23:35:08 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (745,'Cleuza Duarte De Oliveira','cleuza.duarte.oliveira@gmail.com','35980435972','PRECOMUNIDADE','Rua Xv De Novembro, 42','entrega','13992024918','Almeirão Fino (Maço) - 1<br />
+Almeirão Pão-de-açucar (Maço) - 1<br />
+Couve Manteiga (Maço) - 1<br />
+Escarola (Maço)- 1<br />
+Repolho Roxo (Maço) - 1<br />
+Purê de Tomate Sachê (200g) - 1<br />
+Palmito Pupunha Tolete (350g)- 1')
+2023-04-01-23:46:40 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-01-23:47:03 () Usuário logado. CPF: 070019098/82 / Email: aleiros@uol.com.br | 
+2023-04-01-23:50:22 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (413,'Andréa C. Leiros Carvalho','aleiros@uol.com.br','070019098/82','PRECOMUNIDADE','Praça Winston Churchill N55 Ap41','entrega','13991023430','Alface crespa roxa<br />
+Banana prata verde 12<br />
+Cebolinha<br />
+Cenoura 500g<br />
+Kombucha hibisco e maracujá 2<br />
+Mel silvestre 270ml<br />
+Queijo minas padrão (+- meio kilo)<br />
+Rúcula<br />
+Suco de uva bordô 1l')
+2023-04-02-00:07:45 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-02-00:08:02 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-04-21:15:37 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-04-21:15:55 () 4255921870 tentou logar com cpf inexistente | 
+2023-04-04-21:16:05 () Usuário logado. CPF: 42559221870 / Email: vanessabaortiz@gmail.com | 
+2023-04-04-21:24:43 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (761,'Vanessa Bazuco Ortiz','vanessabaortiz@gmail.com','42559221870','PRECOMUNIDADE','Rua Doutor Emílio Ribas, 94, Apto 169a - Santos','entrega','13997912506','Banana Nanica (6 unidades)<br />
+Abacate (600g)<br />
+Limão Tahití 1,5 kg<br />
+Cenoura (500g)<br />
+Alface Americana (1 Maço)<br />
+Couve Manteiga (1 Maço)<br />
+Repolho Roxo (2 Maço)<br />
+4 pacotes de Banana Chips <br />
+Manjericão (1 Maço)<br />
+Cebola Nacional (500g)')
+2023-04-06-02:26:42 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-06-13:14:13 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-06-13:14:28 () 04966808898 tentou logar com cpf/senha incorreto | 
+2023-04-06-13:14:39 () Usuário logado. CPF: 04966808898 / Email: remafurigo@uol.com.br | 
+2023-04-06-13:17:57 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (540,'Regina Mara De Oliveira Furigo','remafurigo@uol.com.br','04966808898','PRECOMUNIDADE','Av Alm Cochrane, 83, Apto 183','entrega','13996097574','6 pés de alface crespa<br />
+4 kg de tomate italiano<br />
+1 maço de couve manteiga<br />
+1 tofu 375g<br />
+1 maço de cenoura<br />
+1 maço de salsinha<br />
+1 porção de grão de trigo')
+2023-04-06-13:18:07 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 540 AND pedido_inativo = 0
+2023-04-06-13:25:35 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 540 AND pedido_inativo = 0
+2023-04-06-13:26:23 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 540 AND pedido_inativo = 0
+2023-04-06-13:26:23 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (540,'Regina Mara De Oliveira Furigo','remafurigo@uol.com.br','04966808898','PRECOMUNIDADE','Av Alm Cochrane, 83, Apto 183','entrega','13996097574','1 pão vegano ora pro nobis')
+2023-04-06-13:26:28 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 540 AND pedido_inativo = 0
+2023-04-06-13:26:28 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 540 AND pedido_inativo = 0
+2023-04-06-14:30:52 () Usuário logado. CPF: 14854174811 / Email: dcsuporte@hotmail.com | 
+2023-04-06-14:31:59 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (389,'Daniel Cesário Dos Santos','dcsuporte@hotmail.com','14854174811','PRECOMUNIDADE','Av. Alcídes Cândido Dos Santos, 43 - Ap 51 -  Maracanã, Praia Grande','entrega','11997930846','Alface Crespa Roxa - 2<br />
+Escarola Frisee (Maço) - 1<br />
+Alface Americana - 1<br />
+Inhame (500g) - 1<br />
+Mel de Abelha Florada Silvestre (330g) -1 <br />
+Batata Doce Rosada (500g) - 1<br />
+Banana Nanica - 6<br />
+Banana Prata - 6 <br />
+Cebola Nacional (500g) - 1<br />
+Arroz Agulhinha Integral a vácuo - 1kg<br />
+Abacate - 600g')
+2023-04-08-12:04:15 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-09-13:26:04 () 17484823864 tentou logar com cpf/senha incorreto | 
+2023-04-09-13:26:28 () Usuário logado. CPF: 17484823864 / Email: sil.ascosta@hotmail.com | 
+2023-04-09-13:26:29 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsosPRECOMUNIDADE' AND valor='1'
+2023-04-09-13:27:50 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsosPRECOMUNIDADE' AND valor='1'
+2023-04-09-13:27:57 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsosPRECOMUNIDADE' AND valor='1'
+2023-04-09-13:46:59 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsosPRECOMUNIDADE' AND valor='1'
+2023-04-09-14:18:43 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-09-14:22:36 () Usuário logado. CPF: 02550422805 / Email: rosane2512@gmail.com | 
+2023-04-09-14:22:36 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsosPRECOMUNIDADE' AND valor='1'
+2023-04-09-14:22:49 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsosPRECOMUNIDADE' AND valor='1'
+2023-04-09-14:22:58 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsosPRECOMUNIDADE' AND valor='1'
+2023-04-09-14:23:04 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsosPRECOMUNIDADE' AND valor='1'
+2023-04-09-14:51:30 () Usuário logado. CPF: 04966808898 / Email: remafurigo@uol.com.br | 
+2023-04-09-14:52:24 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (540,'Regina Mara De Oliveira Furigo','remafurigo@uol.com.br','04966808898','PRECOMUNIDADE','Av Alm Cochrane, 83, Apto 183','entrega','13996097574','3 kg de tomate<br />
+4pes de alface crespa')
+2023-04-09-14:52:29 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 540 AND pedido_inativo = 0
+2023-04-10-21:05:59 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-11-22:16:15 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-12-15:01:56 () 04283305928 tentou logar com cpf/senha incorreto | 
+2023-04-12-15:02:55 () Usuario tentou cadastrar com cpf/email já cadastrado. CPF: 04283305928 / Email: silverdri@gmail.com | 
+2023-04-12-15:03:06 () 04283305928 tentou logar com cpf/senha incorreto | 
+2023-04-12-15:03:46 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-12-15:03:55 () Usuário logado. CPF: 04283305928 / Email: silverdri@gmail.com | 
+2023-04-12-16:26:12 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-12-16:26:16 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-13-12:30:53 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-13-12:31:09 () Usuário logado. CPF: 070019098/82 / Email: aleiros@uol.com.br | 
+2023-04-13-12:32:26 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (413,'Andréa C. Leiros Carvalho','aleiros@uol.com.br','070019098/82','PRECOMUNIDADE','Praça Winston Churchill N55 Ap41','entrega','13991023430','Alface americana<br />
+Banana prata verde<br />
+Brócolis ninja<br />
+Couve manteiga<br />
+Gatinha de trigo integral 400g<br />
+Suco de uva bordô 1l')
+2023-04-13-13:31:23 () Usuário logado. CPF: 14854174811 / Email: dcsuporte@hotmail.com | 
+2023-04-16-14:17:43 () Usuário logado. CPF: 04966808898 / Email: remafurigo@uol.com.br | 
+2023-04-16-14:18:08 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (540,'Regina Mara De Oliveira Furigo','remafurigo@uol.com.br','04966808898','PRECOMUNIDADE','Av Alm Cochrane, 83, Apto 183','entrega','13996097574','4 pés de alface crespa')
+2023-04-16-14:18:17 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 540 AND pedido_inativo = 0
+2023-04-16-14:18:19 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 540 AND pedido_inativo = 0
+2023-04-16-14:27:06 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-16-14:30:30 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-16-14:31:10 () Usuário logado. CPF: 04461518825 / Email: fontes1959@gmail.com | 
+2023-04-16-14:49:30 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (733,'José Luiz Fontes','fontes1959@gmail.com','04461518825','PRECOMUNIDADE','Travessa Lelia, 93, Apto 14','entrega','11994079282','1. Cebola Nacional (500g)<br />
+1. Salsa (Maço)<br />
+2. Tomate Grape (250g)<br />
+1. Goiaba (500g)<br />
+4. Iogurte Natural (300g)<br />
+1. Abóbora Minimamente processada (250g)<br />
+4. Pepino Japonês (450g)<br />
+1. Chuchu (500g)<br />
+2. Banana Chips (salgada 50g)<br />
+1. Rabanete (Maço)<br />
+1. Vinagre de Jabuticaba (250ml)<br />
+1. Pão caseiro artesanal Vegano (Ora-Pro-Nobis) (350g)**<br />
+1. Alface Lisa (Maço)<br />
+1. Almeirão Pão-de-açucar (Maço)<br />
+1. Cebolinha (Maço)<br />
+1. Repolho Verde (Maço)')
+2023-04-16-20:37:14 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-16-21:13:55 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-16-21:26:26 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-17-14:19:03 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-18-19:59:36 () Usuário logado. CPF: 34574135840 / Email: joseandro.luiz@gmail.com | 
+2023-04-19-13:47:25 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-19-13:47:33 () Usuário logado. CPF: 08063987870 / Email: kinddanconchilha@gmail.com | 
+2023-04-19-14:39:34 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-19-14:39:48 () Usuário logado. CPF: 08063987870 / Email: kinddanconchilha@gmail.com | 
+2023-04-19-14:42:27 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (277,'Daniel Soares Conchilha','kinddanconchilha@gmail.com','08063987870','PRECOMUNIDADE','Av. General Francisco Glicério, 637 Ap,83','retirada','+5513981655556','Banana nanica 18<br />
+Cenoura 1kg<br />
+Beterraba 1kg<br />
+Escarola 1<br />
+Shimeji branco 250g')
+2023-04-20-13:08:21 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-20-13:08:36 () Usuário logado. CPF: 04966808898 / Email: remafurigo@uol.com.br | 
+2023-04-20-13:13:23 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (540,'Regina Mara De Oliveira Furigo','remafurigo@uol.com.br','04966808898','PRECOMUNIDADE','Av Alm Cochrane, 83, Apto 183','entrega','13996097574','6 pés de alface crespa<br />
+3 kg de tomate italiano<br />
+1 maço de couve manteiga<br />
+1 maço de salsinha<br />
+1 maço de brócolis ramoso<br />
+1 maço de rúcula')
+2023-04-20-13:13:26 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 540 AND pedido_inativo = 0
+2023-04-20-13:13:27 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 540 AND pedido_inativo = 0
+2023-04-20-14:26:18 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-20-14:26:23 () Usuário logado. CPF: 14854174811 / Email: dcsuporte@hotmail.com | 
+2023-04-20-14:29:56 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (389,'Daniel Cesário Dos Santos','dcsuporte@hotmail.com','14854174811','PRECOMUNIDADE','Av. Alcídes Cândido Dos Santos, 43 - Ap 51 -  Maracanã, Praia Grande','entrega','11997930846','Alface Americana 2<br />
+Escarola 1<br />
+Banana Nanica 6<br />
+Banana Prata 6<br />
+Tomate Italiano 500g<br />
+Alface crespa roxa 1<br />
+Batata doce rosada 500g<br />
+Salsa - 1 maço<br />
+Brócolis Ramoso - 450g<br />
+cheiro verde - 1 Maço<br />
+Cebola Nacional (500g)<br />
+Açafrão da Terra (100g)<br />
+<br />
+Obs: Favor trazer um arroz cateto integral para trocar pelo agulhinha que foi enviado errado no último pedido')
+2023-04-22-00:09:03 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-22-00:09:27 () 30749156848 tentou logar com cpf inexistente | 
+2023-04-22-00:14:58 () 30749156848 tentou logar com cpf inexistente | 
+2023-04-22-00:15:18 () 30749156848 tentou logar com cpf inexistente | 
+2023-04-22-00:16:48 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-22-20:48:44 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-23-14:32:26 () 36070912772 tentou logar com cpf/senha incorreto | 
+2023-04-23-14:33:09 () Usuário logado. CPF: 36070912772 / Email: helenacrs@yahoo.com.br | 
+2023-04-23-14:37:24 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-23-14:37:27 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-23-14:40:42 () Usuário logado. CPF: 36070912772 / Email: helenacrs@yahoo.com.br | 
+2023-04-23-14:44:10 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (499,'Helena Do Carmo Rosa Da Silva','helenacrs@yahoo.com.br','36070912772','PRECOMUNIDADE','Avenida Bernardino De Campos, 648, Ap 82','entrega','13997274666','Acelga<br />
+Alface mimosa<br />
+Batata Yacon<br />
+Brócolis ramoso<br />
+Cebolinha<br />
+Escarola<br />
+Arroz Integral Terra Livre<br />
+Extrato de tomate Carraro 590 gr<br />
+Geleia de Mirtilo')
+2023-04-23-20:01:55 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-24-15:48:42 (lmatos1102@hotmail.com) Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-24-15:52:32 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-25-11:30:58 () Usuário cadastrado. CPF: 13654038743 / Email: eric.iron@gmail.com | 
+2023-04-25-11:31:10 () Usuário logado. CPF: 13654038743 / Email: eric.iron@gmail.com | 
+2023-04-25-11:31:10 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsosPRECOMUNIDADE' AND valor='1'
+2023-04-25-15:09:20 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-25-15:12:19 () 30749156848 tentou logar com cpf inexistente | 
+2023-04-25-15:12:37 () tatianevallim83@gmail.com  tentou logar com cpf inexistente | 
+2023-04-25-17:18:56 () 42559221870 tentou logar com cpf/senha incorreto | 
+2023-04-25-17:19:05 () Usuário logado. CPF: 42559221870 / Email: vanessabaortiz@gmail.com | 
+2023-04-25-17:27:14 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (761,'Vanessa Bazuco Ortiz','vanessabaortiz@gmail.com','42559221870','PRECOMUNIDADE','Rua Doutor Emílio Ribas, 94, Apto 169a - Santos','entrega','13997912506','Abobrinha Italiana (500g)<br />
+Shimeji Branco (250g)*<br />
+Geleia de Morango sem adição de açúcar (180g)<br />
+6 Bananas Nanica<br />
+Goiaba (500g)<br />
+Mamão Formosa (kg)<br />
+Iogurte Natural (950g)<br />
+Mandioquinha (400g)<br />
+Batata Doce Roxa (500g)<br />
+Alface Americana (Maço)<br />
+Couve Manteiga (Maço)<br />
+Repolho Roxo (2 Maços)')
+2023-04-25-19:21:56 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-25-19:24:27 () 30749156848 tentou logar com cpf inexistente | 
+2023-04-25-19:24:58 () tatianevallim83@gmail.com.br  tentou logar com cpf inexistente | 
+2023-04-25-19:26:27 (milenasavini@hotmail.com) Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-25-19:27:33 (milenasavini@hotmail.com) Usuário cadastrado. CPF: 30749156848 / Email: tatianevallim83@gmail.com | 
+2023-04-25-19:27:49 (milenasavini@hotmail.com) Usuário logado. CPF: 30749156848 / Email: tatianevallim83@gmail.com | 
+2023-04-25-22:17:54 () Usuário logado. CPF: 13654038743 / Email: eric.iron@gmail.com | 
+2023-04-25-22:32:59 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (773,'Eric Gonçalves De Oliveira','eric.iron@gmail.com','13654038743','PRECOMUNIDADE','Avenida Presidente Wilson 68 Apto 708','entrega','13991386968','*lista MST*<br />
+<br />
+1 pacote arroz agulhinha polido - 1kg<br />
+<br />
+1 pacote Flocos de milho para cuscuz Mano Velho <br />
+<br />
+5 unidades Banana prata <br />
+5 unidades Limão Tahiti <br />
+4 unidades Iorgute de mel (950g)<br />
+1 Manteiga com sal <br />
+1 kg Batata inglesa<br />
+1 Iogurte de Morango Light (300g)<br />
+Alface Crespa (Maço)')
+2023-04-26-13:18:33 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-26-13:44:05 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-26-13:45:06 () Usuário logado. CPF: 13654038743 / Email: eric.iron@gmail.com | 
+2023-04-26-13:45:06 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 773 AND pedido_inativo = 0
+2023-04-26-14:49:34 (gabriellaprado20@gmail.com) Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-26-15:30:04 (gabriellaprado20@gmail.com) Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-26-15:37:29 (gabriellaprado20@gmail.com) gabriellaprado20@gmail.com tentou logar com cpf inexistente | 
+2023-04-26-18:55:09 () Usuário logado. CPF: 36923471893 / Email: nathaliatalmeida@hotmail.com | 
+2023-04-26-19:08:12 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (466,'Nathália Talita De Almeida','nathaliatalmeida@hotmail.com','36923471893','PRECOMUNIDADE','Av Paris 562 Apartamento 45 Bloco Helena Boqueirão Praia Grande','retirada','13997107252','- Alface americana ou lisa<br />
+- 500gr de tomate<br />
+- 1kg de batata doce roxa<br />
+- 500gr de limão taiti <br />
+- 500gr de limão siciliano<br />
+- 1 kg de banana prata ou nanica<br />
+- 1kg de maçã gala<br />
+- 1kg de feijão preto<br />
+- 1 caixa de Cereal Mano Velho<br />
+- 250 gr de Cebola Roxa<br />
+- 01 de Chá de Erva Doce<br />
+- 350 gr Tofu<br />
+- 1 caixa de Morangos (se tiver :) )')
+2023-04-27-11:33:01 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-27-11:34:21 () 29848848843 tentou logar com cpf/senha incorreto | 
+2023-04-27-11:34:32 () 29848848843 tentou logar com cpf/senha incorreto | 
+2023-04-27-11:34:44 () Usuário logado. CPF: 29848848843 / Email: lecysartori@gmail.com | 
+2023-04-27-11:49:44 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (555,'Lecy Sartori','lecysartori@gmail.com','29848848843','PRECOMUNIDADE','Av. Washington Luiz, 437. Apartamento 13 Bloco E','entrega','13981400919','Abóbora Kabochá (500g)<br />
+Alface Americana (Maço)<br />
+06 Banana Nanica<br />
+Batata Doce Rosada (500g)<br />
+Cenoura (500g)<br />
+Gengibre (200g)<br />
+Iogurte Natural (300g)<br />
+Brócolis Ramoso (Maço)')
+2023-04-27-13:37:41 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-27-13:41:01 () Usuário cadastrado. CPF: 76609413720 / Email: mraquelrmiranda@hotmail.com | 
+2023-04-27-13:41:45 () Usuário logado. CPF: 76609413720 / Email: mraquelrmiranda@hotmail.com | 
+2023-04-27-13:47:38 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (775,'Maria Raquel Miranda','mraquelrmiranda@hotmail.com','76609413720','PRECOMUNIDADE','R General Euclides Figueiredo 370, Praia Grande','retirada','13991186434','20 Ovos<br />
+1dz de banana prata<br />
+1/2kg cenoura<br />
+1/2 kg abobrinha<br />
+1kg Mandioca<br />
+1/2 kg Inhame<br />
+200gs de gengibre<br />
+1/2 kg de Limão cravo<br />
+1 un de Brocolis <br />
+1 un de Alface crespa verde<br />
+1 un de coentro<br />
+1 PC de farinha de arroz branca<br />
+<br />
+Obs. Vou retirar no açougue vegano em Praia Grande')
+2023-04-27-13:49:18 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 775 AND pedido_inativo = 0
+2023-04-27-13:49:20 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 775 AND pedido_inativo = 0
+2023-04-27-13:49:38 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 775 AND pedido_inativo = 0
+2023-04-27-13:49:50 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 775 AND pedido_inativo = 0
+2023-04-29-11:04:07 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-29-11:20:28 () Usuário logado. CPF: 46829714842 / Email: thaiscristhinecabral@gmail.com | 
+2023-04-29-19:17:41 () Usuário logado. CPF: 01829525840 / Email: amsarubi@hotmail.com | 
+2023-04-29-19:26:25 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-30-12:05:35 () 30749156848 tentou logar com cpf/senha incorreto | 
+2023-04-30-12:06:36 () Usuário logado. CPF: 30749156848 / Email: tatianevallim83@gmail.com | 
+2023-04-30-12:07:09 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (774,'Tatiane Vallim De França','tatianevallim83@gmail.com','30749156848','PRECOMUNIDADE','Rua Doutor Guilherme Álvaro 42, Apto 103b','entrega','13997793504','Pedido')
+2023-04-30-12:07:17 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 774 AND pedido_inativo = 0
+2023-04-30-12:07:23 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 774 AND pedido_inativo = 0
+2023-04-30-12:10:37 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-30-12:10:53 () Usuário logado. CPF: 30749156848 / Email: tatianevallim83@gmail.com | 
+2023-04-30-12:10:54 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 774 AND pedido_inativo = 0
+2023-04-30-12:11:05 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 774 AND pedido_inativo = 0
+2023-04-30-12:11:12 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 774 AND pedido_inativo = 0
+2023-04-30-12:11:17 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 774 AND pedido_inativo = 0
+2023-04-30-12:15:02 () Usuário logado. CPF: 30749156848 / Email: tatianevallim83@gmail.com | 
+2023-04-30-12:15:02 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 774 AND pedido_inativo = 0
+2023-04-30-12:15:53 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 774 AND pedido_inativo = 0
+2023-04-30-12:23:37 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 774 AND pedido_inativo = 0
+2023-04-30-12:26:04 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 774 AND pedido_inativo = 0
+2023-04-30-12:26:04 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (774,'Tatiane Vallim De França','tatianevallim83@gmail.com','30749156848','PRECOMUNIDADE','Rua Doutor Guilherme Álvaro 42, Apto 103b','entrega','13997793504','2 caixa de tomate grape<br />
+1 rúcula<br />
+Meio.kilo de cambuci<br />
+3 pepino japonês<br />
+1 dúzia de ovos<br />
+1 pct de milho de pipoca<br />
+1 manjericão<br />
+Meia dúzia de limão cravo<br />
+3 cenoura<br />
+5 cebola pequenas<br />
+1 dúzia de banana prata<br />
+1 alface frisse<br />
+1 americana<br />
+1 abacate')
+2023-04-30-12:26:11 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 774 AND pedido_inativo = 0
+2023-04-30-12:26:11 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 774 AND pedido_inativo = 0
+2023-04-30-12:26:28 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 774 AND pedido_inativo = 0
+2023-04-30-12:26:28 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 774 AND pedido_inativo = 0
+2023-04-30-13:59:21 () cleuza.duarte.oliveira@gmail.com tentou logar com cpf/senha incorreto | 
+2023-04-30-13:59:38 () Usuário logado. CPF: 35980435972 / Email: cleuza.duarte.oliveira@gmail.com | 
+2023-04-30-14:18:33 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (745,'Cleuza Duarte De Oliveira','cleuza.duarte.oliveira@gmail.com','35980435972','PRECOMUNIDADE','Rua Xv De Novembro, 42','entrega','13992024918','1 - Alface Romana (Maço)<br />
+1 - Almeirão Fino (Maço)<br />
+1 - Almeirão Pão-de-açucar (Maço)<br />
+1 - Colorau Puro Artesanal (60g)<br />
+1 - Couve Manteiga (Maço)<br />
+1 - Flocos de Milho para Cuscuz Natural (500g)*')
+2023-04-30-14:48:19 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-04-30-14:48:58 () Usuário logado. CPF: 36070912772 / Email: helenacrs@yahoo.com.br | 
+2023-04-30-14:50:38 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (499,'Helena Do Carmo Rosa Da Silva','helenacrs@yahoo.com.br','36070912772','PRECOMUNIDADE','Avenida Bernardino De Campos, 648, Ap 82','entrega','13997274666','Abacate<br />
+Achcolatado Organ Zero<br />
+Açúcar demerara<br />
+Brócolis ramoso<br />
+Cebolinha<br />
+Couve manteiga<br />
+Geleia de abacaxi')
+2023-04-30-14:50:42 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 499 AND pedido_inativo = 0
+2023-04-30-14:50:49 () Usuário com pedido já feito logou para novo pedido | SELECT * FROM PedidosAvulsos WHERE idUsuario = 499 AND pedido_inativo = 0

@@ -86,14 +86,22 @@ class Ecoholerite extends Livres {
     /*
     ativo = 0 --> apenas atividades inativas
     ativo = 1 --> apenas atividades ativas
-    ativo = 2 --> atividades ativas e inativas
+    ativo = -1 --> atividades ativas e inativas
     */
-    public function descontos($id_atividade, $ativo = 1) {
+    public function descontos($id_atividade=-1, $ativo = -1) {
         $sql = "SELECT * FROM descontos_atividades a";
         $sql .= " LEFT JOIN descontos_em_folha b ON b.id = a.id_desconto";
-        $sql .= " WHERE id_atividade = ".$id_atividade;
-        if ($ativo <= 1) {
-            $sql .= " AND a.ativo = ".$ativo;
+
+        if ($id_atividade >= 0) {
+            $where .= " id_atividade = ".$id_atividade;
+        }
+        if ($ativo >= 0) {
+            if ($where != "") { $where .= " AND "; }
+            $where .= " a.ativo = ".$ativo;
+        }
+        
+        if ($where != "") {
+            $sql .= " WHERE ".$where;
         }
         
         $st = $this->conn()->prepare($sql);
@@ -101,13 +109,18 @@ class Ecoholerite extends Livres {
         if (!$st->execute()) return false;
         if ($st->rowCount() == 0) return false;
         
-        foreach ($st->fetchAll() as $row) {
-            $arr[] = $row["aliquota"];
-        }
+        return $st->fetchAll();
+    }
+    
+    public function lista_descontos() {
+        $sql = "SELECT * FROM descontos_em_folha";
         
-        if (!isset($arr)) return false;
+        $st = $this->conn()->prepare($sql);
         
-        return $arr;
+        if (!$st->execute()) return false;
+        if ($st->rowCount() == 0) return false;
+        
+        return $st->fetchAll();
     }
     
     public function addAtividadeExecutada($add_nome, $add_atividade, $add_data, $add_ecohoras, $add_valor, $add_comentario) {
@@ -119,14 +132,20 @@ class Ecoholerite extends Livres {
         $add_comentario = $this->conn()->quote($add_comentario);
         
         $valor_desconto = 0;
-        if ($descontos = $this->descontos($add_atividade)) {
+        $i = 1;
+        $arr_descontos;
+        if ($descontos = $this->descontos($add_atividade,1)) {
             foreach ($descontos as $desconto) {
-                $valor_desconto += $desconto*$add_valor;
+                $valor_desconto += $desconto["aliquota"]*$add_valor;
+                $arr_descontos[$i]["id"] = $desconto["id"];
+                $arr_descontos[$i]["descricao"] = $desconto["descricao"];
+                $arr_descontos[$i]["aliquota"] = $desconto["aliquota"];
+                $i++;
             }
         }
         
-        $sql = "INSERT INTO Ecoholerites(id_admin, id_atividade, data, ecohoras, valor, desconto, comentario) VALUES";
-        $sql .= " (".$add_nome.",".$add_atividade.",'".$data."',".$add_ecohoras.",".$add_valor.",".$valor_desconto.",".$add_comentario.")";
+        $sql = "INSERT INTO Ecoholerites(id_admin, id_atividade, data, ecohoras, valor, desconto, ids_descontos, comentario) VALUES";
+        $sql .= " (".$add_nome.",".$add_atividade.",'".$data."',".$add_ecohoras.",".$add_valor.",".$valor_desconto.",'".json_encode($arr_descontos)."',".$add_comentario.")";
         $st = $this->conn()->prepare($sql);
         
         return $st->execute();
@@ -202,11 +221,15 @@ class Ecoholerite extends Livres {
 
         if ($st->rowCount() == 0) return false;
         
-        $colunas = array("nome", "valor_total", "desconto_total", "nascimento");
+        $colunas = array("nome", "valor_total", "desconto_total", "nascimento", "ids_descontos");
         $rs = $st->fetchAll();
         foreach ($rs as $row) {
             foreach ($colunas as $coluna) {
-                $arr[$row["id"]][$coluna] = $row[$coluna];
+                if ($coluna == "ids_descontos") {
+                    $arr[$row["id"]][$coluna] = json_decode($row[$coluna], true);
+                } else {
+                    $arr[$row["id"]][$coluna] = $row[$coluna];
+                }
             }
         }
 

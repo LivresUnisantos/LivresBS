@@ -10,10 +10,11 @@ $livres = new Livres();
 $calendario = new Calendario();
 
 $loader = new \Twig\Loader\FilesystemLoader('../templates/layouts/painel');
-$twig = new \Twig\Environment($loader, ['debug' => false]);//
+$twig = new \Twig\Environment($loader, ['debug' => true]);//
 
 $filter = new \Twig\TwigFilter('stripslashes', 'stripslashes');
 $twig->addFilter($filter);
+$twig->addExtension(new \Twig\Extension\DebugExtension());
 
 $alerta = "";
 $sucesso = "";
@@ -122,6 +123,8 @@ if (!isset($_SESSION["data_consulta"]) || $_SESSION["data_consulta"] == "") {
     
     if (!isset($conteudo)) $conteudo="";
     
+    $descontos = $oEcoholerite->lista_descontos();
+    
     echo $twig->render('ecoholerites_rel.html', [
         "titulo"                => "LivresBS - Ecoholerite",
         "alerta"                => $alerta,
@@ -133,6 +136,7 @@ if (!isset($_SESSION["data_consulta"]) || $_SESSION["data_consulta"] == "") {
         "periodo_mes"           => $data->format('F'),
         "inicio_semana"         => $iniSemana,
         "fim_semana"            => $fimSemana,
+        "descontos"             => $descontos,
         "data_selecionada"      => (isset($_SESSION['data_consulta']) ? date('d/m/Y H:i',strtotime($_SESSION["data_consulta"])) : ""),
         ]);
 }

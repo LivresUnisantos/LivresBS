@@ -32,6 +32,10 @@ if (isset($_POST["id"])) {
     $telefone = str_replace("+", "", $telefone);
     $telefone = str_replace(" ", "", $telefone);
     
+    if ($nascimento == "") {
+        $nascimento = null;
+    }
+    
     $dados = [
         "id"                            => $id,
         "consumidor"                    => $consumidor,

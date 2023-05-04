@@ -1,0 +1,381 @@
+{% extends "index.html" %}
+
+{% block content %}
+    {% if sucesso != '' %}
+        <div class="alert alert-success" role="alert">
+            {{ sucesso }}
+        </div>
+    {% endif %}
+    {% if conteudo %}
+        <!-- Relatório Semanal -->
+        <div class="input-group mb-2 mr-sm-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Filtro</div>
+            </div>
+            <input type="text" class="form-control" id="filtro_semana" campo="semana" name="filtro_semana" placeholder="Filtre por nome">
+        </div>
+        
+        <div class="row justify-content">
+            <div class="col-4">
+                <table class="table" style="width:1000px%">
+                    <colgroup>
+                        <col width="500px">
+                        <col>
+                        <col>
+                        <col>
+                        {% set total_descontos = 0 %}
+                        {% for desconto in descontos %}
+                            {% set total_descontos = total_descontos + 1 %}
+                            <col>
+                        {% endfor %}
+                        {% set total_descontos = total_descontos + 5 %}
+                        <col>
+                        <col>
+                    </colgroup>
+                    <thead class="thead-light" style="text-align:center;vertical-align:top">
+                        <tr>
+                            <th rowspan="2">Nome</th>
+                            <th colspan="{{ total_descontos }}">Semana {{ inicio_semana|date('d/m/y') }} - {{ fim_semana|date('d/m/y') }}</th>
+                        </tr>
+                        <tr>
+                            <th>Ecohoras</th>
+                            <th>Ecopedaladas</th>
+                            <th>Tarefa Bikers</th>
+                            {% for desconto in descontos %}
+                                <th>{{ desconto['descricao'] }}</th>
+                            {% endfor %}
+                            <th>Reembolsos</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela_atividades_semana">
+                        {% set total_ecohoras_dia = 0 %}
+                        {% set total_ecopedaladas_dia = 0 %}
+                        {% set total_bikers_dia = 0 %}
+                        
+                        {% set total_descontos_dia = [] %}
+                        {% for desconto in descontos %}
+                            {% set total_descontos_dia = array|merge([{ desconto['id']: 0 }]) %}
+                        {% endfor %}
+                        
+                        {% set total_reembolsos_dia = 0 %}
+                        
+                        {% set total_ecohoras_semana = 0 %}
+                        {% set total_ecopedaladas_semana = 0 %}
+                        {% set total_bikers_semana = 0 %}
+                        
+                        {% set total_descontos_semana = [] %}
+                        {% for desconto in descontos %}
+                            {% set total_descontos_semana = array|merge([{ desconto['id']: 0 }]) %}
+                        {% endfor %}
+                        
+                        {% set total_reembolsos_semana = 0 %}
+                        
+                        {% set total_ecohoras_mes = 0 %}
+                        {% set total_ecopedaladas_mes = 0 %}
+                        {% set total_bikers_mes = 0 %}
+                        
+                        {% set total_descontos_mes = [] %}
+                        {% for desconto in descontos %}
+                            {% set total_descontos_mes = array|merge([{ desconto['id']: 0 }]) %}
+                        {% endfor %}
+                        
+                        {% set total_reembolsos_mes = 0 %}
+                        
+                        {% set total_dia = 0 %}
+                        {% set total_semana = 0 %}
+                        {% set total_mes = 0 %}
+                        {% for id, val in conteudo["total_#{total_maior}"] %}
+                            {% set total_ecohoras_dia = total_ecohoras_dia + conteudo['ecohoras_dia'][id]['valor_total'] %}
+                            {% set total_ecopedaladas_dia = total_ecopedaladas_dia + conteudo['ecopedaladas_dia'][id]['valor_total'] %}
+                            {% set total_bikers_dia = total_bikers_dia + conteudo['bikers_dia'][id]['valor_total'] %}
+                            {% set total_descontos_dia = total_descontos_dia + conteudo['ecohoras_dia'][id]['desconto_total'] %}
+                            {% set total_reembolsos_dia = total_reembolsos_dia + conteudo['reembolsos_dia'][id]['valor_total'] %}
+                            
+                            {% set total_ecohoras_semana = total_ecohoras_semana + conteudo['ecohoras_semana'][id]['valor_total'] %}
+                            {% set total_ecopedaladas_semana = total_ecopedaladas_semana + conteudo['ecopedaladas_semana'][id]['valor_total'] %}
+                            {% set total_bikers_semana = total_bikers_semana + conteudo['bikers_semana'][id]['valor_total'] %}
+                            {% set total_descontos_semana = total_descontos_semana + conteudo['ecohoras_semana'][id]['desconto_total'] %}
+                            {% set total_reembolsos_semana = total_reembolsos_semana + conteudo['reembolsos_semana'][id]['valor_total'] %}
+                            
+                            {% set total_ecohoras_mes = total_ecohoras_mes + conteudo['ecohoras_mes'][id]['valor_total'] %}
+                            {% set total_ecopedaladas_mes = total_ecopedaladas_mes + conteudo['ecopedaladas_mes'][id]['valor_total'] %}
+                            {% set total_bikers_mes = total_bikers_mes + conteudo['bikers_mes'][id]['valor_total'] %}
+                            {% set total_descontos_mes = total_descontos_mes + conteudo['ecohoras_mes'][id]['desconto_total'] %}
+                            {% set total_reembolsos_mes = total_reembolsos_mes + conteudo['reembolsos_mes'][id]['valor_total'] %}
+                            
+                            {% set total_dia = total_dia + conteudo['total_dia'][id]['valor_total'] %}
+                            {% set total_semana = total_semana + conteudo['total_semana'][id]['valor_total'] %}
+                            {% set total_mes = total_mes + conteudo['total_mes'][id]['valor_total'] %}
+                            <tr>
+                                <td>{{ conteudo["total_#{total_maior}"][id]['nome'] }}</td>
+
+                                <td>{{ conteudo['ecohoras_semana'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                <td>{{ conteudo['ecopedaladas_semana'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                <td>{{ conteudo['bikers_semana'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                {% set aliquota_total = 0 %}
+                                {% for desconto in conteudo['ecohoras_semana'][id]['ids_descontos'][0] %}
+                                    {% set aliquota_total = aliquota_total + desconto['aliquota'] %}
+                                {% endfor %}
+                                
+                                {% for desconto_geral in descontos %}
+                                    {% set flag = 0 %}
+                                    {% for desconto in conteudo['ecohoras_semana'][id]['ids_descontos'][0] %}
+                                        {% if (desconto_geral['id'] == desconto['id']) %}
+                                            {% set flag = 1 %}
+                                            <td>{{ (conteudo['ecohoras_semana'][id]['desconto_total']*desconto['aliquota']/aliquota_total)|number_format(2,",",".") }}</td>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if (flag == 0) %}
+                                        <td>0,00</td>
+                                    {% endif %}
+                                {% endfor %}
+                                <td>{{ conteudo['reembolsos_semana'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                <td>{{ (conteudo['total_semana'][id]['valor_total']-conteudo['ecohoras_semana'][id]['desconto_total'])|number_format(2,",",".") }}</td>
+                                
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td>Totais</td>
+                            <td>{{ total_ecohoras_semana|number_format(2,",",".") }}</td>
+                            <td>{{ total_ecopedaladas_semana|number_format(2,",",".") }}</td>
+                            <td>{{ total_bikers_semana|number_format(2,",",".") }}</td>
+                            <td>{{ total_descontos_semana|number_format(2,",",".") }}</td>
+                            <td>{{ total_reembolsos_semana|number_format(2,",",".") }}</td>
+                            <td>{{ (total_semana-total_descontos_semana)|number_format(2,",",".") }}</td>
+                        </tr>
+                    </tbody>
+                    </table>
+            </div>
+        </div>
+        
+        <!-- relatório mensal -->
+        <div class="input-group mb-2 mr-sm-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Filtro</div>
+            </div>
+            <input type="text" class="form-control" id="filtro_mes" campo="mes" name="filtro_mes" placeholder="Filtre por nome">
+        </div>
+        
+        <div class="row justify-content">
+            <div class="col-4">
+                <table class="table" style="width:1000px%">
+                    <colgroup>
+                        <col width="500px">
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                    </colgroup>
+                    <thead class="thead-light" style="text-align:center;vertical-align:top">
+                        <tr>
+                            <th rowspan="2">Nome</th>
+                            <th colspan="{{ total_descontos }}">Mês {{ periodo_mes }}</th>
+                        </tr>
+                        <tr>
+                            <th>Ecohoras</th>
+                            <th>Ecopedaladas</th>
+                            <th>Tarefa Bikers</th>
+                            {% for desconto in descontos %}
+                                <th>{{ desconto['descricao'] }}</th>
+                            {% endfor %}
+                            <th>Reembolsos</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela_atividades_mes">
+                        {% set total_ecohoras_dia = 0 %}
+                        {% set total_ecopedaladas_dia = 0 %}
+                        {% set total_bikers_dia = 0 %}
+
+                        {% set total_descontos_dia = [] %}
+                        {% for desconto in descontos %}
+                            {% set total_descontos_dia = array|merge([{ desconto['id']: 0 }]) %}
+                        {% endfor %}
+                        
+                        {% set total_reembolsos_dia = 0 %}
+                        
+                        {% set total_ecohoras_semana = 0 %}
+                        {% set total_ecopedaladas_semana = 0 %}
+                        {% set total_bikers_semana = 0 %}
+                        
+                        {% set total_descontos_semana = [] %}
+                        {% for desconto in descontos %}
+                            {% set total_descontos_semana = array|merge([{ desconto['id']: 0 }]) %}
+                        {% endfor %}
+                        
+                        {% set total_reembolsos_semana = 0 %}
+                        
+                        {% set total_ecohoras_mes = 0 %}
+                        {% set total_ecopedaladas_mes = 0 %}
+                        {% set total_bikers_mes = 0 %}
+                        {% set total_descontos_mes = 0 %}
+                        
+                        {% set total_descontos_mes = [] %}
+                        {% for desconto in descontos %}
+                            {% set total_descontos_mes = array|merge([{ desconto['id']: 0 }]) %}
+                        {% endfor %}
+                        
+                        {% set total_reembolsos_mes = 0 %}
+                        
+                        {% set total_dia = 0 %}
+                        {% set total_semana = 0 %}
+                        {% set total_mes = 0 %}
+                        {% for id, val in conteudo["total_#{total_maior}"] %}
+                            {% set total_ecohoras_dia = total_ecohoras_dia + conteudo['ecohoras_dia'][id]['valor_total'] %}
+                            {% set total_ecopedaladas_dia = total_ecopedaladas_dia + conteudo['ecopedaladas_dia'][id]['valor_total'] %}
+                            {% set total_bikers_dia = total_bikers_dia + conteudo['bikers_dia'][id]['valor_total'] %}
+                            {% set total_descontos_dia = total_descontos_dia + conteudo['ecohoras_dia'][id]['desconto_total'] %}
+                            {% set total_reembolsos_dia = total_reembolsos_dia + conteudo['reembolsos_dia'][id]['valor_total'] %}
+                            
+                            {% set total_ecohoras_semana = total_ecohoras_semana + conteudo['ecohoras_semana'][id]['valor_total'] %}
+                            {% set total_ecopedaladas_semana = total_ecopedaladas_semana + conteudo['ecopedaladas_semana'][id]['valor_total'] %}
+                            {% set total_bikers_semana = total_bikers_semana + conteudo['bikers_semana'][id]['valor_total'] %}
+                            {% set total_descontos_semana = total_descontos_semana + conteudo['ecohoras_semana'][id]['desconto_total'] %}
+                            {% set total_reembolsos_semana = total_reembolsos_semana + conteudo['reembolsos_semana'][id]['valor_total'] %}
+                            
+                            {% set total_ecohoras_mes = total_ecohoras_mes + conteudo['ecohoras_mes'][id]['valor_total'] %}
+                            {% set total_ecopedaladas_mes = total_ecopedaladas_mes + conteudo['ecopedaladas_mes'][id]['valor_total'] %}
+                            {% set total_bikers_mes = total_bikers_mes + conteudo['bikers_mes'][id]['valor_total'] %}
+                            {% set total_descontos_mes = total_descontos_mes + conteudo['ecohoras_mes'][id]['desconto_total'] %}
+                            {% set total_reembolsos_mes = total_reembolsos_mes + conteudo['reembolsos_mes'][id]['valor_total'] %}
+                            
+                            {% set total_dia = total_dia + conteudo['total_dia'][id]['valor_total'] %}
+                            {% set total_semana = total_semana + conteudo['total_semana'][id]['valor_total'] %}
+                            {% set total_mes = total_mes + conteudo['total_mes'][id]['valor_total'] %}
+                            <tr>
+                                <td>{{ conteudo["total_#{total_maior}"][id]['nome'] }}</td>
+
+                                <td>{{ conteudo['ecohoras_mes'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                <td>{{ conteudo['ecopedaladas_mes'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                <td>{{ conteudo['bikers_mes'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                {% set aliquota_total = 0 %}
+                                {% for desconto in conteudo['ecohoras_semana'][id]['ids_descontos'][0] %}
+                                    {% set aliquota_total = aliquota_total + desconto['aliquota'] %}
+                                {% endfor %}
+                                
+                                {% for desconto_geral in descontos %}
+                                    {% set flag = 0 %}
+                                    {% for desconto in conteudo['ecohoras_semana'][id]['ids_descontos'][0] %}
+                                        {% if (desconto_geral['id'] == desconto['id']) %}
+                                            {% set flag = 1 %}
+                                            {% set total_descontos_dia[desconto_geral['id']] = total_descontos_dia[desconto_geral['id']] + (conteudo['ecohoras_semana'][id]['desconto_total']*desconto['aliquota']/aliquota_total) %}
+                                            <td>{{ (conteudo['ecohoras_semana'][id]['desconto_total']*desconto['aliquota']/aliquota_total)|number_format(2,",",".") }}</td>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if (flag == 0) %}
+                                        <td>0,00</td>
+                                    {% endif %}
+                                {% endfor %}
+                                <td>{{ conteudo['reembolsos_mes'][id]['valor_total']|number_format(2,",",".") }}</td>
+                                <td>{{ (conteudo['total_mes'][id]['valor_total']-conteudo['ecohoras_mes'][id]['desconto_total'])|number_format(2,",",".") }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td>Totais</td>
+                            <td>{{ total_ecohoras_mes|number_format(2,",",".") }}</td>
+                            <td>{{ total_ecopedaladas_mes|number_format(2,",",".") }}</td>
+                            <td>{{ total_bikers_mes|number_format(2,",",".") }}</td>
+                            <td>{{ total_descontos_mes|number_format(2,",",".") }}</td>
+                            <td>{{ total_reembolsos_mes|number_format(2,",",".") }}</td>
+                            <td>{{ (total_mes-total_descontos_mes)|number_format(2,",",".") }}</td>
+                        </tr>
+                    </tbody>
+                    </table>
+            </div>
+        </div>
+    {% else %}
+        <h5>Não há atividades cadastradas</h5>
+    {% endif %}    
+    <script>
+        $(document).ready(function(){
+            $("#add_nome").val($("#add_nome2").find('option:selected').val());
+            $("#add_atividade").on('change', function() {
+                atividade = $(this).find("option:selected");
+                ecohoras = atividade.attr('ecohoras');
+                valor = atividade.attr('valor');
+                if (ecohoras != 0) {
+                    $("#add_ecohoras").prop('readonly', true);
+                    $("#add_valor").prop('readonly', true);
+                    $("#add_ecohoras").val(ecohoras);
+                    $("#add_valor").val(valor);
+                } else {
+                    $("#add_ecohoras").val(0);
+                    $("#add_valor").val(0);
+                    $("#add_ecohoras").prop('readonly', false);
+                    $("#add_valor").prop('readonly', false);
+                }
+            });
+            $("#add_nome2").on('change', function() {
+                $("#add_nome").val($(this).find('option:selected').val());
+            });
+            
+            $("[name='geren_atividade']").on('click',function() {
+                event.preventDefault();
+                dados = $(this).attr('href').substring(1);
+                if (confirm('Deseja realmente ' + $(this).attr('act') + '?')) {
+                    $.ajax({
+                        method: "GET",
+                        data: dados,
+                        url: "ecoholerites.php",
+                        })
+                    .done(function(msg) {
+                        window.location.href = "ecoholerites.php";
+                    });
+                }
+            });
+            
+            $("#aprovar_pendentes").on('click', function() {
+                if (confirm('Deseja realmente aprovar todas os ecoholerites pendentes?')) {
+                    $.ajax({
+                        method: "GET",
+                        data: {
+                            act: 'aprovar_todos'
+                        },
+                        url: "ecoholerites.php",
+                        })
+                    .done(function(msg) {
+                        window.location.href = "ecoholerites.php";
+                    });
+                }
+            });
+            
+            $("#form_add_atividade").on("submit", function() {
+                error=false;
+                console.log($(this));
+                $(this).find('input').each(function(){
+                    if ($(this).val() == "" && $(this).attr('validation') == 'mandatory') {
+                        error=true;
+                    }
+                });
+                /*$(this).filter(':select').each(function(){
+                    if ($(this).val() == "") {
+                        error=true;
+                    }
+                });*/
+                
+                if (error) {
+                    alert('Preencha todos os campos');
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+            
+            function filtrar() {
+                campo = $(this).attr("campo");
+                texto = $("#filtro_" + campo).val().toLowerCase();
+                
+                $("#tabela_atividades_" + campo + " tr").filter(function() {
+                    ftexto = $(this).text().toLowerCase().indexOf(texto) > -1;
+                    flag = ftexto;
+                    $(this).toggle(flag);
+                });
+            }
+            
+            $("#filtro_semana").on("keyup", filtrar);
+            $("#filtro_mes").on("keyup", filtrar);
+        });
+    </script>
+{% endblock content %}
