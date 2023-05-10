@@ -400,7 +400,7 @@ if ($PostData && $PostData['callback_action'] && $PostData['callback'] == $CallB
             $Read->FullRead("SELECT preco, preco_mercado, preco_lojinha FROM " . DB_PRODUTO . " WHERE id = :id", "id={$PostData['id']}");
             if ($Read->getResult()):
                 $PrecoPdt = $Read->getResult()[0];
-                $options = "<option value=''>Selecione</option><option value='comunidade'>(R$ " . number_format($PrecoPdt['preco'], 2, ",", ".") . ") Preço de comunidade</option><option value='mercado'>(R$ " . number_format($PrecoPdt['preco_mercado'], 2, ",", ".") . ") Preço de mercado</option><option value='lojinha'>(R$ " . number_format($PrecoPdt['preco_lojinha'], 2, ",", ".") . ") Preço da lojinha</option><option value='cortesia'>(R$ 0,00) Preço cortesia</option>";
+                $options = "<option value=''>Selecione</option><option value='comunidade'>(R$ " . number_format($PrecoPdt['preco'], 2, ",", ".") . ") Comboio Agroecológico</option><option value='lojinha'>(R$ " . number_format($PrecoPdt['preco_lojinha'], 2, ",", ".") . ")  Consumo Consciente</option><option value='mercado'>(R$ " . number_format($PrecoPdt['preco_mercado'], 2, ",", ".") . ") Livre Mercado</option><option value='cortesia'>(R$ 0,00) Preço cortesia</option>";
             endif;
 
             $Read->FullRead("SELECT preco_produtor, produtor FROM " . DB_PRODUTO . " WHERE id = :id", "id={$PostData['id']}");

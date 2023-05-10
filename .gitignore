@@ -5,7 +5,7 @@
 /Painel/log_estoque.txt
 /Variavel/log.txt
 /_app/Config.inc.php
-/classes/Livres.class.php
+/classes/db_info.php
 config.php
 /config/Database.php
 /cadastro/log.txt

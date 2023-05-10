@@ -1,3 +1,7 @@
 
 2023-05-03-18:16:29 () Pedido do cpf 43092089839 cadastrado (verificar na próxima linha se houve erro) | 
 2023-05-04-20:39:57 () Pedido do cpf 31510472894 cadastrado (verificar na próxima linha se houve erro) | 
+2023-05-05-12:55:12 () Usuário com cadastro existente (cpf 43092089839) tentou realizar preenchimento | SELECT * FROM Consumidores WHERE cpf = '43092089839'
+2023-05-06-14:19:14 () Pedido do cpf 05578275826 cadastrado (verificar na próxima linha se houve erro) | 
+2023-05-06-16:37:41 () Pedido do cpf 18141362828 cadastrado (verificar na próxima linha se houve erro) | 
+2023-05-08-15:26:38 () Pedido do cpf 93985690278 cadastrado (verificar na próxima linha se houve erro) | 

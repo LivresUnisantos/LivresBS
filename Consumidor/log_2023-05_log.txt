@@ -64,3 +64,23 @@ pepino japonês')
 2023-05-04-17:25:02 () Usuário cadastrado. CPF: 00808756885 / Email: rangelsmarina@gmail.com | 
 2023-05-04-17:26:01 () Usuário logado. CPF: 00808756885 / Email: rangelsmarina@gmail.com | 
 2023-05-04-17:26:02 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsosPRECOMUNIDADE' AND valor='1'
+2023-05-05-16:26:26 () Usuário logado. CPF: 00808756885 / Email: rangelsmarina@gmail.com | 
+2023-05-05-16:26:26 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsosPRECOMUNIDADE' AND valor='1'
+2023-05-05-16:26:56 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsosPRECOMUNIDADE' AND valor='1'
+2023-05-05-16:27:19 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsosPRECOMUNIDADE' AND valor='1'
+2023-05-05-16:27:19 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsosPRECOMUNIDADE' AND valor='1'
+2023-05-06-10:09:50 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-05-06-16:23:06 () Usuário logado. CPF: 01842993062 / Email: leticia.rmartines@gmail.com | 
+2023-05-06-16:34:59 () Novo pedido realizado | INSERT INTO PedidosAvulsos (idUsuario,nome,email,cpf,grupo,endereco,entrega,telefone,pedido) VALUES (662,'Leticia Martines','leticia.rmartines@gmail.com','01842993062','PRECOMUNIDADE','Rua Oswaldo Cruz, 559, Apto 803','entrega','(11)979664818','1  Almeirão fino (maço) <br />
+1 Vinagreira (maço)<br />
+1 Quiabo (200g) <br />
+1 Tomate caqui (500g)<br />
+1  Pasta de amendoim integral (200g)')
+2023-05-08-17:24:35 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-05-08-17:26:06 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-05-08-17:26:49 () Usuário cadastrado. CPF: 41721933824 / Email: carolinepsico.07@gmail.com | 
+2023-05-08-17:27:05 () Usuário logado. CPF: 41721933824 / Email: carolinepsico.07@gmail.com | 
+2023-05-08-19:44:10 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-05-08-19:54:09 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
+2023-05-08-19:54:11 () Usuário logado. CPF: 41721933824 / Email: carolinepsico.07@gmail.com | 
+2023-05-08-21:09:56 () Usuário tentou fazer pedido, mas pedidos ainda não estão abertos. | SELECT * FROM Parametros WHERE parametro = 'PedidosAvulsos' AND valor='1'
