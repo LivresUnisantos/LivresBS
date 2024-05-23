@@ -1,5 +1,5 @@
 <?php
-include "../config.php";
+
 include "../Painel/password.php";
 include "../Painel/helpers.php";
 session_start();
@@ -30,9 +30,7 @@ if (isset($_SESSION["usuario_logado"])) {
 	</script>
 </head>
 <?php
-$conn = new PDO("mysql:host=".$c_db["host"].";dbname=".$c_db["name"],$c_db["user"],$c_db["password"],
-	array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
-);
+$conn = new PDO("mysql:host=162.214.95.160;dbname=livresbs_demo","livresbs_demo","q.X31uG7VvE");
 if (isset($_SESSION["alerta"])) {
     $alerta = $_SESSION["alerta"];
     $_SESSION["alerta"] = "";

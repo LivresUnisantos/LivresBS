@@ -15,7 +15,7 @@ $oProdutos = new Produtos();
 $oListas = new Listas();
 
 $ordens = array("Nome", "Preço");
-//$lista = 1;
+$lista = 1;
 
 $categoria = "";
 $filtro = "";

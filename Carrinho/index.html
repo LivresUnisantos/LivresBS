@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<?php
+session_start();
+// Include functions and connect to the database using PDO MySQL
+include 'functions.php';
+$pdo = pdo_connect_mysql();
+
+?php>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="content-wrapper">
+            <h1>Carrinho de Compras</h1>
+            <nav>
+                <a href="#">Usuário</a>
+                <a href="#">Endereço do Usuário</a>
+            </nav>
+            <div class="link-icons">
+                <i class="fas fa-shopping-cart"></i>
+                <span>3</span>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="cart content-wrapper">
+            <h1>Carrinho de Compras</h1>
+            <form action="cart.php" method="post">
+                <div class="cart-items">
+                    <div class="cart-item">
+                        <img src="img/abobora.jpg" alt="Abóbora">
+                        <div class="product-info">
+                            <h3>Abóbora Minimamente Processada (250g)</h3>
+                            <p>R$7,10 <br> R$6,85 <br> R$6,60 <span class="discount">-5%</span></p>
+                        </div>
+                        <div class="quantity-controls">
+                            <button type="button" class="decrease">-</button>
+                            <input type="number" value="1">
+                            <button type="button" class="increase">+</button>
+                        </div>
+                    </div>
+                    <div class="cart-item">
+                        <img src="img/feijao.jpg" alt="Feijão Preto">
+                        <div class="product-info">
+                            <h3>Feijão Preto (500g)</h3>
+                            <p>R$13,20 <br> R$12,75 <br> R$12,25 <span class="discount">-5%</span></p>
+                        </div>
+                        <div class="quantity-controls">
+                            <button type="button" class="decrease">-</button>
+                            <input type="number" value="1">
+                            <button type="button" class="increase">+</button>
+                        </div>
+                    </div>
+                    <div class="cart-item">
+                        <img src="img/banana.jpg" alt="Banana Ouro">
+                        <div class="product-info">
+                            <h3>Banana Ouro</h3>
+                            <p>R$0,90 <br> R$0,85 <br> R$0,77 <span class="discount">-15%</span></p>
+                        </div>
+                        <div class="quantity-controls">
+                            <button type="button" class="decrease">-</button>
+                            <input type="number" value="4">
+                            <button type="button" class="increase">+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-summary">
+                    <h3>Resumo do pedido</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Preço</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Abóbora</td>
+                                <td>R$6,60</td>
+                            </tr>
+                            <tr>
+                                <td>Feijão Preto</td>
+                                <td>R$12,25</td>
+                            </tr>
+                            <tr>
+                                <td>Banana Ouro</td>
+                                <td>R$3,08</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Valor Total</td>
+                                <td>R$21,93</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="buttons">
+                        <button type="submit" name="update">Finalizar Pedido</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+    <footer>
+        <p>© 2024, Livres</p>
+    </footer>
+    <script src="https://use.fontawesome.com/releases/v5.7.1/js/all.js"></script>
+</body>
+</html>

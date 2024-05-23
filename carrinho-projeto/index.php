@@ -10,11 +10,11 @@
   </head>
   <body>
 <?php
-include "../config.php";
+include "../_app/Config/config.php";
 require_once "../includes/autoloader.inc.php";
 
 //$conn = new PDO("mysql:host=localhost;dbname=id1608716_livres","id1608716_henderson","190788");
-$conn = new PDO("mysql:host=".$c_db["host"].";dbname=".$c_db["name"],$c_db["user"],$c_db["password"],
+$conn = new PDO("mysql:host=162.214.95.160;dbname=livresbs_demo","livresbs_demo","q.X31uG7VvE",
 	array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
 );
 /*$sql = "SELECT * FROM produtos WHERE carrinho = 1 ORDER BY categoria,nome ASC";
