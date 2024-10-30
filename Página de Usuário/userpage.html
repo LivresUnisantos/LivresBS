@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página do Usuário</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Olá, Nome do Usuário</h1>
+        <div class="cart">
+            <img src="cart-icon.png" alt="Carrinho">
+            <span>0</span>
+        </div>
+    </header>
+
+    <main class="user-dashboard">
+        <!-- Informações do Usuário -->
+        <section class="user-info">
+            <h2>Minhas Informações</h2>
+            <div class="user-card">
+                <img src="https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=" alt="Foto do Usuário">
+                <p><strong>Nome do Usuário</strong></p>
+                <p>Email</p>
+                <p>Endereço</p>
+                <p>Telefone</p>
+            </div>
+        </section>
+
+        <!-- Informações do Grupo -->
+        <section class="user-group">
+            <h2>Seu Grupo</h2>
+            <div class="group-info">
+                <img src="group-logo.png" alt="Logo do Grupo">
+                <p>Quem em comunidade programa seu consumo com determinado agricultor e alimento, colocando-o em sua cesta, é o maior recompensado. O maior comprometimento com a Economia Solidária resulta no acesso ao melhor preço.</p>
+            </div>
+        </section>
+
+        <!-- Últimos Pedidos Realizados -->
+        <section class="user-orders">
+            <h2>Últimos Pedidos Realizados</h2>
+            <div class="orders-list">
+                <!-- Produto 1 -->
+                <div class="order-item">
+                    <img src="feijao-preto.png" alt="Feijão Preto">
+                    <p>982 - Feijão Preto (500g)</p>
+                    <p><span>R$13,20</span> <span class="discount">R$12,75</span> <span class="promo">R$12,25 -8%</span></p>
+                </div>
+
+                <!-- Produto 2 -->
+                <div class="order-item">
+                    <img src="abobora.png" alt="Abóbora">
+                    <p>759 - Abóbora Minimamente Processada (250g)</p>
+                    <p><span>R$7,10</span> <span class="discount">R$6,85</span> <span class="promo">R$6,60 -8%</span></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <button class="new-order-btn">Realizar Novo Pedido</button>
+    </footer>
+</body>
+</html>

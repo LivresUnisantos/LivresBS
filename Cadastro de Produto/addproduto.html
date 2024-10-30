@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Produto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <form action="/submit-product" method="POST" enctype="multipart/form-data">
+            <h2>Cadastrar Produto</h2>
+           
+            <div class="input-field">
+                <label for="nome">Nome do Produto</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+           
+            <div class="input-field">
+                <label for="tipo">Tipo do Produto</label>
+                <input type="text" id="tipo" name="tipo" required>
+            </div>
+
+            <div class="input-field">
+                <label for="produtor">Produtor</label>
+                <input type="text" id="produtor" name="produtor" required>
+            </div>
+
+            <div class="input-field">
+                <label for="preco1">Preço 1</label>
+                <input type="number" id="preco1" name="preco1" step="0.01" required>
+            </div>
+
+            <div class="input-field">
+                <label for="preco2">Preço 2</label>
+                <input type="number" id="preco2" name="preco2" step="0.01">
+            </div>
+
+            <div class="input-field">
+                <label for="preco3">Preço 3</label>
+                <input type="number" id="preco3" name="preco3" step="0.01">
+            </div>
+
+            <div class="input-field">
+                <label for="imagem">Upload de Imagem</label>
+                <input type="file" id="imagem" name="imagem" accept="image/*">
+            </div>
+
+            <button type="submit" class="btn-submit">Cadastrar Produto</button>
+        </form>
+    </div>
+</body>
+</html>
